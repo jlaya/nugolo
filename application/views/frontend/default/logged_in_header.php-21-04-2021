@@ -1,0 +1,173 @@
+<?php
+    $user_details = $this->user_model->get_user($this->session->userdata('user_id'))->row_array();
+
+    $homework_items = $this->user_model->get_homework_items($this->session->userdata('user_id'));
+?>
+<style type="text/css">
+  .name-users{
+    font-size: 14px;
+    padding: 0% 0% 0% 5%;
+  }
+  .user-avatar{
+    font-size: 14px;
+    padding: 0% 0% 0% 5%;
+    border-radius: 25%;
+  }
+</style>
+<script type="text/javascript">
+  $(document).ready(function() {  
+    function toggleNavbarMethod() {  
+        if ($(window).width() > 768) {  
+            $('.navbar .dropdown').on('mouseover', function(){  
+                $('.dropdown-toggle', this).trigger('click');   
+            }).on('mouseout', function(){  
+                $('.dropdown-toggle', this).trigger('click').blur();  
+            });  
+        }  
+        else {  
+            $('.navbar .dropdown').off('mouseover').off('mouseout');  
+        }  
+    }  
+    toggleNavbarMethod();  
+    $(window).resize(toggleNavbarMethod);  
+}); 
+</script>
+<section class="menu-area">
+    <div class="container-xl">
+        <div class="row">
+            <div class="col">
+                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="<?php echo site_url(''); ?>">
+    <img src="<?php echo base_url().'assets/frontend/img/logo.png'; ?>" alt="" height="50">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <form class="form-inline my-2 my-lg-12" action="<?php echo site_url('home/bycourses'); ?>" method="post" style="width: 70% !important;">
+        <input type="text" name = 'search_string' class="form-control" placeholder="<?php echo get_phrase('search_for_courses'); ?>" style="width: 70% !important;">
+        <div class="input-group-append">
+            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+    </form>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" title="Clic para iniciar Chat" href="<?php echo base_url('chat') ?>" target='_blanck'>
+            Foro
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Reto
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <?php if(count($homework_items) > 0){ ?>
+          <?php foreach ($homework_items as $key => $value) { ?>
+          <a class="dropdown-item" href="#" style="color: #000000;">
+              <span style="background-color: <?php echo $value->color; ?>;width: 1.5%;">&nbsp;</span>
+              <?php echo $value->name; ?>
+              <?php
+                  if( $value->is_checked == 1 ){
+                      $checked  = 'checked="checked"';
+                      $disabled = 'disabled';
+                  }else{
+                      $checked  = '';
+                      $disabled = '';
+                  }
+              ?>
+              <input <?php echo $checked; ?> data-id="<?php echo $value->id; ?>" type="checkbox" id="is_checked" >
+          </a>
+          <?php } ?>
+          <?php }else{ ?>
+            No se encuentran tareas asignadas...          
+          <?php } ?>
+        </div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="<?php echo site_url('home/mycourses'); ?>">
+            <?php echo get_phrase('my_courses'); ?>
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Perfil
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <?php if (file_exists('uploads/user_image/'.$user_details['id'].'.jpg')): ?>
+              <img src="<?php echo base_url().'uploads/user_image/'.$user_details['id'].'.jpg';?>" alt="" class="img-fluid w-20 user-avatar" style="width: 60%;height: 200px;">
+          <?php else: ?>
+              <img src="<?php echo base_url().'uploads/user_image/placeholder.png';?>" alt="" class="img-fluid w-20 user-avatar" style="width: 60%;height: 200px;">
+          <?php endif; ?>
+          <br>
+          <span class="name-users"><?php echo $user_details['first_name'].' '.$user_details['last_name']; ?></span>
+          <br>
+          <span class="email name-users"><?php echo $user_details['email']; ?></span>
+          <a class="dropdown-item" href="<?php echo site_url('home/mycourses'); ?>">
+            <i class="far fa-gem"></i>&nbsp;&nbsp;&nbsp;
+            <?php echo get_phrase('my_courses'); ?>
+          </a>
+          <a class="dropdown-item" href="<?php echo site_url('home/mywishlist'); ?>">
+            <i class="far fa-heart"></i>&nbsp;&nbsp;&nbsp;
+            <?php echo get_phrase('my_wishlist'); ?>
+          </a>
+          <a class="dropdown-item" href="<?php echo site_url('home/messages'); ?>">
+            <i class="far fa-envelope"></i>&nbsp;&nbsp;&nbsp;
+            <?php echo get_phrase('my_messages'); ?>
+          </a>
+          <a class="dropdown-item" href="<?php echo site_url('home/history'); ?>">
+            <i class="fas fa-shopping-cart"></i>&nbsp;&nbsp;&nbsp;
+            <?php echo get_phrase('purchase_history'); ?>
+          </a>
+          <a class="dropdown-item" href="<?php echo site_url('home/profile/users'); ?>">
+            <i class="fas fa-user"></i>&nbsp;&nbsp;&nbsp;
+            <?php echo get_phrase('user_profile'); ?>
+          </a>
+          <?php if( $this->session->userdata('role_id') == 2 ){ ?>
+          <a class="dropdown-item" data-toggle="modal" data-target="#CuestionModalUpdate">
+            <i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;
+            Editar encuesta
+          </a>
+          <?php } ?>
+          <a class="dropdown-item" href="<?php echo site_url('login/logout/user'); ?>">
+            <?php echo get_phrase('log_out'); ?>
+          </a>
+        </div>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="<?php echo site_url('login/logout/user'); ?>">
+            <?php echo get_phrase('log_out'); ?>
+        </a>
+    </ul>
+
+  </div>
+</nav>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+    // Captura de los datos en el formulario
+   $('#is_checked').click(function(){
+      var id         = $(this).data('id');
+      var checked = $(this).is(':checked');
+      if( checked == true ){
+        is_checked = 1;
+      }else{
+        is_checked = 0;
+      }
+      //se utiliza $.ajax(), a la cual se le pasa un objeto {}, con la información
+      $.ajax({
+          type:"POST", // la variable type guarda el tipo de la peticion GET,POST,..
+          url:"<?php echo base_url('Confirmation/is_checked'); ?>", //url guarda la ruta hacia donde se hace la peticion
+          data: {
+            'id':id,
+            'is_checked':is_checked
+          } , // data recive un objeto con la informacion que se enviara al servidor
+          success:function(datos){
+
+           },
+          dataType: 'json' // El tipo de datos esperados del servidor. Valor predeterminado: Intelligent Guess (xml, json, script, text, html).
+      });
+   });
+</script>

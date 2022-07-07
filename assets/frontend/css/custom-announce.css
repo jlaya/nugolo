@@ -1,0 +1,31 @@
+.div-announce-1{
+	background-color: #d0e5ee;
+	height: 450px;
+	overflow: auto;
+}
+
+.div-announce-2{
+	color: #686f7a;
+}
+
+.div-announce-3{
+	background-color: #e9ecef;
+	margin: 6% 0% 0% 0%;
+	padding: 3% 3% 3% 3%;
+}
+
+.div-announce-3 img{
+	width:100%;
+	height: auto;
+}
+.div-announce-4{
+	background-color: #e9ecef;
+	margin: 6% 0% 0% 0%;
+	padding: 3% 3% 3% 3%;
+}
+
+.div-announce-5{
+	background-color: #e9ecef;
+	margin: 6% 0% 0% 0%;
+	padding: 3% 3% 3% 3%;
+}

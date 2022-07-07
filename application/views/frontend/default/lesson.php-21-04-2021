@@ -1,0 +1,378 @@
+<?php
+    //echo base_url(uri_string()); exit;
+    //header("Location: ".base_url(uri_string()));
+    $this->load->library('session');
+    header('X-Frame-Options: SAMEORIGIN');
+    $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
+    $first_more_videos = $this->Media_model->first_get_media($course_details['token']);
+    $more_videos = $this->Media_model->get_media($course_details['token']);
+    // Carga automatica de video segun el usuario
+    $this->Media_model->add_video( $course_details['token'] );
+    // Lectura de datos de videos
+    $token  = $course_details['token'];
+    $videos = $this->Media_model->get_multi_media_users( $course_details['token'] );
+    //echo "<pre>";
+    //print_r($videos);
+    //exit;
+    //echo $this->db->last_query();
+
+    $cuestion = '<br>';
+    $cuestion .= '<label style="font-weight: bold;">¿Como le parece el curso?</label>';
+    $cuestion .= '<textarea class="form-control" class="form-control" id="request_a" name="request_a"></textarea>';
+    $cuestion .= '<br>';
+    $cuestion .= '<label style="font-weight: bold;">¿Como le parece el instructor?</label>';
+    $cuestion .= '<textarea class="form-control" id="request_b" name="request_b"></textarea>';
+    $cuestion .= '<br>';
+    $cuestion .= '<input required="" type="checkbox" id="is_checked" name="is_checked" value="1">';
+    $cuestion .= '&nbsp;<label>¿Visto?</label>';
+    $cuestion .= '<br>';
+    $cuestion .= '<input class="btn col-12 button-send" type="submit" value="Enviar" disabled>';
+
+    setlocale(LC_TIME, 'es_PA.UTF-8');
+?>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Videos</title>
+    <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/demo.css') ?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/font-awesome.min.css') ?>">
+  <link type="text/css" rel="stylesheet" href="<?php echo base_url('assets/api-video/css/shCoreDefault.css') ?>"/>
+
+  <style type="text/css">
+
+    /* Style the buttons that are used to open and close the accordion panel */
+    .accordion {
+      background-color: #eee;
+      color: #444;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      text-align: left;
+      border: none;
+      outline: none;
+      transition: 0.4s;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active, .accordion:hover {
+      background-color: #ccc;
+    }
+
+    /* Style the accordion panel. Note: hidden by default */
+    .panel {
+      padding: 0 18px;
+      background-color: white;
+      display: none;
+      overflow: hidden;
+    }
+
+    #container {
+     margin: 0 auto;
+     width: 460px;
+     padding: 2em;
+    }
+
+    .ui-progress-bar {
+     margin-top: 3em;
+     margin-bottom: 3em;
+    }
+
+    .ui-progress span.ui-label {
+     font-size: 1.2em;
+     position: absolute;
+     right: 0;
+     line-height: 33px;
+     padding-right: 12px;
+     color: rgba(0,0,0,0.6);
+     text-shadow: rgba(255,255,255, 0.45) 0 1px 0px;
+     white-space: nowrap;
+    }
+
+    @-webkit-keyframes animate-stripes {
+     from {
+     background-position: 0 0;
+     }
+
+     to {
+     background-position: 44px 0;
+     }
+
+    }
+    .ui-progress-bar {
+     position: relative;
+     height: 35px;
+     padding-right: 2px;
+     background-color: #abb2bc;
+     border-radius: 35px;
+     -moz-border-radius: 35px;
+     -webkit-border-radius: 35px;
+     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #b6bcc6), color-stop(1, #9da5b0));
+     background: -moz-linear-gradient(#9da5b0 0%, #b6bcc6 100%);
+     -webkit-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px #FFF;
+     -moz-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px #FFF;
+     box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px #FFF;
+    }
+
+    .ui-progress {
+     position: relative;
+     display: block;
+     overflow: hidden;
+     height: 33px;
+     -moz-border-radius: 35px;
+     -webkit-border-radius: 35px;
+     border-radius: 35px;
+     -webkit-background-size: 44px 44px;
+     background-color: #74d04c;
+     background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0.00, rgba(255,255,255,0.17)), color-stop(0.25, rgba(255,255,255,0.17)), color-stop(0.26, rgba(255,255,255,0)), color-stop(0.50, rgba(255,255,255,0)), color-stop(0.51, rgba(255,255,255,0.17)), color-stop(0.75, rgba(255,255,255,0.17)), color-stop(0.76, rgba(255,255,255,0)), color-stop(1.00, rgba(255,255,255,0)) ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));
+     background: -moz-repeating-linear-gradient(top left -30deg, rgba(255,255,255,0.17), rgba(255,255,255,0.17) 15px, rgba(255,255,255,0) 15px, rgba(255,255,255,0) 30px ), -moz-linear-gradient(#9bdd62 0%, #74d04c 100%);
+     -webkit-box-shadow: inset 0px 1px 0px 0px #dbf383, inset 0px -1px 1px #58c43a;
+     -moz-box-shadow: inset 0px 1px 0px 0px #dbf383, inset 0px -1px 1px #58c43a;
+     box-shadow: inset 0px 1px 0px 0px #dbf383, inset 0px -1px 1px #58c43a;
+     border: 1px solid #4c8932;
+     -webkit-animation: animate-stripes 2s linear infinite;
+    }
+    .btn:disabled {
+        opacity: .65;
+        background-color: #17a2b8 !important;
+    }
+  </style>
+  <?php include 'includes_top.php';?>
+</head>
+<body class="gray-bg">
+
+<?php
+  if ($this->session->userdata('user_login')) {
+    include 'logged_in_header.php';
+  }else {
+    include 'logged_out_header.php';
+  }
+  ?>
+<br><br>
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-2">
+        &nbsp;
+      </div>
+      <div class="col-lg-6">
+        <div class="row">
+          <div id="container" class="progress_bar_"></div><!-- #container -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<?php
+  $button_1  = 'disabled'; $button_2  = 'disabled'; $button_3  = 'disabled'; $button_4  = 'disabled'; $button_5  = 'disabled';
+  $button_6  = 'disabled'; $button_7  = 'disabled'; $button_8  = 'disabled'; $button_9  = 'disabled'; $button_10 = 'disabled';
+  $button_11 = 'disabled'; $button_12 = 'disabled'; $button_13 = 'disabled'; $button_14 = 'disabled'; $button_15 = 'disabled';
+  $button_16 = 'disabled'; $button_17 = 'disabled'; $button_18 = 'disabled'; $button_19 = 'disabled'; $button_20 = 'disabled';
+
+  foreach ($videos as $key => $value) {
+    
+    // SEMANA 1
+    if( $value->week == 1 && $value->day == 'Lunes' && $value->is_checked == 1 ){
+      $button_2 = '';
+    }else if( $value->week == 1 && $value->day == 'Martes' && $value->is_checked == 1 ){
+      $button_3 = '';
+    }else if( $value->week == 1 && $value->day == 'Miercoles' && $value->is_checked == 1 ){
+      $button_4 = '';
+    }else if( $value->week == 1 && $value->day == 'Jueves' && $value->is_checked == 1 ){
+      $button_5 = '';
+    }
+    // SEMANA 2
+    if( $value->week == 2 && $value->day == 'Lunes' && $value->is_checked == 1 ){
+      $button_6 = '';
+    }else if( $value->week == 2 && $value->day == 'Martes' && $value->is_checked == 1 ){
+      $button_7 = '';
+    }else if( $value->week == 2 && $value->day == 'Miercoles' && $value->is_checked == 1 ){
+      $button_8 = '';
+    }else if( $value->week == 2 && $value->day == 'Jueves' && $value->is_checked == 1 ){
+      $button_9 = '';
+    }
+    // SEMANA 3
+    if( $value->week == 3 && $value->day == 'Lunes' && $value->is_checked == 1 ){
+      $button_10 = '';
+    }else if( $value->week == 3 && $value->day == 'Martes' && $value->is_checked == 1 ){
+      $button_11 = '';
+    }else if( $value->week == 3 && $value->day == 'Miercoles' && $value->is_checked == 1 ){
+      $button_12 = '';
+    }else if( $value->week == 3 && $value->day == 'Jueves' && $value->is_checked == 1 ){
+      $button_13 = '';
+    }
+    // SEMANA 4
+    if( $value->week == 4 && $value->day == 'Lunes' && $value->is_checked == 1 ){
+      $button_14 = '';
+    }else if( $value->week == 4 && $value->day == 'Martes' && $value->is_checked == 1 ){
+      $button_15 = '';
+    }else if( $value->week == 4 && $value->day == 'Miercoles' && $value->is_checked == 1 ){
+      $button_16 = '';
+    }else if( $value->week == 4 && $value->day == 'Jueves' && $value->is_checked == 1 ){
+      $button_17 = '';
+    }
+    // CONDICIONES COMBINADAS
+
+    // PARA LA SEMANA 2 DEL DIA LUNES
+    if( $value->week == 1 && $value->day == 'Viernes' && $value->is_checked == 1 ){
+      $button_18 = '';
+    }
+    // PARA LA SEMANA 3 DEL DIA LUNES
+    else if( $value->week == 2 && $value->day == 'Viernes' && $value->is_checked == 1 ){
+      $button_19 = '';
+    }// PARA LA SEMANA 4 DEL DIA LUNES
+    else if( $value->week == 3 && $value->day == 'Viernes' && $value->is_checked == 1 ){
+      $button_20 = '';
+    }
+
+  }
+
+?>
+<section class="course-content-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12" style="height: 600px;">
+        <div class="about-instructor-box">
+            <!-- BORRAR ESTO -->
+            <span style="color: red;" class="mensaje"></span>
+
+            <div hidden="" class="about-instructor-title">
+                + Videos
+            </div>
+            <form action="<?php echo base_url('Video/is_checked'); ?>" id='frm-send' method="POST">
+              <input type="hidden" name="url" value="<?php echo base_url(uri_string()); ?>">
+              <div class="row">
+                <div class="col-lg-3">
+                  <div class="about-instructor-image">
+                    <ul class="more-videos"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <div class="container">
+                    <div class="row jumbotron">
+                      <div class="col-sm col-md-1 col-sm-1 col-xs-1" style="background-color: transparent;">
+                        <label>Semana</label>
+                        <button type="button" class="accordion btn btn-primary" style="text-align: center;">1</button>
+                          <div class="panel">
+                            <button type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(1,'Lunes');">L</button>
+                            <button <?php echo $button_2; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(1,'Martes');">M</button>
+                            <button <?php echo $button_3; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(1,'Miercoles');">M</button>
+                            <button <?php echo $button_4; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(1,'Jueves');">J</button>
+                            <button <?php echo $button_5; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(1,'Viernes');">V</button>
+                          </div>
+                          <hr>
+                          <button type="button" class="accordion btn btn-primary" style="text-align: center;">2</button>
+                          <div class="panel">
+                            <button <?php echo $button_18; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(2,'Lunes');">L</button>
+                            <button <?php echo $button_6; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(2,'Martes');">M</button>
+                            <button <?php echo $button_7; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(2,'Miercoles');">M</button>
+                            <button <?php echo $button_8; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(2,'Jueves');">J</button>
+                            <button <?php echo $button_9; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(2,'Viernes');">V</button>
+                          </div>
+                          <hr>
+                          <button type="button" class="accordion btn btn-primary" style="text-align: center;">3</button>
+                          <div class="panel">
+                            <button <?php echo $button_19; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(3,'Lunes');">L</button>
+                            <button <?php echo $button_10; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(3,'Martes');">M</button>
+                            <button <?php echo $button_11; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(3,'Miercoles');">M</button>
+                            <button <?php echo $button_12; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(3,'Jueves');">J</button>
+                            <button <?php echo $button_13; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(3,'Viernes');">V</button>
+                          </div>
+                          <hr>
+                          <button type="button" class="accordion btn btn-primary" style="text-align: center;">4</button>
+                          <div class="panel">
+                            <button <?php echo $button_20; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(4,'Lunes');">L</button>
+                            <button <?php echo $button_14; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(4,'Martes');">M</button>
+                            <button <?php echo $button_15; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(4,'Miercoles');">M</button>
+                            <button <?php echo $button_16; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(4,'Jueves');">J</button>
+                            <button <?php echo $button_17; ?> type="button" class="btn btn-default" style="width: 39.84px;" onclick="show_content(4,'Viernes');">V</button>
+                          </div>
+                      </div>
+                      <div class="col-sm  col-md-7 col-sm-7 col-xs-7" style="background-color: transparent; text-align: center;">
+                        <div class="video-embed"></div>
+                      </div>
+                      <div class="col-sm  col-md-4 col-sm-4 col-xs-4" style="background-color: transparent;">
+                        <?php echo $cuestion; ?>
+                        <input type="hidden" id="multi_media_id" name="multi_media_id" />'
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php
+  //include 'footer.php';
+  include 'includes_bottom.php';
+  include 'modal.php';
+?>
+<input type="hidden" id="get_token" value="<?php echo $course_details['token']; ?>">
+
+<script type="text/javascript">
+  function get_url(url){
+    alert(url)
+  }
+</script>
+<script type="text/javascript">
+  var acc = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function() {
+      /* Toggle between adding and removing the "active" class,
+      to highlight the button that controls the panel */
+      this.classList.toggle("active");
+
+      /* Toggle between hiding and showing the active panel */
+      var panel = this.nextElementSibling;
+      if (panel.style.display === "block") {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "block";
+      }
+    });
+  }
+</script>
+<script type="text/javascript">
+  function show_content( week , day ){
+    //alert("Semana: "+week+" Dia: "+day);
+    var token = '<?php echo $token; ?>';
+    $.ajax({
+        dataType: "json",
+        url: '<?php echo site_url('home/show_content');?>',
+        type : 'POST',
+        data : {
+          'week' : week,
+          'day' : day,
+          'token' : token
+        },
+        success: function(r)
+        {
+			if( r == null ){
+				alert("Disculpe, Aun no se encuentra el paquete cargado de la semana ("+week+") del dia ("+day+"), por favor debe comunicarlo al encargado para que sea anexado al sistema...")
+			}else{
+				$(".button-send").prop( "disabled", false );
+				$("#multi_media_id").val(r['id']);
+				$("div.video-embed").html(r['embed']);
+            }
+        }
+    });
+  }
+</script>
+
+</body>
+</html>
+<input type="hidden" id="ready_videoId" value="<?php echo $this->session->userdata('videoId'); ?>">
+<?php 
+  $arraydata = array(
+          'get_token' => $course_details['token']
+  );
+  $this->session->set_userdata($arraydata);
+?>

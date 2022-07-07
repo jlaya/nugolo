@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Roboto&display=swap');
+
+body{
+    font-size: 16px;
+}
+
+#bg-about{
+    width: 100%;
+    height: 100%;
+    margin:0;
+    padding: 0;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+	background-size: cover !important;
+    position: fixed;
+}
+.right-about{
+    background: rgba(0, 0, 0, 0.1);
+}
+.right-about p{
+    color: #fff;
+    margin: 2.81rem 0;
+}
+
+/* Inicio boton ver mas  */
+.ver-mas-about{
+    margin: 0 !important; 
+    text-align: end; 
+    text-transform: uppercase; 
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    vertical-align: middle;
+}
+
+.link {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 400;
+    text-decoration: none;
+}
+  
+.link--arrowed {
+    display: inline-block;
+    height: 2rem;
+    line-height: 2rem;
+}
+.link--arrowed .arrow-icon {
+    position: relative;
+    top: -1px;
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+    vertical-align: middle;
+}
+.link--arrowed .arrow-icon--circle {
+    -webkit-transition: stroke-dashoffset .3s ease;
+    transition: stroke-dashoffset .3s ease;
+    stroke-dasharray: 95;
+    stroke-dashoffset: 95;
+}
+.btn-arrowed:hover .arrow-icon {
+    -webkit-transform: translate3d(5px, 0, 0);
+            transform: translate3d(5px, 0, 0);
+}
+.btn-arrowed:hover .arrow-icon--circle {
+    stroke-dashoffset: 0;
+}
+/* Final boton ver mas */
+
+@media (max-width: 992px){
+    .btn-arrowed{
+        width: 100%;
+    }
+    .ver-mas-about{
+        text-align: center;
+    }
+    .col-ver-mas{
+        margin: 10px 0;
+    }
+}
+
+
+
+/* Formulario contacto */
+*{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: 'Quicksand', sans-serif;
+}
+
+body{
+	height: 100%;
+	width: 100%;
+}
+
+.container-contact{
+    min-height: calc(100vh - 65px - 87px );
+	position: relative;
+	width: 100%;
+	/* height: 100%; */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 40px 100px;
+}
+
+.container-contact:after{
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	background: url('https://static.standard.co.uk/s3fs-public/thumbnails/image/2017/04/18/15/run-header.jpg?width=1000&height=614&fit=bounds&format=pjpg&auto=webp&quality=70&crop=16:9,offset-y0.5') no-repeat center;
+	background-size: cover;
+	filter: blur(50px);
+	z-index: -1;
+}
+.contact-box{
+    /* max-width: 62.5rem; */
+    background: red;
+	display: grid;
+	grid-template-columns: repeat(1, 34rem 23rem) ;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	background-color: #fff;
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.19);
+    
+}
+
+#left{
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+	background-size: cover !important;
+	height: 100% ;
+}
+
+.right{
+	padding: 25px 40px;
+}
+
+h2{
+    font-size: 2rem;
+    font-family: 'Lato';
+    position: relative;
+    letter-spacing: 3px;
+	padding: 0 0 10px;
+	margin-bottom: 10px;
+}
+
+h2:after{
+	content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 50px;
+    border-radius: 2px;
+    background-color: #48668E;
+}
+
+.field{
+	width: 100%;
+	border: 2px solid rgba(0, 0, 0, 0);
+	outline: none;
+	background-color: rgba(230, 230, 230, 0.466);
+	padding: 0.5rem 1rem;
+	font-size: 1.1rem;
+	margin-bottom: 22px;
+    transition: .3s;
+    border-bottom: 1px solid #000000b6 ;
+}
+
+.field:hover{
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+textarea{
+	min-height: 150px;
+}
+
+.btn-form{
+	width: 40%;
+	padding: 0.4rem 0.5rem;
+	background-color: #ffffff;
+    color: #48668E;
+    border: 2px solid #48668E;
+    border-radius: 1rem;
+	font-size: 1.1rem;
+	cursor: pointer;
+    transition: .3s;
+    font-family: 'roboto';
+    letter-spacing: 2px;
+}
+
+.btn-form:hover{
+    background-color: #48668E;
+    color: #fff;
+}
+
+@media screen and (max-width: 880px){
+    body{
+        font-size: 14px;
+
+    }
+	.contact-box{
+		grid-template-columns: 1fr;
+	}
+	#left{
+		height: 200px;
+	}
+}
+
+@media (min-width: 1444px){
+    body{
+        font-size: 60px;
+    }
+
+    .contact-box{
+        min-width: 62.5rem;
+        grid-template-columns: repeat(1, 34rem 32rem);
+
+    }
+
+    .row-about{
+        font-size: 2.125rem !important;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+    .right-about{
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        max-width: 42%;
+    }
+    .ver-mas-about{
+        font-size: 1.3rem;
+    }
+
+}

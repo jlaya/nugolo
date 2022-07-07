@@ -1,0 +1,14 @@
+
+
+.rejilla-1 {
+  display: grid;
+  grid-template-columns: 100%;
+  text-align: center;
+}
+
+.rejilla-2 {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  text-align: center;
+}
+
