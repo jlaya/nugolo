@@ -20,6 +20,11 @@
 <script type="text/javascript" src="<?php echo base_url('assets/backend/js/custom-course-page.js'); ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/backend/css/custom-course-page.css'); ?>">
 
+<style>
+    body {
+  font-size: 16px !important;
+}
+</style>
 <div id="modal">
   <div class="modal-content">
     <div class="header">
@@ -43,6 +48,8 @@
                           <button class="btn btn-default">
                             <a style="color: #FFF;" href="<?php echo base_url('home/courses'); ?>">Volver</a>
                           </button>
+                          <br>
+                          <br>
                           <br>
                             <h1 class="title "><?php echo $course_details['title']; ?></h1>
                             <p class="subtitle" s><?php echo $course_details['short_description']; ?></p>
@@ -78,6 +85,9 @@
                                 <button class="btn btn-default">
                                   <a href="<?php echo base_url('registro?uri_string='.$uri_string); ?>">REGISTRAR</a>
                                 </button>
+                                <button class="btn btn-default">
+                                  <a href="<?php echo site_url('home/lesson/'.slugify($course_details['title']).'/'.$course_details['id']); ?>">PROBAR</a>
+                                </button>
                                 <?php } ?>
                                 <span class="created-by d-block">
                                     <?php echo get_phrase('created_by'); ?>
@@ -111,7 +121,7 @@
                     <div class="col-lg-8 order-1 order-lg-0">
 
                         <div class="what-you-get-box">
-                            <div class="what-you-get-title"><?php echo get_phrase('what_will_i_learn'); ?>?</div>
+                            <div class="what-you-get-title">Contenido del Curso</div>
                             <ul class="what-you-get__items">
                                 <?php foreach (json_decode($course_details['outcomes']) as $outcome): ?>
                                     <?php if ($outcome != ""): ?>
@@ -122,19 +132,7 @@
                         </div>
                         <br>
                         <div class="course-curriculum-box">
-                            <div class="course-curriculum-title clearfix">
-                                <div class="title float-left"><?php echo get_phrase('curriculum_for_this_course'); ?></div>
-                                <div class="float-right">
-                                    <span class="total-lectures">
-                                        <?php echo $this->crud_model->get_lessons('course', $course_details['id'])->num_rows().' '.get_phrase('lessons'); ?>
-                                    </span>
-                                    <span class="total-time">
-                                        <?php
-                                            echo $this->crud_model->get_total_duration_of_lesson_by_course_id($course_details['id']);
-                                         ?>
-                                    </span>
-                                </div>
-                            </div>
+                            
                             <div class="course-curriculum-accordion">
                                 <?php
                                 $sections = json_decode($course_details['section']);
@@ -286,29 +284,12 @@
                                 <div class="col-lg-4">
                                     <div class="about-instructor-image">
                                         <img src="<?php echo $this->user_model->get_user_image_url($instructor_details['id']); ?>" alt="" class="img-fluid">
-                                        <ul>
-                                            <!-- <li><i class="fas fa-star"></i><b>4.4</b> Average Rating</li> -->
-                                            <li><i class="fas fa-comment"></i><b>
-                                                <?php echo $this->crud_model->get_instructor_wise_course_ratings($instructor_details['id'], 'course')->num_rows(); ?>
-                                            </b> <?php echo get_phrase('reviews'); ?></li>
-                                            <li><i class="fas fa-user"></i><b>
-                                                <?php
-                                                    $course_ids = $this->crud_model->get_instructor_wise_courses($instructor_details['id'], 'simple_array');
-                                                    $this->db->select('user_id');
-                                                    $this->db->distinct();
-                                                    $this->db->where_in('course_id', $course_ids);
-                                                    echo $this->db->get('enroll')->num_rows();
-                                                 ?>
-                                            </b> <?php echo get_phrase('students') ?></li>
-                                            <li><i class="fas fa-play-circle"></i><b>
-                                                <?php echo $this->crud_model->get_instructor_wise_courses($instructor_details['id'])->num_rows(); ?>
-                                            </b> <?php echo get_phrase('courses'); ?></li>
-                                        </ul>
+                                        
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
                                     <div class="about-instructor-details view-more-parent">
-                                        <div class="view-more" onclick="viewMore(this)">+ <?php echo get_phrase('view-more'); ?></div>
+                                        <div style="font-size: 20px !important;" class="view-more display-8" onclick="viewMore(this)">+ <?php echo get_phrase('view-more'); ?></div>
                                         <div class="instructor-name">
                                             <a href="<?php echo site_url('home/instructor_page/'.$course_details['user_id']); ?>"><?php echo $instructor_details['first_name'].' '.$instructor_details['last_name']; ?></a>
                                         </div>
@@ -320,24 +301,7 @@
                                         </div>
                                     </div>
                                       <br>
-                                    <div class="about-instructor-details view-more-parent">
-                                        <div class="view-more" onclick="viewMore(this)">+ <?php echo get_phrase('view_more'); ?></div>
-                                        <div class="instructor-name">
-                                            <a href="<?php echo site_url('home/instructor_page/'.$course_details['user_id']); ?>"><?php echo get_phrase('courses'); ?></a>
-                                        </div>
-                                        <div class="instructor-bio">
-                                            <ul class="list-unstyled">
-                                              <?php $curso=$this->crud_model->get_instructor_wise_courses($course_details['user_id'])->result_array(); ?>
-                                                <?php $cu="";
-                                                foreach($curso as $key=>$cur):
-                                                    $cu.= '<li><small>'.$cur['title'].'</small></li>';
-                                                endforeach;
-                                                echo $cu;
-                                                ?>         
-                                            </ul>
-                                        </div>
-                                        
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -361,7 +325,7 @@
                                             echo $average_ceil_rating;
                                              ?>
                                          </div>
-                                        <div class="rating">
+                                        <div class="rating display-6">
                                         <?php
                                             for($i = 1; $i < 6; $i++):?>
                                             <?php if ($i <= $average_ceil_rating): ?>

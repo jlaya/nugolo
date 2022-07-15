@@ -98,6 +98,27 @@ class Media_model extends CI_Model {
         return $query->result();
     }
 
+    public function searchDocument( $course_id )
+    {
+        $this->db->select('count(a.id) AS cant');
+        $this->db->from('doc AS a');
+        $this->db->where('a.course_id', $course_id);
+        $this->db->where('a.user_id', $this->session->userdata('user_id'));
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function group_by_courses( $token )
+    {
+        $this->db->select('b.id,b.month,b.token');
+        $this->db->from('multi_media_users AS a');
+        $this->db->join('multi_media AS b', 'b.id = a.multi_media_id');
+        $this->db->where('b.token', $token);
+        $this->db->group_by('month');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
     public function sum_modules( $token )
     {
         $this->db->select('SUM(a.num_lec) AS sum_modules');
@@ -228,6 +249,19 @@ class Media_model extends CI_Model {
         $this->db->where('b.id', $post['id']);
         $this->db->where('b.token', $post['token']);
         $this->db->where('a.user_id', $this->session->userdata('user_id'));
+        $query = $this->db->get();
+        return $query->row();
+    }
+
+    public function show_content_courses( $post )
+    {
+        $this->db->select('b.*,b.id,a.is_checked');
+        $this->db->from('multi_media_users AS a');
+        $this->db->join('multi_media AS b', 'b.id = a.multi_media_id');
+        //$this->db->where('a.is_checked', 0);
+        #$this->db->where('b.week', $post['week']);
+        $this->db->where('b.id', $post['id']);
+        $this->db->where('b.token', $post['token']);
         $query = $this->db->get();
         return $query->row();
     }

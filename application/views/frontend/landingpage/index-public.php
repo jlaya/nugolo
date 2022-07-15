@@ -8,12 +8,15 @@
       <meta name="author" content="Creativeitem" />
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       <link name="favicon" type="image/x-icon" href="<?php echo base_url().'assets/favicon.ico' ?>" rel="shortcut icon" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Nugolo</title>
       <link href="<?php echo base_url().'assets/frontend/landingpage/toastr.css'; ?>" rel="stylesheet" type="text/css" />
       <?php #include 'icon-whatsapp.php'; ?>
       <!--<script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
       <style type="text/css">
-
+        body {
+            background-color: #5a3ebf;
+        }
       #segundacaja{
          position: absolute;
          top: 0;
@@ -23,7 +26,7 @@
       }
 
       #msform {
-         position: absolute;
+         position: relative;
          top:0;
          left:0;
          width:100%;
@@ -46,7 +49,7 @@
       } */
       /*  */
          #msform fieldset {
-         background: #292f45 !important;
+         background: #201b5d !important;
          /*display: flex;*/
          border: 0 none;
          border-radius: 3px;
@@ -61,7 +64,7 @@
 
          #msform input, #msform textarea {
          padding: 15px;
-         border: 1px solid #1f53c5 !important;
+         border: 1px solid #7126dd !important;
          border-radius: 3px;
          margin-bottom: 10px;
          width: 100%;
@@ -77,7 +80,7 @@
          line-height: 1.15;
          margin: 0;
          height: 48.95px !important;
-         border: 1px solid #1f53c5 !important;
+         border: 1px solid #7126dd !important;
          background-color: #FFF !important;
          color: #2c333e !important;
          }
@@ -86,7 +89,7 @@
          width: 100px;
          margin-left: auto;
          margin-right: auto;
-         background: #1f53c5 !important;
+         background: #5c1cb7 !important;
          font-weight: bold;
          color: white !important;
          border: 0 none;
@@ -230,51 +233,71 @@
       </style>
    </head>
    <body>
-      <div id="segundacaja">
-         <section class="form-register">
-            <!-- multistep form -->
-            <form id="msform" method="POST" action="<?php echo base_url('users/add'); ?>">
-              <input type="hidden" name="uri_string" value="<?php echo $this->input->get('uri_string'); ?>">
-               <!-- progressbar -->
-               <ul id="progressbar">
-                  <li class="active">Cuenta Usuario</li>
-                  <li>Valoraci&oacute;n</li>
-                  <li>Video</li>
-               </ul>
-               <!-- fieldsets -->
-               <fieldset>
-                  <h2 class="fs-title">Registro</h2>
-                  <select required="" style="width: 100%;margin-top: 1%;padding: 0px 8px;" id="nivel" name="nivel">
-                     <option value="" selected="selected">Grado (escolar)</option>
-                     <?php foreach (range(1, 11) as $key => $value) { ?>
-                        <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
-                     <?php } ?>
-                  </select>
-                   <input type="hidden" name="depart" value="0">
-                   <input type="hidden" name="city" value="0">
-                  <input style="margin-top: 4%;" required="" type="text" name="first_name" placeholder="Nombre" />
-                  <input required="" type="text" name="last_name" placeholder="Apellido" />
-                  <input required="" type="text" name="email" placeholder="Correo electrónico" />
-                  <input required="" type="date" name="date_nac" placeholder="Fecha de nacimiento" />
-                  <input required="" type="hidden" name="phone" placeholder="Tel&eacute;fono" value="0" />
-                  <input required="" type="hidden" name="address" placeholder="Dirección" value="0" />
-                  <input required="" type="password" name="password" placeholder="Ingrese su contrase&ntilde;a" />
-                  <input type="submit" class="submit action-button send-register_1" value="Enviar"/>
-               </fieldset>
-            </form>
-         </section>
-         <section class="form-register form-register-whatsapp" style="display: none;">
-            <div style="background-color: brown;padding: 2%;">
-               Recuerde hacer el pago y enviarnos su comprobante de pago para ser activado en nuestra plataforma.
+        
+          <div class="container-fluid">
+             <div class="row mt-4">
+                <div class="col-sm-6">
+              <img src="https://i.ibb.co/njBrC6x/personajes.png" class="img-fluid" alt="profesores">
+              <p class="row-text-center mt-4 " style="text-align:center;font-size: 20px;color: white;">Lleva tu Conocmiento a otro nivel >>></p>
+          </div>
+          
+          <div class="col-sm-6">
+             
+                <!-- multistep form -->
+                <form id="msform" method="POST" action="<?php echo base_url('users/add'); ?>">
+                  <input type="hidden" name="uri_string" value="<?php echo $this->input->get('uri_string'); ?>">
+                   <!-- progressbar -->
+                   <ul id="progressbar">
+                      <li class="active">Cuenta Usuario</li>
+                      <li>Valoraci&oacute;n</li>
+                      <li>Video</li>
+                   </ul>
+                   <!-- fieldsets -->
+                   <fieldset>
+                      <h2 class="fs-title">Registro</h2>
+                      <select required="" style="width: 100%;margin-top: 1%;padding: 0px 8px;" id="nivel" name="nivel">
+                         <option value="" selected="selected">Grado (escolar)</option>
+                         <?php foreach (range(1, 11) as $key => $value) { ?>
+                            <option value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                         <?php } ?>
+                      </select>
+                       <input type="hidden" name="depart" value="0">
+                       <input type="hidden" name="city" value="0">
+                      <input style="margin-top: 4%;" required="" type="text" name="first_name" placeholder="Nombre" />
+                      <input required="" type="text" name="last_name" placeholder="Apellido" />
+                      <input required="" type="text" name="email" placeholder="Correo electrónico" />
+                      <input required="" type="text" name="date_nac" placeholder="Fecha de nacimiento" onfocus="(this.type='date')" />
+                      <input required="" type="hidden" name="phone" placeholder="Tel&eacute;fono" value="0" />
+                      <input required="" type="hidden" name="address" placeholder="Dirección" value="0" />
+                      <input required="" type="password" name="password" placeholder="Ingrese su contrase&ntilde;a" />
+                      <input type="submit" class="submit action-button send-register_1" value="Enviar"/>
+                   </fieldset>
+                </form>
+            
+             <section class="form-register form-register-whatsapp" style="display: none;">
+                <div style="background-color: brown;padding: 2%;">
+                   Recuerde hacer el pago y enviarnos su comprobante de pago para ser activado en nuestra plataforma.
+                </div>
+                <br>
+                <a target="_blank" href="https://wa.me/573014701404?text=Hola!%20Estoy%20interesado%20en%20tu%20servicio">
+                   <div align="center">
+                      <img title="Whatsapp" class="btn-whatsapp" src="<?php echo base_url('assets/icon-cliente.png'); ?>" width="400" height="400" alt="Whatsapp" style="margin: auto;">
+                   </div>
+                </a>
+             </section>
+          </div>
             </div>
-            <br>
-            <a target="_blank" href="https://wa.me/573014701404?text=Hola!%20Estoy%20interesado%20en%20tu%20servicio">
-               <div align="center">
-                  <img title="Whatsapp" class="btn-whatsapp" src="<?php echo base_url('assets/icon-cliente.png'); ?>" width="400" height="400" alt="Whatsapp" style="margin: auto;">
-               </div>
-            </a>
-         </section>
-      </div>
+          </div>
+        
+        <footer class="text-center text-lg-start" style="position: fixed;left: 0;bottom: 0; width: 100%; background-color: red; color: white; text-align: center;">
+          <!-- Copyright -->
+          <div class="text-center p-3" style="background-color: #7f4cdd;">
+           Derechos Reservados Copyright a 
+            <a class="text-dark" href="https://www.nugolociencia.com/">NUGOLO</a>
+          </div>
+          <!-- Copyright -->
+        </footer>
+        
    </body>
 </html>
 

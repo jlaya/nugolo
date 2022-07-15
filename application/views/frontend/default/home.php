@@ -64,18 +64,20 @@
             border-color: #b858fe;
         }
         .color-FFF{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
+            font-family: "GameOfSquids" !important;
+            color: #FFF !important;
+            font-weight: bold !important;
+            border: none !important; 
+            background-color: transparent !important;
+            cursor: pointer !important;
         }
         .color-FFF:hover{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
+            font-family: "GameOfSquids" !important;
+            color: #FFF !important;
+            font-weight: bold !important;
+            border: none !important; 
+            background-color: transparent !important;
+            cursor: pointer !important;
         }
         .color-000{
             font-family: "GameOfSquids";
@@ -91,21 +93,6 @@
             color: #FFF;
         }
 
-        /* Tipografias 
-        .boombox2{
-            font-family: "boombox2";
-            src: url("<?php echo base_url('assets/frontend/fonts/boombox2.ttf'); ?>");
-        }
-        .bebas{
-            font-family: "Bebas-Regular";
-            src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
-        }
-        .gameofsquids{
-            font-family: "Game Of Squids";
-            src: url("<?php echo base_url('assets/frontend/fonts/Game-Of-Squids.ttf'); ?>");
-        }
-        */
-        
         .container {
             display:inline-block;
             width: 100vw;
@@ -264,6 +251,10 @@
                     </a>
                 </div>
                 <div class="col" style="top: 15px;">
+                    <a id="play" class="color-FFF">Reproducir</a>
+                    <a id="stop" class="color-FFF" style="display: none;">Detener</a>
+                </div>
+                <div class="col" style="top: 15px;">
                     <a class="color-FFF" href="<?php echo site_url('login/logout'); ?>">
                         <?php echo get_phrase('log_out'); ?>
                     </a>
@@ -278,12 +269,13 @@
     <!-- Estructura 7 -->
     <div class="container-fluid">
       <div class="row row p-3">
-        <div class="col-12 col-md-10">
+        <div class="col-12 col-md-5">
             <?php if( $course_user == 0 ){ ?>
-              <br><br><br><br><br><br><br><br><br><br><br><br><br>
+              <div style="margin-top: 30%;text-align: center;">
               <a title="Ir a todos los cursos" class="color-FFF text-center" href="<?php echo site_url('home/courses'); ?>">
                   VER CURSOS
               </a>
+              </div>
             <?php }else{ ?>
             <div style=" overflow-y: hidden; overflow-x: touch; width: 100%; height: 400px; white-space: nowrap;">
                 <?php
@@ -298,9 +290,9 @@
                     <div style="width: 250px; height: 180px; position: absolute; top: 140px ">
                         <div style="position:relative; text-align: center; padding-top: 20px; ">
                             <H1 style="color: #0D0046; line-height : 1px; font-weight: bold;"><b>&nbsp;</b></H1>
-                            <h3 style="color: white; "><?php echo $latest_course['title']; ?></h3>
-                            <div style="line-height : 25px;width: 100%;white-space: pre-line;overflow: hidden;text-overflow: ellipsis;margin: -12% 0% 0% 0%;">
-                              <?php echo limitar_cadena($latest_course['short_description'], 110, '...'); ?>
+                            <h3 class="h3-margin-1"><?php echo $latest_course['title']; ?></h3>
+                            <div class="div-description">
+                              <?php echo limitar_cadena($latest_course['short_description'], 70, '...'); ?>
                               </div>
                            </div>
                     </div>
@@ -320,6 +312,11 @@
 
             </div>
             <?php } ?>
+        </div>
+        <div class="col-12 col-md-5">
+          <?php if( $course_user == 0 ){ ?>
+          <img src="<?php echo base_url('assets/mensaje.png');?>" alt="" width="300px" height="300px">
+          <?php } ?>
         </div>
         <div class="col-12 col-md-2 pt-2" style="color:rgb(42, 22, 99) ; background-color: #A396D1; width:220px; height: 430px;text-align: center; padding: 0px 15px 0px 15px; border-radius: 8px;">
             <p><?php echo $user_details['first_name'].' '.$user_details['last_name']; ?></p>
@@ -407,5 +404,6 @@
         $('.cielo-2').append(estrellaDos);
       }
   </script>
+  <?php include("application/views/frontend/viewsSound.php"); ?>
 </body>
 </html>

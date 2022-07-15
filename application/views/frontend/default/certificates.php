@@ -397,5 +397,6 @@
         $('.cielo-2').append(estrellaDos);
       }
   </script>
+  <?php include("application/views/frontend/viewsSound.php"); ?>
 </body>
 </html>

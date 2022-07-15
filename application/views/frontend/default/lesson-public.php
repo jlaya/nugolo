@@ -21,12 +21,11 @@
     //$first_more_videos = $this->Media_model->first_get_media($course_details['token']);
     //$more_videos = $this->Media_model->get_media($course_details['token']);
     // Carga automatica de video segun el usuario
-    $this->Media_model->add_video( $course_id, $course_details['token'] );
+    //$this->Media_model->add_video( $course_id, $course_details['token'] );
     // Lectura de datos de videos
     $token  = $course_details['token'];
     #$videos = $this->Media_model->get_multi_media_users( $course_details['token'] );
-    $doc = $this->Media_model->searchDocument( $course_details['id'] )->cant;
-    $module = $this->Media_model->group_by_users( $course_details['token'] );
+    $module = $this->Media_model->group_by_courses( $course_details['token'] );
     # Consulta para hacer el conteo de la cantidad de lecciones que pueda tener a nivel
     # global los modulos
     $sum_modules = $this->Media_model->sum_modules( $course_details['token'] );
@@ -54,11 +53,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title><?php echo $course_details['title']; ?></title>
+    <title>Cursos</title>
     <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/demo.css') ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/font-awesome.min.css') ?>">
   <link type="text/css" rel="stylesheet" href="<?php echo base_url('assets/api-video/css/shCoreDefault.css') ?>"/>
+  <style>
+  img.btn-whatsapp {
+    display: block !important;
+    position: fixed;
+    z-index: 9999999;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+    border-radius:100px !important;
+  }
+  img.btn-whatsapp:hover{
+    border-radius:100px !important;
+    -webkit-box-shadow: 0px 0px 15px 0px rgba(7,94,84,1); 
+    -moz-box-shadow: 0px 0px 15px 0px rgba(7,94,84,1);
+    box-shadow: 0px 0px 15px 0px rgba(7,94,84,1);
+    transition-duration: 1s;
+  }
 
+  a.btn-whatsapp {
+      display: block !important;
+      position: fixed;
+      z-index: 9999999;
+      bottom: 20px;
+      right: 100px;
+      cursor: pointer;
+      border-radius: 100px !important;
+      font-size: 31px;
+  }
+</style>
   <style type="text/css">
         .menu-area {
             margin-bottom: 3rem!important;
@@ -403,15 +430,6 @@
   <?php include 'includes_top.php';?>
 </head>
 <body style="color: #fff; background: linear-gradient(338deg, #00205b, #37163b);">
-
-<?php
-  if ($this->session->userdata('user_login')) {
-    include 'logged_in_header.php';
-  }else {
-    include 'logged_out_header.php';
-  }
-?>
-
 <section class="container-fluid">
   <h1><?php echo $course_details['title']; ?></h1>
 </section>
@@ -442,7 +460,6 @@
                 </div>
                 <div class="row  justify-content-center" >
                     <div class="container-fluid py-5 px-0" >
-
                       <div class="col-md-12 mb-2 text-center text-md-left px-0" style="background-color: transparent;">
                         <!--<div class="d-inline-block p-2 mb-4 rounded course-text-content text-center text-lg-left">
                           Puntuaciones: <?php echo $wallet->cant; ?>
@@ -476,9 +493,7 @@
 
       <div class="col-lg-5">
           <br>
-        <object type="application/php" data='<?php echo base_url("chat_private?course_id=$course_id");?>' style="width:100%; height:600px;">
-            <embed src='<?php echo base_url("chat_private?course_id=$course_id");?>' style="width:100%; height:600px;" frameborder="0" style="border:0;">
-          </object>
+        <img src="<?php echo base_url('assets/chat-block.png') ?>" style="width: 100%">
       </div>
     </div>
   </div>
@@ -591,7 +606,7 @@
 
     $.ajax({
       dataType: "json",
-      url: '<?php echo site_url('home/show_content');?>',
+      url: '<?php echo site_url('home/show_content_courses');?>',
       type : 'POST',
       data : {
         'id' : id,
@@ -625,7 +640,10 @@
     });
   }
 </script>
-
+<!-- Whatsapp image -->
+<a target="_blank" href="https://wa.me/573014701404?text=Hola!%20Estoy%20interesado%20en%20tu%20servicio">
+<img title="Whatsapp" class="btn-whatsapp" src="https://clientes.dongee.com/whatsapp.png" width="64" height="64" alt="Whatsapp">
+</a>
 </body>
 </html>
 <input type="hidden" id="ready_videoId" value="<?php echo $this->session->userdata('videoId'); ?>">

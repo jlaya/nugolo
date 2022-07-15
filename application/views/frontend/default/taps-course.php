@@ -39,11 +39,13 @@
         	Valoraci&oacute;n
         </a>
       </li>
+      <?php if( $this->session->userdata('user_login') ){ ?>
       <li class="nav-item">
         <a class="nav-link" href='<?php echo base_url("document?course_id=$course_id"); ?>'>
-          Documento
+          Cargar taller
         </a>
       </li>
+      <?php } ?>
     </ul>
 
     <!-- Tab panes -->
@@ -98,11 +100,14 @@
       </div>
       </p>
     </div>
+    <?php if( $this->session->userdata('user_login') ){ ?>
     <div class="tab-content" >
-
       <div class="row justify-content-center">
+        <?php if( $doc > 0 ){ ?>
         <div class="col-auto">
-          <label class="form-check-label" for="is_checked">Validar Lecci&oacute;n</label>
+          <label class="form-check-label" for="is_checked">
+            Si viste todo el curso dale clic en el botón enviar
+          </label>
         </div>
         <div class="col-auto">
           <input required="" type="checkbox" class="form-check-input" id="is_checked" name="is_checked" value="1">
@@ -110,6 +115,14 @@
         <div class="col-auto">
           <button style="width:150px;" type="submit" class="btn button-send btn-lg btn-block shadow-sm" onclick="return confirm(\'Esta de acuerdo en dar de visto al curso?\');">Enviar</button>
         </div>
+        <?php }else{ ?>
+          <div class="col-auto">
+            <label class="form-check-label" for="is_checked">
+              Por favor, debe cargar el taller. <a href="<?php echo base_url("document?course_id=$course_id"); ?>">aqui</a>
+            </label>
+          </div>
+        <?php } ?>
       </div>
     </div>
+    <?php } ?>
   </div>

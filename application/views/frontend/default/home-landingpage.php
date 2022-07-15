@@ -41,18 +41,20 @@
             border-color: #b858fe;
         }
         .color-FFF{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
+            font-family: "GameOfSquids" !important;
+            color: #FFF !important;
+            font-weight: bold !important;
+            border: none !important; 
+            background-color: transparent !important;
+            cursor: pointer !important;
         }
         .color-FFF:hover{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
+            font-family: "GameOfSquids" !important;
+            color: #FFF !important;
+            font-weight: bold !important;
+            border: none !important; 
+            background-color: transparent !important;
+            cursor: pointer !important;
         }
         .h1-font{
             color: #FFF;
@@ -223,6 +225,10 @@
                       <button class="color-FFF ">CONTACTANOS</button>
                   </a>
                 </div>
+                <div class="col">
+                 <a id="play" class="color-FFF">Reproducir</a>
+                 <a id="stop" class="color-FFF" style="display: none;">Detener</a>
+                </div>
               </div>
             </div>
         </div>
@@ -297,5 +303,6 @@
       </div>
     </div>
     <br><br><br>
+    <?php include("application/views/frontend/viewsSound.php"); ?>
 </body>
 </html>

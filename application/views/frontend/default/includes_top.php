@@ -36,13 +36,13 @@
 <script src="<?php echo base_url('assets/backend/js/toastr.js'); ?>"></script>
 
 <!--<script src="<?php echo base_url('assets/backend/js/jquery-1.11.0.min.js'); ?>"></script>-->
-<script type="text/javascript">
+<!--<script type="text/javascript">
     function removeMenu() {
     if (event.button == 2) {
         parent.frames.location.replace('javascript: parent.dummy1');
     }
     removeMenu();
-</script>
+</script>-->
 <script type="text/javascript">
 	$(document).ready(function() {
     

@@ -691,11 +691,11 @@ class Home extends CI_Controller {
     }
 
     public function lesson($slug = "", $course_id = "", $lesson_id = "") {
-        if ($this->session->userdata('user_login') != 1){
+      /*if ($this->session->userdata('user_login') != 1){
             if ($this->session->userdata('admin_login') != 1){
               redirect('home', 'refresh');
           }
-      }
+      }*/
 
       $user_id = $this->session->userdata('user_id');
       $this->completar_2_cursos( $user_id, 0 );
@@ -720,8 +720,11 @@ class Home extends CI_Controller {
         $page_data['page_title'] = get_phrase('blank_page');
         $page_data['page_body'] = get_phrase('no_section_found');
     }
-
-    $this->load->view('frontend/default/lesson', $page_data);
+    if( $this->session->userdata('user_login') == "" ){
+        $this->load->view('frontend/default/lesson-public', $page_data);
+    }else{
+        $this->load->view('frontend/default/lesson', $page_data);
+    }
 }
 
 public function my_courses_by_category() {
@@ -997,6 +1000,12 @@ function getRealIP()
 public function show_content() {
     $post = $this->input->post();
     $json = $this->Media_model->show_content( $post );
+    echo json_encode($json);
+}
+
+public function show_content_courses() {
+    $post = $this->input->post();
+    $json = $this->Media_model->show_content_courses( $post );
     echo json_encode($json);
 }
 

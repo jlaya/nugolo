@@ -1022,9 +1022,9 @@ public function all_courses() {
     $user_id = $this->session->userdata('user_id');
 
     if( $user_id ){
-        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' ";
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' ORDER by category_id ASC";
     }else{
-        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id) AS is_pay FROM course AS a WHERE a.status ='active' ";
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id) AS is_pay FROM course AS a WHERE a.status ='active' AND is_free_course = 1 ORDER by category_id ASC";
     }
 
 

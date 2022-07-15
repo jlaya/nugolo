@@ -233,9 +233,9 @@
                     <div style="width: 250px; height: 180px; position: absolute; top: 140px ">
                         <div style="position:relative; text-align: center; padding-top: 20px; ">
                             <H1 style="color: #0D0046; line-height : 1px; font-weight: bold;"><b>&nbsp;</b></H1>
-                            <h3 style="color: white; "><?php echo $latest_course['title']; ?></h3>
-                            <div style="line-height : 25px;width: 100%;white-space: pre-line;overflow: hidden;text-overflow: ellipsis;margin: -12% 0% 0% 0%;">
-                              <?php echo limitar_cadena($latest_course['short_description'], 110, '...'); ?>
+                            <h3 class="h3-margin-1"><?php echo $latest_course['title']; ?></h3>
+                            <div class="div-description">
+                              <?php echo limitar_cadena($latest_course['short_description'], 70, '...'); ?>
                               </div>
                            </div>
                     </div>
@@ -341,5 +341,6 @@
         $('.cielo-2').append(estrellaDos);
       }
   </script>
+  <?php include("application/views/frontend/viewsSound.php"); ?>
 </body>
 </html>
