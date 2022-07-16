@@ -225,10 +225,6 @@
                       <button class="color-FFF ">CONTACTANOS</button>
                   </a>
                 </div>
-                <div class="col">
-                 <a id="play" class="color-FFF">Reproducir</a>
-                 <a id="stop" class="color-FFF" style="display: none;">Detener</a>
-                </div>
               </div>
             </div>
         </div>
@@ -303,6 +299,5 @@
       </div>
     </div>
     <br><br><br>
-    <?php include("application/views/frontend/viewsSound.php"); ?>
 </body>
 </html>

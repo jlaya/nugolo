@@ -59,6 +59,7 @@
 	}else {
 		include 'logged_out_header.php';
 	}*/
+	include("application/views/frontend/viewsSound.php");
 	include $page_name.'.php';
 	#include 'footer.php';
 	include 'includes_bottom.php';

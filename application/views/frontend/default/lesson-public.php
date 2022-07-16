@@ -432,6 +432,9 @@
 <body style="color: #fff; background: linear-gradient(338deg, #00205b, #37163b);">
 <section class="container-fluid">
   <h1><?php echo $course_details['title']; ?></h1>
+  <button class="btn btn-default">
+    <a style="color: #FFF;" href="<?php echo site_url('home/course/'.slugify($course_details['title']).'/'.$course_details['id']); ?>">Volver</a>
+  </button>
 </section>
 <section class="container-fluid pt-5" style="min-height: 100vh;">
   <div>

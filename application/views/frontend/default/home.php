@@ -217,6 +217,62 @@
           z-index: 10;
         }
     </style>
+    <style type="text/css">
+      /* From uiverse.io by @kirzin */
+button {
+ text-decoration: none;
+ position: absolute;
+ border: none;
+ font-size: 14px;
+ font-family: inherit;
+ color: #fff;
+ width: 9em;
+ height: 3em;
+ line-height: 2em;
+ text-align: center;
+ background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+ background-size: 300%;
+ border-radius: 30px;
+ z-index: 1;
+}
+
+button:hover {
+ animation: ani 8s linear infinite;
+ border: none;
+}
+
+@keyframes ani {
+ 0% {
+  background-position: 0%;
+ }
+
+ 100% {
+  background-position: 400%;
+ }
+}
+
+button:before {
+ content: '';
+ position: absolute;
+ top: -5px;
+ left: -5px;
+ right: -5px;
+ bottom: -5px;
+ z-index: -1;
+ background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+ background-size: 400%;
+ border-radius: 35px;
+ transition: 1s;
+}
+
+button:hover::before {
+ filter: blur(20px);
+}
+
+button:active {
+ background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+}
+    </style>
     
    
 </head>
@@ -251,10 +307,6 @@
                     </a>
                 </div>
                 <div class="col" style="top: 15px;">
-                    <a id="play" class="color-FFF">Reproducir</a>
-                    <a id="stop" class="color-FFF" style="display: none;">Detener</a>
-                </div>
-                <div class="col" style="top: 15px;">
                     <a class="color-FFF" href="<?php echo site_url('login/logout'); ?>">
                         <?php echo get_phrase('log_out'); ?>
                     </a>
@@ -269,13 +321,15 @@
     <!-- Estructura 7 -->
     <div class="container-fluid">
       <div class="row row p-3">
+        <?php if( $course_user == 0 ){ ?>
         <div class="col-12 col-md-5">
+        <?php }else{ ?>
+        <div class="col-12 col-md-10">
+        <?php } ?>
             <?php if( $course_user == 0 ){ ?>
-              <div style="margin-top: 30%;text-align: center;">
               <a title="Ir a todos los cursos" class="color-FFF text-center" href="<?php echo site_url('home/courses'); ?>">
-                  VER CURSOS
+                <img src="<?php echo base_url('assets/mensaje.png');?>" alt="" width="300px" height="300px">
               </a>
-              </div>
             <?php }else{ ?>
             <div style=" overflow-y: hidden; overflow-x: touch; width: 100%; height: 400px; white-space: nowrap;">
                 <?php
@@ -313,11 +367,17 @@
             </div>
             <?php } ?>
         </div>
+        <?php if( $course_user == 0 ){ ?>
         <div class="col-12 col-md-5">
-          <?php if( $course_user == 0 ){ ?>
-          <img src="<?php echo base_url('assets/mensaje.png');?>" alt="" width="300px" height="300px">
-          <?php } ?>
+          <div style="margin-top: 30%;text-align: center;">
+            <a title="Ir a todos los cursos" class="color-FFF text-center" href="<?php echo site_url('home/courses'); ?>">
+              <button>
+                VER CURSOS
+              </button>
+            </a>
+          </div>
         </div>
+        <?php } ?>
         <div class="col-12 col-md-2 pt-2" style="color:rgb(42, 22, 99) ; background-color: #A396D1; width:220px; height: 430px;text-align: center; padding: 0px 15px 0px 15px; border-radius: 8px;">
             <p><?php echo $user_details['first_name'].' '.$user_details['last_name']; ?></p>
                 <br>
@@ -404,6 +464,5 @@
         $('.cielo-2').append(estrellaDos);
       }
   </script>
-  <?php include("application/views/frontend/viewsSound.php"); ?>
 </body>
 </html>
