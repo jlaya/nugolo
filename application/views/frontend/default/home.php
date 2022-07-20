@@ -346,19 +346,36 @@ button:active {
                             <H1 style="color: #0D0046; line-height : 1px; font-weight: bold;"><b>&nbsp;</b></H1>
                             <h3 class="h3-margin-1"><?php echo $latest_course['title']; ?></h3>
                             <div class="div-description">
-                              <?php echo limitar_cadena($latest_course['short_description'], 70, '...'); ?>
+                              <?php echo limitar_cadena($latest_course['short_description'], 50, '...'); ?>
                               </div>
                            </div>
                     </div>
-                    <a href="<?php echo site_url('home/lesson/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">
-                    <div style="background-color: #0D0046; width: 200px; height: 50px; position: relative; top: 310px; margin: 0 auto; border-radius: 8px;  ">
-                                  
+                    <?php if( $latest_course['is_free_course'] ==1 ){ ?>
+                    <div style="background-color: #0D0046; width: 40%; height: 50px; position: absolute; top: 310px;  border-radius: 8px;  margin-left: 19px;">
+                    <?php }else{ ?>
+                      <div style="background-color: #0D0046; width: 200px; height: 50px; position: relative; top: 310px; margin: 0 auto; border-radius: 8px;  ">
+                    <?php } ?>
+                       <a href="<?php echo site_url('home/lesson/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">  
                        <div style="position:relative; text-align: center; padding-top: 15px; ">
                        <b>EMPEZAR</b> 
                        </div>
+                        </a>
                     </div>
-                    </a>
-                    <div style="width: 150px; height: 150px; position: relative; top: -40px;   margin: 0 auto; ">
+                    <?php
+                      if( $latest_course['is_free_course'] !=1 ){
+                        $hidden = "hidden";
+                      }else{
+                        $hidden = "";
+                      }
+                    ?>
+                    <div <?php echo $hidden; ?> style="background-color: #0D0046; width: 40%; height: 50px; position: absolute; top: 310px; margin-left: 130px; border-radius: 8px;">
+                       <a href="<?php echo site_url('home/lesson/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">
+                       <div style="position:relative; text-align: center; padding-top: 15px; ">
+                       <b>PROBAR</b> 
+                       </div>
+                     </a>
+                    </div>
+                    <div style="width: 150px; height: 150px; position: relative; top: 8px;   margin: 0 auto; ">
                         <img src="<?php echo $this->crud_model->get_course_thumbnail_url($latest_course['id']); ?>" alt="" width="150px"  height="150px">
                     </div>
                 </div>

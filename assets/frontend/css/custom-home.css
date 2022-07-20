@@ -15,9 +15,10 @@
 .h3-margin-1{
 	color: #FFF !important;
 	margin: 5% !important;
+	white-space: normal !important;
 }
 .div-description{
-	line-height : 25px;
+	line-height : 20px;
 	width: 100%;
 	white-space: pre-line;
 	overflow: hidden;

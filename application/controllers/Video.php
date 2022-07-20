@@ -110,7 +110,7 @@ class Video extends CI_Controller {
         $this->Media_model->history_user($data_history);
         //}
         
-        redirect($url, 'refresh');
+        redirect($url."?q=message", 'refresh');
     }
 
 }

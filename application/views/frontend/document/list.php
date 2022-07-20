@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Cursos</title>
+    <title>Taller</title>
     <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/demo.css') ?>" type="text/css">
     <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/font-awesome.min.css') ?>">
   <link type="text/css" rel="stylesheet" href="<?php echo base_url('assets/api-video/css/shCoreDefault.css') ?>"/>
@@ -366,7 +366,7 @@
             <form action="<?php echo base_url('document/save'); ?>" enctype="multipart/form-data" method="POST">
               <input type="hidden" name="course_id" value="<?php echo $this->input->get('course_id'); ?>">
               <?php if( count($verify) == 0 ){ ?>
-              <input type="file" name="doc" required="">
+              <input type="file" name="doc" required="" accept="application/pdf">
               <input type="submit" value="Adjuntar" class="btn btn-primary">
               <?php } ?>
               <a href="<?php echo $this->session->userdata('url'); ?>">

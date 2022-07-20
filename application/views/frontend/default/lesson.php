@@ -421,9 +421,17 @@
     <?php if ( $verify == 1 ) { ?>
     <div class="alert alert-info">Atenci&oacute;n: ya se encuentra validado.</div>
     <?php } ?>
-    <div class="row">
+    <?php if( $this->input->get("q") == "message" ){ ?>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="alert alert-warning">
+            Debes estar pendiente de la calificación de nuestro tutor, revisa tu correo y mensajes constantemente.
+          </div>
+        </div>
+      </div>
+    <?php } ?>
+    <div class="row mt-3">
       <div class="col-lg-7">
-        
         <div class="about-instructor-box">
             <!-- BORRAR ESTO -->
             <span style="color: red;" class="mensaje"></span>

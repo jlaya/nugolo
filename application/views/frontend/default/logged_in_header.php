@@ -102,6 +102,7 @@
         </div>
     </div>
 </section>
+<?php include("application/views/frontend/viewsSound.php"); ?>
 <script type="text/javascript">
     // Captura de los datos en el formulario
    $('ul > li input#is_checked').click(function(){

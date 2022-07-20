@@ -224,6 +224,7 @@
                 <?php
                 $latest_courses = $this->crud_model->all_courses();
                 foreach ($latest_courses as $latest_course){ ?>
+                <?php if( $latest_course['is_free_course'] !=1 ){ ?>
                 <div class="mx-3" style="width: 250px;height: 370px;position: relative;overflow: hidden;/* padding: 10px 10px 10px 10px; */display: inline-block;">
                 
                 
@@ -235,11 +236,10 @@
                             <H1 style="color: #0D0046; line-height : 1px; font-weight: bold;"><b>&nbsp;</b></H1>
                             <h3 class="h3-margin-1"><?php echo $latest_course['title']; ?></h3>
                             <div class="div-description">
-                              <?php echo limitar_cadena($latest_course['short_description'], 70, '...'); ?>
+                              <?php echo limitar_cadena($latest_course['short_description'], 50, '...'); ?>
                               </div>
                            </div>
                     </div>
-                    <a href="<?php echo site_url('home/course/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">
                     <?php 
                       if( $this->session->userdata('user_id') && $latest_course['is_pay'] == 1 ){
                         $color_botton = "#eebe33";
@@ -247,23 +247,29 @@
                         $color_botton = "#0D0046";
                       }
                     ?>
-                    <div style="background-color: <?php echo $color_botton; ?>; width: 200px; height: 50px; position: relative; top: 310px; margin: 0 auto; border-radius: 8px;  ">
-                                  
+                    <div <?php echo $hidden; ?> style="background-color: #0D0046; width: 40%; height: 50px; position: absolute; top: 310px; margin-left: 130px; border-radius: 8px;">
+                       <a href="<?php echo site_url('home/lesson/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">  
                        <div style="position:relative; text-align: center; padding-top: 15px; ">
-                       <b>
+                       <b>PROBAR</b> 
+                       </div>
+                        </a>
+                    </div>
+                    <div style="background-color: <?php echo $color_botton; ?>; width: 40%; height: 50px; position: absolute; top: 310px;  border-radius: 8px;  margin-left: 19px;">
+                        <a href="<?php echo site_url('home/lesson/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">
+                       <div style="position:relative; text-align: center; padding-top: 15px; ">
                         <?php if( $this->session->userdata('user_id') && $latest_course['is_pay'] == 1 ){ ?>
                           Adquirido
                         <?php }else{ ?>
                           Mas detalles
                         <?php } ?>
-                      </b> 
                        </div>
+                        </a>
                     </div>
-                    </a>
-                    <div style="width: 150px; height: 150px; position: relative; top: -40px;   margin: 0 auto; ">
+                    <div style="width: 150px; height: 150px; position: relative; top: 8px;   margin: 0 auto; ">
                         <img src="<?php echo $this->crud_model->get_course_thumbnail_url($latest_course['id']); ?>" alt="" width="150px"  height="150px">
                     </div>
                 </div>
+                <?php } ?>
                 <?php } ?>
 
             </div>

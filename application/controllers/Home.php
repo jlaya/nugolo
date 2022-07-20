@@ -182,7 +182,7 @@ class Home extends CI_Controller {
         $page_data['matriculation'] = $this->Matriculation_model->show();
         $page_data['verify_matriculation'] = $this->Matriculation_model->verify_matriculation();
         
-        if($this->session->userdata('user_id') !=""){
+        if($this->session->userdata('user_id')){
             $this->load->view('frontend/default/index-landigpage', $page_data);
         }else{
             redirect(site_url('login'), 'refresh');

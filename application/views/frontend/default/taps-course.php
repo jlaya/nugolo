@@ -118,8 +118,13 @@
         <?php }else{ ?>
           <div class="col-auto">
             <label class="form-check-label" for="is_checked">
-              Por favor, debe cargar el taller. <a href="<?php echo base_url("document?course_id=$course_id"); ?>">aqui</a>
+              <div style="white-space: normal !important">
+              <a href="<?php echo base_url("document?course_id=$course_id"); ?>">Recuerda para validar el curso debes cargar el taller.</a>
+              </div>
             </label>
+          </div>
+          <div class="col-auto">
+            <button style="width:150px;background-color: red;" type="button" class="btn button-send btn-lg btn-danger shadow-sm">Enviar</button>
           </div>
         <?php } ?>
       </div>
