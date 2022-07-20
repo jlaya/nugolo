@@ -369,13 +369,20 @@ button:active {
                       }
                     ?>
                     <div <?php echo $hidden; ?> style="background-color: #0D0046; width: 40%; height: 50px; position: absolute; top: 310px; margin-left: 130px; border-radius: 8px;">
-                       <a href="<?php echo site_url('home/lesson/'.slugify($latest_course['title']).'/'.$latest_course['id']); ?>" style="text-decoration: none; color: white ;">
+                       <a target="_blank" href="https://wa.me/573132545111?text=<?php echo $latest_course['title']."%20".$latest_course['price'].": %20Dejale este mensaje al asesor para que se comunique contigo"; ?>" style="text-decoration: none; color: white ;">
                        <div style="position:relative; text-align: center; padding-top: 15px; ">
-                       <b>PROBAR</b> 
+                       <b>PAGAR</b> 
                        </div>
                      </a>
                     </div>
-                    <div style="width: 150px; height: 150px; position: relative; top: 8px;   margin: 0 auto; ">
+                    <?php
+                      if( $latest_course['is_free_course'] ==1 ){
+                        $top = 8;
+                      }else{
+                        $top = -40;
+                      }
+                    ?>
+                    <div style="width: 150px; height: 150px; position: relative; top: <?php echo $top; ?>px;   margin: 0 auto; ">
                         <img src="<?php echo $this->crud_model->get_course_thumbnail_url($latest_course['id']); ?>" alt="" width="150px"  height="150px">
                     </div>
                 </div>
