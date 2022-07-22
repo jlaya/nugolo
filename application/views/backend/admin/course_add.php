@@ -1,5 +1,8 @@
 <?php
   $token =  date('Y-m-dH:i:s').md5(rand(100000000, 200000000));
+
+  $children = $this->Media_model->children();
+
 ?>
 
 <ol class="breadcrumb bc-3">
@@ -27,6 +30,24 @@
                   <div class="col-md-6">
                       <form class="" action="<?php echo site_url('admin/course_actions/add'); ?>" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="token" value="<?php echo $token ?>">
+                        <div class="row">
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                  <label class="form-label">Relacionar curso de prueba</label>
+                                  <div class="controls">
+                                      <select class="form-control select2" id="children" name="children" required="">
+                                        <option value="">---</option>
+                                        <option value="0">Ninguno</option>
+                                        <?php foreach ($children as $key => $value){?>
+                                        <option value="<?php echo $value->id; ?>">
+                                          <?php echo $value->title; ?>
+                                        </option>
+                                        <?php } ?>
+                                      </select>
+                                  </div>
+                              </div>
+                          </div>
+                        </div>
                         <div class="row">
                           <div class="col-md-12 col-sm-12 col-xs-12">
                               <div class="form-group">

@@ -9,6 +9,11 @@ class Media_model extends CI_Model {
         $this->load->library('session');
     }
 
+    public function get_children( $children_id ) {
+        $this->db->where('id', $children_id);
+        return $this->db->get('course')->row_array();
+    }
+
 
     public function multi_media( $data ) {
         $this->db->insert('multi_media', $data);
@@ -391,6 +396,15 @@ class Media_model extends CI_Model {
         #$this->db->order_by('a.id','ASC');
         $query = $this->db->get();
         return $query->row();
+    }
+
+    public function children()
+    {
+        $this->db->select('id, title');
+        $this->db->from('course AS a');
+        $this->db->where('a.is_free_course', 1);
+        $query = $this->db->get();
+        return $query->result();
     }
 
     // Conteo de ValorExp

@@ -1,5 +1,6 @@
 <?php
 $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
+$children = $this->Media_model->children();
 ?>
 
 <ol class="breadcrumb bc-3">
@@ -27,6 +28,24 @@ $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
                 <div class="row">
                     <div class="col-md-6">
                         <form class="" action="<?php echo site_url('admin/course_actions/edit/'.$course_id); ?>" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                              <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                      <label class="form-label">Relacionar curso de prueba</label>
+                                      <div class="controls">
+                                          <select class="form-control select2" id="children" name="children" required="">
+                                            <option value="">---</option>
+                                            <option value="0">Ninguno</option>
+                                            <?php foreach ($children as $key => $value){?>
+                                            <option value="<?php echo $value->id; ?>">
+                                              <?php echo $value->title; ?>
+                                            </option>
+                                            <?php } ?>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="form-group">
@@ -341,6 +360,7 @@ $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
     </div>
   </div>
 </div>
+<input type="hidden" id="value_children" value="<?php echo $course_details['children']; ?>">
 
 <script type="text/javascript">
 var blank_outcome = jQuery('#blank_outcome_field').html();
@@ -349,6 +369,10 @@ jQuery(document).ready(function() {
     jQuery('#blank_outcome_field').hide();
     jQuery('#blank_requirement_field').hide();
     calculateDiscountPercentage($('#discounted_price').val());
+
+    var value_children = $("#value_children").val();
+    $("#children").val(value_children);
+
 });
 function appendOutcome() {
     jQuery('#outcomes_area').append(blank_outcome);

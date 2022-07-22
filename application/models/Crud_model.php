@@ -380,6 +380,7 @@ public function add_course($param1 = "") {
     $outcomes = $this->trim_and_return_json($this->input->post('outcomes'));
     $requirements = $this->trim_and_return_json($this->input->post('requirements'));
 
+    $data['children'] = html_escape($this->input->post('children'));
     $data['title'] = html_escape($this->input->post('title'));
     $data['short_description'] = $this->input->post('short_description');
     $data['description'] = $this->input->post('description');
@@ -449,6 +450,7 @@ function trim_and_return_json($untrimmed_array) {
 public function update_course($course_id, $type = "") {
     $outcomes = $this->trim_and_return_json($this->input->post('outcomes'));
     $requirements = $this->trim_and_return_json($this->input->post('requirements'));
+    $data['children'] = html_escape($this->input->post('children'));
     $data['title'] = $this->input->post('title');
     $data['short_description'] = $this->input->post('short_description');
     $data['description'] = $this->input->post('description');
@@ -1022,9 +1024,9 @@ public function all_courses() {
     $user_id = $this->session->userdata('user_id');
 
     if( $user_id ){
-        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' ORDER by category_id ASC";
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' AND a.is_free_course IS NULL ORDER by category_id ASC";
     }else{
-        $sql = "SELECT * FROM course AS a WHERE a.status ='active' ORDER by a.category_id ASC";
+        $sql = "SELECT * FROM course AS a WHERE a.status = 'active' AND a.is_free_course IN(1) ORDER by a.category_id ASC ";
     }
 
 
@@ -1034,12 +1036,23 @@ public function all_courses() {
 
 // Lista de cursos asociados al usuario
 public function get_all_course() {
-    $this->db->select('a.*');
+    /*$this->db->select('a.*');
     $this->db->join('enroll AS b', "b.course_id = a.id");
     #$this->db->where('a.status', 'active' );
     $this->db->where('b.user_id', $this->session->userdata('user_id') );
     #$this->db->order_by("a.id", "desc");
-    return $this->db->get('course AS a')->result_array();
+    return $this->db->get('course AS a')->result_array();*/
+    $user_id = $this->session->userdata('user_id');
+
+    if( $user_id ){
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' ORDER by category_id ASC";
+    }else{
+        $sql = "SELECT * FROM course AS a WHERE a.status ='active' ORDER by a.category_id ASC";
+    }
+
+
+    $result = $this->db->query($sql);
+    return $result->result_array();
 }
 
 public function enroll_student($user_id){

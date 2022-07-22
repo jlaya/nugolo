@@ -3,6 +3,12 @@
     //header("Location: ".base_url(uri_string()));
     $this->load->library('session');
     header('X-Frame-Options: SAMEORIGIN');
+
+    // Matricular estudiante de forma gratuita
+    if( $this->input->get('q') == "free" ){
+      $this->crud_model->enroll_to_free_course( $course_id, $user_id );
+    }
+
     $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
     $user_id = $this->session->userdata('user_id');
     $r1 = $this->Media_model->count_lesson( $user_id, $course_id );
@@ -481,13 +487,19 @@
             </form>
         </div>
       </div>
-
+      <?php if( $this->input->get('q') !="free" ){ ?>
       <div class="col-lg-5">
           <br>
         <object type="application/php" data='<?php echo base_url("chat_private?course_id=$course_id");?>' style="width:100%; height:600px;">
             <embed src='<?php echo base_url("chat_private?course_id=$course_id");?>' style="width:100%; height:600px;" frameborder="0" style="border:0;">
           </object>
       </div>
+      <?php }else{ ?>
+       <div class="col-lg-5">
+          <br>
+          <img src="<?php echo base_url('assets/chat-block.png') ?>" style="width: 100%">
+        </div>
+      <?php } ?>
     </div>
   </div>
 </section>

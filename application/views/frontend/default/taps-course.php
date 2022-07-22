@@ -39,7 +39,7 @@
         	Valoraci&oacute;n
         </a>
       </li>
-      <?php if( $this->session->userdata('user_login') ){ ?>
+      <?php if( $this->input->get('q') !="free" ){ ?>
       <li class="nav-item">
         <a class="nav-link" href='<?php echo base_url("document?course_id=$course_id"); ?>'>
           Cargar taller
@@ -100,7 +100,7 @@
       </div>
       </p>
     </div>
-    <?php if( $this->session->userdata('user_login') ){ ?>
+    <?php if( $this->input->get('q') !="free" ){ ?>
     <div class="tab-content" >
       <div class="row justify-content-center">
         <?php if( $doc > 0 ){ ?>

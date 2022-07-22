@@ -335,7 +335,7 @@ button:active {
                 <?php
                 $latest_courses = $this->crud_model->get_all_course();
                 foreach ($latest_courses as $latest_course){ ?>
-                <div style="width: 250px;height: 370px;position: relative;overflow: hidden;/* padding: 10px 10px 10px 10px; */display: inline-block;">
+                <div <?php if( $latest_course['is_pay'] == 1 && $latest_course['is_free_course'] ==1 ){ echo "hidden"; } ?> style="width: 250px;height: 370px;position: relative;overflow: hidden;/* padding: 10px 10px 10px 10px; */display: inline-block;">
                 
                 
                     <div style="background-color: #57C0C8;width: 250px; height: 300px; position: absolute; top: 50px;border-radius: 8px; display: inline-block;">
