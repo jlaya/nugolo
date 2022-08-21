@@ -428,6 +428,7 @@
     </style>
 
   <?php include 'includes_top.php';?>
+  <?php include 'google-analytics.php'; ?>
 </head>
 <body style="color: #fff; background: linear-gradient(338deg, #00205b, #37163b);">
 <section class="container-fluid">

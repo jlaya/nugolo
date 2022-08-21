@@ -33,6 +33,33 @@ class Document extends CI_Controller {
         $this->load->view('backend/index.php', $page_data);
     }
 
+    public function saveMessage(){
+        $post = $this->input->post();
+        # Usuario
+        $users = $this->doc->getData( 'users', $post['user_id'] );
+        $names = $users->first_name. "  ". $users->last_name;
+        # Curso
+        $users = $this->doc->getData( 'course', $post['course_id'] );
+        $course= $users->title;
+        # Categoria
+        $users = $this->doc->getData( 'category', $post['category_id'] );
+        $category= $users->name;
+        # Profesor
+        $teacher = $this->doc->getData( 'users', $post['tutor_id'] );
+        $tutor = $teacher->first_name. "  ". $teacher->last_name;
+
+        $messageText = $course.' ';
+        $messageText .= '. '.$category;
+        $messageText .= ' El tutor '.$tutor. ' ';
+        $messageText .= ' le ha enviado el siguiente mensaje: '.$post['messageSend'];
+        
+        $context = array(
+            'user_id' => $post['user_id'],
+            'text' => $messageText
+        );
+        $this->doc->messageText( $context );
+    }
+
     public function save() {
 
 

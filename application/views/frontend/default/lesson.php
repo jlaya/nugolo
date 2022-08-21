@@ -3,14 +3,13 @@
     //header("Location: ".base_url(uri_string()));
     $this->load->library('session');
     header('X-Frame-Options: SAMEORIGIN');
-
+    $user_id = $this->session->userdata('user_id');
     // Matricular estudiante de forma gratuita
     if( $this->input->get('q') == "free" ){
       $this->crud_model->enroll_to_free_course( $course_id, $user_id );
     }
 
     $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
-    $user_id = $this->session->userdata('user_id');
     $r1 = $this->Media_model->count_lesson( $user_id, $course_id );
     $r1 = $r1->can;
     $r2 = $this->Media_model->count_lesson_logros( $user_id, $course_id );
@@ -407,6 +406,7 @@
     </style>
 
   <?php include 'includes_top.php';?>
+  <?php include 'google-analytics.php'; ?>
 </head>
 <body style="color: #fff; background: linear-gradient(338deg, #00205b, #37163b);">
 

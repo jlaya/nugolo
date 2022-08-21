@@ -49,7 +49,6 @@
                             <th><?php echo get_phrase('enrolled_course'); ?></th>
                             <th><?php echo get_phrase('enrollment_date'); ?></th>
                             <th>Modalidad</th>
-                            <th>Estatus</th>
                             <th><?php echo get_phrase('actions'); ?></th>
                         </tr>
                     </thead>
@@ -68,18 +67,16 @@
                                 <td><?php echo $enroll['email']; ?></td>
                                 <td><?php echo $enroll['course']; ?></td>
                                 <td><?php echo date('D, d-M-Y', $enroll['date_added']); ?></td>
-                                <td style="<?php echo ($enroll['type'] == 1 ? 'background-color:green;color:#FFF;text-align: center;' : 'background-color:blue;color:#FFF;text-align: center;') ?>">
+                                <td style="<?php echo ($enroll['type'] == 5 ? 'background-color:green;color:#FFF;text-align: center;' : 'background-color:blue;color:#FFF;text-align: center;') ?>">
                                     <?php
-                                        if( $enroll['type'] == 1 ){
-                                            echo "Tarjeta";
-                                        }else if( $enroll['type'] == 2 ){
-                                            echo "PSE";
-                                        }else if( $enroll['type'] == 3 ){
+                                        if( $enroll['type'] == 5 ){
                                             echo "GRATIS";
+                                        }else if( $enroll['type'] == 6 ){
+                                            echo "ADQUIRIDO";
                                         }
                                     ?>
                                 </td>
-                                <td style="background-color: #0e1d53;color:#FFF;">
+                                <!--<td style="background-color: #0e1d53;color:#FFF;">
                                     <?php
                                         if( $enroll['type'] == 1 ){
                                             $state = json_decode($enroll['response']);
@@ -103,7 +100,7 @@
                                             }
                                         }
                                     ?>
-                                </td>
+                                </td>-->
                                 <td>
                                     <?php
                                         if( ($enroll['type'] == 2 && $enroll['response'] !="") || ($enroll['type'] == 2 && $enroll['response'] =="") ){

@@ -29,20 +29,11 @@ class Announce extends CI_Controller {
 
     public function add() {
 
+        $data['id']    = 0;
         $data['title']    = $this->input->post('title');
-        $data['url']      = $this->input->post('url');
-        $data['user_id']  = $this->session->userdata('user_id');
+        $data['html']      = $this->input->post('html');
+        $data['status']  = $this->input->post('status');
         $data['datetime'] = date('Y-m-d H:i:s');
-        if ($_FILES['image']['name'] != ""):
-            $archivo = $_FILES['image']['name'];
-            $ex      = explode('.', $archivo);
-            $ex      = $ex[1]; // Extencion
-            $archivo = 'doc-'.$this->input->post('id') . "." . $ex;
-            $ruta    = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
-            //echo $ruta;
-            move_uploaded_file($_FILES['image']['tmp_name'], $ruta . "/assets/backend/doc/" . $archivo);
-            $data['image'] = $archivo;
-        endif;
         $this->Announce_model->save($data);
         redirect(site_url('announce'), 'refresh');
     }
@@ -57,21 +48,10 @@ class Announce extends CI_Controller {
     }
 
     public function update() {
-
-        if ($_FILES['image']['name'] != ""):
-            $archivo = $_FILES['image']['name'];
-            $ex      = explode('.', $archivo);
-            $ex      = $ex[1]; // Extencion
-            $archivo = 'doc-'.$this->input->post('id') . "." . $ex;
-            $ruta    = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
-            //echo $ruta;
-            move_uploaded_file($_FILES['image']['tmp_name'], $ruta . "/assets/backend/doc/" . $archivo);
-            $data['image'] = $archivo;
-        endif;
-
         $data['id']       = $this->input->post('id');
         $data['title']    = $this->input->post('title');
-        $data['url']      = $this->input->post('url');
+        $data['html']      = $this->input->post('html');
+        $data['status']  = $this->input->post('status');
         $data['datetime'] = date('Y-m-d H:i:s');
         $this->Announce_model->save($data);
         redirect(site_url('announce'), 'refresh');

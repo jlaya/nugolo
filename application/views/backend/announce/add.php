@@ -1,4 +1,5 @@
-<?php 
+<?php
+    $courses = $this->user_model->get_rutinas()->result();
     if( $role_id == 1 ){
         $show_image = 'block';
     }else{
@@ -19,7 +20,7 @@
     <?php include 'application/views/backend/includes_top.php'; ?>
   </head>
   <!-- END HEAD -->
-<body class="page-body" data-url="http://neon.dev">
+<body class="page-body">
     <!-- BEGIN CONTAINER -->
     <div class="page-container">
       <?php include 'application/views/backend/'.$logged_in_user_role.'/navigation.php' ?>
@@ -27,37 +28,37 @@
         <?php include 'application/views/backend/header.php';?>
         <br>
         <br>
-        <form autocomplete="off" action="<?php echo site_url('announce/add'); ?>" method="post" role="form" enctype= multipart/form-data class="form-horizontal form-groups-bordered">
-            <input type="hidden" name="id" value="0">
+        <form id="formsAnuncio" action="<?php echo site_url('announce/add'); ?>" method="post">
             <div class="col-md-12 col-sm-12 col-xs-12">
 
                 <div class="form-group">
-                    <label for="field-1" class="col-sm-3 control-label">Titulo</label>
 
-                    <div class="col-sm-5">
-                        <input type="text" name="title" class="form-control" required="">
+                    <div class="col-sm-12">
+                        <select required="" class="form-control select2" id="status" name="status">
+                            <option value="">---</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Bloqueado</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="field-1" class="col-sm-3 control-label">Link</label>
 
-                    <div class="col-sm-5">
-                        <input type="url" name="url" class="form-control">
+                    <div class="col-sm-12">
+                        <input type="text" name="title" id="titles" class="form-control" placeholder="Titulo" required="">
                     </div>
                 </div>
 
-                <div class="form-group" style="display: <?php echo $show_image; ?>;">
-                    <label for="field-1" class="col-sm-3 control-label">Imagen</label>
+                <div class="form-group">
 
-                    <div class="col-sm-5">
-                        <input type="file" id="image" name = "image">
+                    <div class="col-sm-12">
+                        <textarea class="form-control" id="html" name="html" required=""></textarea>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-5">
-                        <button class = "btn btn-success" type="submit" name="button"><?php echo get_phrase('add_category'); ?></button>
+                        <button class = "btn btn-success" type="submit" onclick="envio()" name="button"><?php echo get_phrase('add_category'); ?></button>
                         <a href="<?php echo base_url('announce'); ?>">
                             <button class = "btn btn-info" type="button">Volver</button>
                         </a>
@@ -70,23 +71,10 @@
     </div>
 </body>
 <?php include 'application/views/backend/includes_bottom.php'; ?>
+<script src="<?php echo base_url('assets/global/js/htmeditor.min.js'); ?>" htmeditor_textarea="html" full_screen="no" editor_height="480" run_local="no"> </script>
 <script type="text/javascript">
-    $( document ).ready(function() {
-        
-        $('#course_id,#name').keyup(function(){
-            var href  = $("#course_id").find(':selected').attr('data-url');
-            var name  = $("#name").val();
-            var url   = "";
-
-            if( href !="" && name !="" ){
-                url = "<a href='"+ href +"' target='_blank'>"+ name +"</a>";
-            }
-
-            $( "#url" ).val( href );
-            $( "span.show-url" ).html( url );
-            
-        });
-
-    });
+    function envio(){
+        document.getElementById("formsAnuncio").submit();
+    }
 </script>
 </html>

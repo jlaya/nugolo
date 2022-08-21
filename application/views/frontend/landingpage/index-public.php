@@ -238,7 +238,7 @@
              <div class="row mt-4">
                 <div class="col-sm-6">
               <img src="https://i.ibb.co/njBrC6x/personajes.png" class="img-fluid" alt="profesores">
-              <p class="row-text-center mt-4 " style="text-align:center;font-size: 20px;color: white;">Lleva tu Conocmiento a otro nivel >>></p>
+              <p class="row-text-center mt-4 " style="text-align:center;font-size: 20px;color: white;">Lleva tu Conocimiento a otro nivel >>></p>
           </div>
           
           <div class="col-sm-6">

@@ -11,7 +11,7 @@
 	<?php endif; ?>
 	
 	<?php include 'application/views/frontend/landingpage/icon-whatsapp.php'; ?>
-
+	<?php include 'google-analytics.php'; ?>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />

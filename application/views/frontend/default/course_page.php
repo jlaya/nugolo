@@ -468,12 +468,12 @@
                         </div>
                     </div>
                     <div class="col-lg-4 order-0 order-lg-1">
-                        <div class="course-sidebar natural" style="display: none;">
+                        <div class="course-sidebar natural">
                             <?php if ($course_details['video_url'] != ""): ?>
                                 <div class="preview-video-box">
                                     <a href="#modal">
-                                      <object type="application/html" data='<?php echo $course_details["video_url"] ?>' style="width:100%; height:300px;">
-                                        <embed src='<?php echo $course_details["video_url"] ?>' style="width:100%; height:300px;" frameborder="0" style="border:0;">
+                                      <object type="application/html" data='<?php echo $course_details['video_url']; ?>' style="width:100%; height:300px;">
+                                        <embed src='<?php echo $course_details['video_url']; ?>' style="width:100%; height:300px;" frameborder="0" style="border:0;">
                                       </object>
                                       <span class="preview-text"><?php echo get_phrase('preview_this_course'); ?></span>
                                       <span class="play-btn"></span>

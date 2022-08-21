@@ -1,4 +1,5 @@
-<?php 
+<?php
+    $courses = $this->user_model->get_rutinas()->result();
     if( $role_id == 1 ){
         $required = '';
         $show_image = 'block';
@@ -34,27 +35,28 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
 
                 <div class="form-group">
-                    <label for="field-1" class="col-sm-3 control-label">Titulo</label>
+                    
 
-                    <div class="col-sm-5">
-                        <input type="text" name="title" class="form-control" value="<?php echo $edit->title; ?>" required="">
+                    <div class="col-sm-12">
+                        <select required="" class="form-control select2" id="status" name="status">
+                            <option value="">---</option>
+                            <option value="1" <?php if( $edit->status == 1 ){ echo "selected"; } ?> >Activo</option>
+                            <option value="0" <?php if( $edit->status == 0 ){ echo "selected"; } ?>>Bloqueado</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="field-1" class="col-sm-3 control-label">Link</label>
 
-                    <div class="col-sm-5">
-                        <input type="url" name="url" class="form-control" value="<?php echo $edit->url; ?>">
+                    <div class="col-sm-12">
+                        <input type="text" name="title" class="form-control" value="<?php echo $edit->title; ?>" placeholder="Titulo" required="">
                     </div>
                 </div>
 
-                <div class="form-group" style="display: <?php echo $show_image; ?>;">
-                    <label for="field-1" class="col-sm-3 control-label">Imagen</label>
+                <div class="form-group">
 
-                    <div class="col-sm-5">
-                        <input type="file" id="image" name = "image" <?php echo $required ?> >
-                        <small style="color: red;font-weight: bold;"><?php echo $edit->image; ?></small>
+                    <div class="col-sm-12">
+                        <textarea class="form-control" id="htmeditor" name="html" required=""><?php echo $edit->html; ?></textarea>
                     </div>
                 </div>
 
@@ -73,23 +75,10 @@
     </div>
 </body>
 <?php include 'application/views/backend/includes_bottom.php'; ?>
+<script src="<?php echo base_url('assets/global/js/htmeditor.min.js'); ?>" htmeditor_textarea="htmeditor"      full_screen="no" editor_height="480" run_local="no"> </script>
 <script type="text/javascript">
     $( document ).ready(function() {
         
-        $('#course_id,#name').keyup(function(){
-            var href  = $("#course_id").find(':selected').attr('data-url');
-            var name  = $("#name").val();
-            var url   = "";
-
-            if( href !="" && name !="" ){
-                url = "<a href='"+ href +"' target='_blank'>"+ name +"</a>";
-            }
-
-            $( "#url" ).val( href );
-            $( "span.show-url" ).html( url );
-            
-        });
-
     });
 </script>
 </html>

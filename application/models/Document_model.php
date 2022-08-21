@@ -9,12 +9,23 @@ class Document_model extends CI_Model {
 		parent::__construct();
 	}
 
+    public function getData( $table, $id ) {
+        
+        $this->db->where('id', $id );
+        $query = $this->db->get( $table );
+        return $query->row();
+    }
+
     public function getDoc($course_id) {
         
         $this->db->where('course_id', $course_id);
         $this->db->where('user_id', $this->session->userdata('user_id'));
         $query = $this->db->get('doc');
         return $query->result();
+    }
+
+    public function messageText( $data ) {
+        return $this->db->insert('message_teacher', $data);
     }
 
     public function verifyDoc($course_id) {
@@ -27,7 +38,7 @@ class Document_model extends CI_Model {
     }
 
     public function getDocTeacher() {
-        $this->db->select('b.id,d.title,c.id AS user_id,c.first_name,c.last_name,b.doc,b.yes,b.no');
+        $this->db->select('b.id,d.title,c.first_name,c.last_name,b.doc,b.yes,b.no, c.id AS user_id, d.id AS course_id, d.category_id, a.user_id AS tutor_id');
         $this->db->join('doc AS b', "a.course_id = b.course_id");
         $this->db->join('users AS c', "b.user_id = c.id");
         $this->db->join('course AS d', "b.course_id = d.id");

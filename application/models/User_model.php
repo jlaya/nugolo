@@ -11,11 +11,38 @@ class User_model extends CI_Model {
         $this->output->set_header('Pragma: no-cache');
     }
 
+    public function messageCountUser() {
+        $this->db->select('COUNT(a.message_thread_id) AS can');
+        $this->db->where('b.read_status', NULL);
+        $this->db->join('message AS b', "a.sender = b.sender");
+        $this->db->where('a.reciever', $this->session->userdata('user_id'));
+        $query = $this->db->get('message_thread AS a');
+        return $query->row();
+    }
+
+    public function updateMessageUser( $message_thread_code ) {
+
+        $this->db->where('a.message_thread_code', $message_thread_code );
+        $this->db->where('a.read_status', NULL );
+        $this->db->update('message AS a', array( 'a.read_status' => 1 ) );
+    }
+
+    public function messageTextUser() {
+        $this->db->where('a.user_id', $this->session->userdata('user_id'));
+        $query = $this->db->get('message_teacher AS a');
+        return $query->result();
+    }
+
     /**
     / Departamentos
     */
     public function get_depart() {
         return $this->db->get('depart')->result();
+    }
+
+    public function getCategory() {
+        $this->db->where('a.parent', 0);
+        return $this->db->get('category AS a')->result();
     }
 
     /**

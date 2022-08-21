@@ -1722,7 +1722,7 @@ public function get_modules() {
         $num_str_pad = $this->num_str_pad( $document_id );
 
         #exit;
-        if( $v1->can == $v2->can && $v3->can > 0 ){
+        if( $v3->can > 0 ){
             
             // Variables para Acta
             $nombre_estudiante = $user->first_name." ".$user->last_name;

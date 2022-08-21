@@ -211,12 +211,12 @@
                 </div>
                 <div class="col">
                   <a href="<?php echo base_url('registro');?>">
-                    <button class="color-571894 ">SIGN UP</button>
+                    <button class="color-571894 ">Registrarse</button>
                   </a>
                 </div>
                 <div class="col">
                   <a href="<?php echo base_url('login');?>">
-                    <button class="color-571894 ">LOGIN</button>
+                    <button class="color-571894 ">Entrar</button>
                   </a>
                 </div>
                 <div class="col">

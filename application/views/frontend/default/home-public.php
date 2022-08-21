@@ -1,5 +1,6 @@
 <?php
     $user_details = $this->user_model->get_user($this->session->userdata('user_id'))->row_array();
+    $category = $this->input->get('category');
     // Conteo de la cantidad de puntuaciones que tenga el usuario
     $wallet = $this->Media_model->wallet();
 
@@ -210,19 +211,25 @@
    
 </head>
 <body style="background: linear-gradient(338deg, #00205b, #37163b);">
-        
-    
     <br><br><br><br>
     <!-- Estructura 7 -->
-    <div class="col-auto">
+    <div class="row">
+      <div class="col-12">
+        <?php include 'menu-home.php'; ?>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-8"><?php include 'filter-category-home-public.php'; ?></div>
+      <div class="col-2"></div>
+    </div>
+    
+    <div class="col-auto mt-5">
       <div class="m-0 row justify-content-center">
         <div class="">
-            <button class="btn btn-default">
-              <a style="color: #FFF;" href="<?php echo base_url(); ?>">Volver</a>
-            </button>
             <div class="container-fluid row justify-content-center mx-0 px-1">
                 <?php
-                $latest_courses = $this->crud_model->all_courses();
+                $latest_courses = $this->crud_model->all_courses($category);
                 foreach ($latest_courses as $latest_course){ ?>
                   <?php
                     if( $this->session->userdata('user_id') ){

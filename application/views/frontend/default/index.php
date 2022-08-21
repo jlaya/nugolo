@@ -17,7 +17,7 @@
 	<meta name="author" content="<?php echo get_settings('author') ?>" />
 	
 	<?php include 'application/views/frontend/landingpage/icon-whatsapp.php'; ?>
-
+	<?php include 'google-analytics.php'; ?>
 	<?php
 	$seo_pages = array('course_page');
 	if (in_array($page_name, $seo_pages)):

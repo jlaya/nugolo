@@ -294,7 +294,7 @@
                 <th><?php echo $value->course; ?></th>
                 <th>
                   <?php
-                    if( $v1->can == $v2->can && $v3->can > 0 ){
+                    if( $v3->can > 0 ){
                       echo "<a target='_blank' href='".base_url("home/pdf/2?user_id=".$value->user_id."&course_id=".$value->course_id)."'><button class='btn btn-default'>Descargar</button></a>";
                     }else{
                       echo "NO";
@@ -303,7 +303,7 @@
                 </th>
                 <th>
                   <?php
-                    if( $v1->can == $v2->can && $v3->can > 0 ){
+                    if( $v3->can > 0 ){
                       echo "<a target='_blank' href='".base_url("home/pdf/1?user_id=".$value->user_id."&course_id=".$value->course_id)."'><button class='btn btn-default'>Descargar</button></a>";
                     }else{
                       echo "NO";

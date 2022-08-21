@@ -21,6 +21,13 @@ class Announce_model extends CI_Model {
         return $query->result();
     }
 
+    public function announceActive()
+    {   
+        $this->db->where('status', 1 );
+        $query = $this->db->get('announce');
+        return $query->result();
+    }
+
     public function show_public()
     {
         $query = $this->db->get('announce');

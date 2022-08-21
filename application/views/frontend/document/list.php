@@ -348,6 +348,7 @@
           background-color: transparent;
       }
     </style>
+    <?php include 'application/views/frontend/default/google-analytics.php'; ?>
 </head>
 <body style="color: #fff;background: linear-gradient(338deg, #00205b, #37163b);">
 
@@ -366,7 +367,7 @@
             <form action="<?php echo base_url('document/save'); ?>" enctype="multipart/form-data" method="POST">
               <input type="hidden" name="course_id" value="<?php echo $this->input->get('course_id'); ?>">
               <?php if( count($verify) == 0 ){ ?>
-              <input type="file" name="doc" required="" accept="application/pdf">
+              <input type="file" name="doc" id="doc" required="" accept="application/pdf">
               <input type="submit" value="Adjuntar" class="btn btn-primary">
               <?php } ?>
               <a href="<?php echo $this->session->userdata('url'); ?>">
@@ -393,3 +394,25 @@
 </section>
 </body>
 </html>
+<script type="text/javascript">
+    const MAXIMO_TAMANIO_BYTES = 5000000; // 1MB = 1 millón de bytes
+
+// Obtener referencia al elemento
+const $miInput = document.querySelector("#doc");
+
+$miInput.addEventListener("change", function () {
+  // si no hay archivos, regresamos
+  if (this.files.length <= 0) return;
+
+  // Validamos el primer archivo únicamente
+  const archivo = this.files[0];
+  if (archivo.size > MAXIMO_TAMANIO_BYTES) {
+    const tamanioEnMb = MAXIMO_TAMANIO_BYTES / 1000000;
+    alert(`El tamaño máximo es ${tamanioEnMb} MB`);
+    // Limpiar
+    $miInput.value = "";
+  } else {
+    // Validación pasada. Envía el formulario o haz lo que tengas que hacer
+  }
+});
+</script>

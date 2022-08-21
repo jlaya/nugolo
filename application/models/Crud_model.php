@@ -1015,18 +1015,20 @@ public function get_latest_10_course() {
 }
 
 // Lista de cursos
-public function all_courses() {
-    /*$this->db->select('a.*');
-    $this->db->where('a.status', 'active' );
-    $this->db->order_by("a.id", "desc");
-    return $this->db->get('course AS a')->result_array();*/
-
+public function all_courses( $category = 0 ) {
+    
     $user_id = $this->session->userdata('user_id');
 
-    if( $user_id ){
-        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' AND a.is_free_course IS NULL ORDER by category_id ASC";
+    if( $category == 0 ){
+        $whereCategory = "";
     }else{
-        $sql = "SELECT * FROM course AS a WHERE a.status = 'active' AND a.is_free_course IN(1) ORDER by a.category_id ASC ";
+        $whereCategory = " AND category_id = $category ";
+    }
+
+    if( $user_id ){
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id AND type=1) AS is_pay FROM course AS a WHERE a.status ='active' AND a.is_free_course IS NULL $whereCategory ORDER by category_id ASC";
+    }else{
+        $sql = "SELECT * FROM course AS a WHERE a.status = 'active' AND a.is_free_course IN(1) $whereCategory ORDER by a.category_id ASC ";
     }
 
 
@@ -1036,21 +1038,30 @@ public function all_courses() {
 
 // Lista de cursos asociados al usuario
 public function get_all_course() {
-    /*$this->db->select('a.*');
-    $this->db->join('enroll AS b', "b.course_id = a.id");
-    #$this->db->where('a.status', 'active' );
-    $this->db->where('b.user_id', $this->session->userdata('user_id') );
-    #$this->db->order_by("a.id", "desc");
-    return $this->db->get('course AS a')->result_array();*/
     $user_id = $this->session->userdata('user_id');
 
     if( $user_id ){
-        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id) AS is_pay FROM course AS a WHERE a.status ='active' ORDER by category_id ASC";
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id AND type=1) AS is_pay FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id and b.user_id=$user_id and b.type IS NOT NULL ) WHERE a.status ='active' AND a.is_free_course IS NULL ORDER by a.category_id ASC";
     }else{
         $sql = "SELECT * FROM course AS a WHERE a.status ='active' ORDER by a.category_id ASC";
     }
 
 
+    $result = $this->db->query($sql);
+    return $result->result_array();
+}
+
+public function get_enroll_course( $category = 0 ) {
+
+    if( $category == 0 ){
+        $whereCategory = "";
+    }else{
+        $whereCategory = " AND category_id = $category ";
+    }
+    $user_id = $this->session->userdata('user_id');
+    $sql = "(SELECT a.* FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id and b.user_id=$user_id and b.type = 5 AND close IS NULL ) WHERE a.status ='active' AND a.is_free_course = 1 $whereCategory ORDER by a.category_id ASC)
+    UNION
+    (SELECT a.* FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id and b.user_id=$user_id and b.type = 6 ) WHERE a.status ='active' AND a.is_free_course IS NULL $whereCategory ORDER by a.category_id ASC)";
     $result = $this->db->query($sql);
     return $result->result_array();
 }
@@ -1070,6 +1081,15 @@ public function enroll_a_student_manually() {
         # code...
         $data['course_id'] = $this->input->post('course_id');
         $data['user_id']   = $value;
+        $data['type']      = 6;
+
+        $this->db->where('id = ', $data['course_id'] );
+        $children_obj = $this->db->get('course')->row();
+        if( $children_obj->children > 0 ){
+            $children = $children_obj->children;
+        }else{
+            redirect(site_url('admin/enroll_student'), 'refresh');
+        }
 
         if ($this->db->get_where('enroll', $data)->num_rows() > 0) {
         $this->session->set_flashdata('error_message', get_phrase('student_has_already_been_enrolled_to_this_course'));
@@ -1077,6 +1097,7 @@ public function enroll_a_student_manually() {
 
             $this->db->where('user_id =', $value );
             $this->db->where('course_id = ', $data['course_id'] );
+            $this->db->where('type = ', 6 );
             $result = $this->db->get('enroll');
 
             if ($result->num_rows() > 0) {
@@ -1085,6 +1106,12 @@ public function enroll_a_student_manually() {
                 $data['date_added'] = strtotime(date('D, d-M-Y'));
                 $this->db->insert('enroll', $data);
                 $this->session->set_flashdata('flash_message', get_phrase('student_has_been_enrolled_to_that_course'));
+
+                // Asignacion de curso completo
+                $this->db->where('user_id =', $value );
+                $this->db->where('course_id = ', $children );
+                $this->db->where('type = ', 5 );
+                $this->db->update('enroll', array('close' => 1));
             }
         }
 
@@ -1125,6 +1152,7 @@ public function enroll_a_teacher_course_manually() {
 public function enroll_to_free_course($course_id = "", $user_id = "") {
     $data['course_id'] = $course_id;
     $data['user_id']   = $user_id;
+    $data['type']      = 5;
     if ($this->db->get_where('enroll', $data)->num_rows() > 0) {
         $this->session->set_flashdata('error_message', get_phrase('student_has_already_been_enrolled_to_this_course'));
     }else {

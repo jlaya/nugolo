@@ -1,8 +1,8 @@
 
 <!-- Play -->
-<img class="play" width="60px" style="float: right;overflow: auto;cursor: pointer;" src="<?php echo base_url('assets/sounds/stop.gif'); ?>" title="Reproducir...">
+<img  class="play" width="60px" style="float: right;overflow: auto;cursor: pointer;position: fixed;" src="<?php echo base_url('assets/sounds/stop.gif'); ?>" title="Reproducir...">
 <!-- Stop -->
-<img class="stop" width="60px" style="float: right;overflow: auto;cursor: pointer;" src="<?php echo base_url('assets/sounds/play.gif'); ?>" title="Detener...">
+<img  class="stop" width="60px" style="float: right;overflow: auto;cursor: pointer;position: fixed;" src="<?php echo base_url('assets/sounds/play.gif'); ?>" title="Detener...">
 
 
 <script src="<?php echo base_url('assets/sounds/ion.sound.js'); ?>"></script>
