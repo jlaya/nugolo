@@ -7,6 +7,61 @@
   		cursor: pointer;
   	}
   </style>
+  <style type="text/css">
+      /* From uiverse.io by @kirzin */
+        .button-preview {
+         text-decoration: none;
+         position: relative;
+         border: none;
+         font-size: 14px;
+         font-family: inherit;
+         color: #fff;
+         height: 3em;
+         line-height: 2em;
+         text-align: center;
+         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+         background-size: 300%;
+         border-radius: 30px;
+         z-index: 1;
+        }
+
+        .button-preview:hover {
+         animation: ani 8s linear infinite;
+         border: none;
+        }
+
+        @keyframes ani {
+         0% {
+          background-position: 0%;
+         }
+
+         100% {
+          background-position: 400%;
+         }
+        }
+
+        .button-preview:before {
+         content: '';
+         position: absolute;
+         top: -5px;
+         left: -5px;
+         right: -5px;
+         bottom: -5px;
+         z-index: -1;
+         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+         background-size: 400%;
+         border-radius: 35px;
+         transition: 1s;
+        }
+
+        .button-preview:hover::before {
+         filter: blur(20px);
+        }
+
+        .button-preview:active {
+         background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+        }
+    </style>
   <div class="content">
     <!-- Nav pills -->
     <ul class="nav nav-pills" role="tablist">
@@ -42,7 +97,7 @@
       <?php if( $this->input->get('q') !="free" ){ ?>
       <li class="nav-item">
         <a class="nav-link" href='<?php echo base_url("document?course_id=$course_id"); ?>'>
-          Cargar taller
+          Enviar taller
         </a>
       </li>
       <?php } ?>
@@ -105,15 +160,15 @@
       <div class="row justify-content-center">
         <?php if( $doc > 0 ){ ?>
         <div class="col-auto">
-          <label class="form-check-label" for="is_checked">
-            Si viste todo el curso dale clic en el botón enviar
-          </label>
-        </div>
-        <div class="col-auto">
           <input required="" type="checkbox" class="form-check-input" id="is_checked" name="is_checked" value="1">
         </div>
         <div class="col-auto">
-          <button style="width:150px;" type="submit" class="btn button-send btn-lg btn-block shadow-sm" onclick="return confirm(\'Esta de acuerdo en dar de visto al curso?\');">Enviar</button>
+          <button style="width:150px;" type="submit" class="button-preview" onclick="return confirm(\'Esta de acuerdo en dar de visto al curso?\');">Enviar</button>
+        </div>
+        <div class="col-auto">
+          <label class="form-check-label">
+            Si viste todo el curso dale clic en el botón enviar
+          </label>
         </div>
         <?php }else{ ?>
           <div class="col-auto">

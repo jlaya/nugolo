@@ -51,7 +51,7 @@ class Document extends CI_Controller {
         $messageText = $course.' ';
         $messageText .= '. '.$category;
         $messageText .= ' El tutor '.$tutor. ' ';
-        $messageText .= ' le ha enviado el siguiente mensaje: '.$post['messageSend'];
+        $messageText .= ' le ha enviado el siguiente mensaje: <br/>'.$post['messageSend'];
         
         $context = array(
             'user_id' => $post['user_id'],

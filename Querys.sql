@@ -1,13 +1,13 @@
 
 
 
-CREATE TABLE `message_teacher` ( `id` INT(11) NOT NULL AUTO_INCREMENT , `user_id` INT(11) NOT NULL , `text` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;
+--CREATE TABLE `message_teacher` ( `id` INT(11) NOT NULL AUTO_INCREMENT , `user_id` INT(11) NOT NULL , `text` TEXT NOT NULL, PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
 
-ALTER TABLE `message_teacher` ADD `timeStamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `text`;
+--ALTER TABLE `message_teacher` ADD `timeStamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `text`;
 
-DROP TABLE announce;
-CREATE TABLE `announce` (
+--DROP TABLE announce;
+/*CREATE TABLE `announce` (
   `id` int(11) NOT NULL,
   `title` text,
   `html` text,
@@ -17,5 +17,31 @@ CREATE TABLE `announce` (
 ALTER TABLE `announce`
   ADD PRIMARY KEY (`id`);
 ALTER TABLE `announce`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;*/
+
+
+--ALTER TABLE `doc` ADD `intentos` INT(11) NULL AFTER `no`;
+
+
+TRUNCATE `message`;
+TRUNCATE `message_teacher`;
+TRUNCATE `message_thread`;
+--ALTER TABLE `message_teacher` ADD `visto` INT(1) NULL AFTER `timeStamp`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

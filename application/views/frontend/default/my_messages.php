@@ -51,8 +51,8 @@
 <section class="message-area">
     <!-- Tab links -->
     <div class="tab">
-      <button class="tablinks" onclick="openContent(event, 'messageContent')">Mensajeria</button>
-      <button class="tablinks" onclick="openContent(event, 'CalifContent')">Calificaciones</button>
+      <button class="tablinks" onclick="openContent(event, 'messageContent', 0)">Mensajeria</button>
+      <button class="tablinks" onclick="openContent(event, 'CalifContent', 1)">Calificaciones</button>
     </div>
 
     <!-- Tab content -->
@@ -159,9 +159,19 @@
     </div>
 </section>
 <script type="text/javascript">
-    function openContent(evt, cityName) {
+    function openContent(evt, cityName, event) {
       // Declare all variables
       var i, tabcontent, tablinks;
+
+      if( event === 1 ){
+        $.ajax({
+            url: '<?php echo site_url('home/updateMessageUserTeacher/');?>',
+            success: function( r )
+            {
+                //jQuery('#sub_category_id').html(response);
+            }
+        });
+      }
 
       // Get all elements with class="tabcontent" and hide them
       tabcontent = document.getElementsByClassName("tabcontent");

@@ -1811,5 +1811,84 @@ public function get_modules() {
 
     ///////////////////////////////////////////////////////////////////////////
 
+    // Envio de test email
+    public function emailTest() {
+        
+        // Load PHPMailer library
+        $this->load->library('phpmailer_lib');
+        
+        // PHPMailer object
+        $mail = $this->phpmailer_lib->load();
+        
+        // SMTP configuration
+        $mail->isSMTP();
+        $mail->Host     = 'mail.nugolociencia.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'service@nugolociencia.com';
+        $mail->Password = '_}6}nVO^7wN[';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port     = 587;
+        
+        #$emailSend = "nags.designer@gmail.com";
+        $emailSend = "jesusgerard2008@gmail.com";
+        
+        $mail->setFrom('service@nugolociencia.com', 'Nugolo ciencia 2022');
+        $mail->addReplyTo($emailSend, 'Programacion.net');
+        
+        // Add a recipient
+        $mail->addAddress($emailSend);
+        
+        // Add cc or bcc 
+        $mail->addCC($emailSend);
+        $mail->addBCC($emailSend);
+        
+        // Email subject
+        $mail->Subject = 'Send Email via SMTP using PHPMailer in CodeIgniter';
+        
+        // Set email format to HTML
+        $mail->isHTML(true);
+        
+        // Email body content
+        $mailContent = "<h1>Send HTML Email using SMTP in CodeIgniter</h1>
+            <p>This is a test email sending using SMTP mail server with PHPMailer.</p>";
+        $mail->Body = $mailContent;
+        
+        // Send email
+        if(!$mail->send()){
+            echo 'Message could not be sent.';
+            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        }else{
+            echo 'Message has been sent: '. $mail->ErrorInfo;
+        }
+
+
+    }
+    
+    public function email2(){
+        
+        $to = 'jesusgerard2008@gmail.com';
+        $subject = 'Nugolo Prueba';
+        
+        $headers = array(
+        "MIME-Version" => "1.0",
+        "Content-Type" => "text/html;charset=UTF-8",
+        "From" => "service@nugolociencia.com",
+       # "Reply-To" => "mail.nugolociencia.com"
+        );
+        
+        $message = "Hola mundo nugolo";
+        
+        $send = mail( $to, $subject, $message, $headers );
+        
+        echo ( $send ? 'Enviado..' : 'Fallido...' );
+        
+    }
+
+    // Aqui se da como visto los mensajes de las notificaciones a los estudiantes
+    // sobre las certificaciones
+    public function updateMessageUserTeacher(){
+        $this->user_model->updateMessageUserTeacher();
+    }
+
 
 }

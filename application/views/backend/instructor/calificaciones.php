@@ -37,11 +37,12 @@
                 <div class="div-1">
                     <form action="<?php echo site_url('admin/enroll_teacher_course/enroll'); ?>" method="post" role="form" class="form-horizontal form-groups-bordered">
                         <div style="width: 100%;">
-                        <table class="table table-bordered datatable" id="table-1" style="width: 100%;">
+                        <table class="table table-bordered datatable" id="table-calificaciones" style="width: 100%;">
                             <thead>
                               <tr>
                                 <th style="width: 30%;">Alumno</th>
                                 <th>Curso</th>
+                                <th style="font-weight: bold;">Fallos</th>
                                 <th style="width: 5%;">Documento</th>
                                 <th style="width: 5%;">Mensaje</th>
                                 <th style="width: 5%;">SI</th>
@@ -58,14 +59,15 @@
                                     <tr>
                                       <td><?php echo $value->first_name.' '.$value->last_name; ?></td>
                                       <td><?php echo $value->title; ?></td>
+                                      <td style="color: red; font-weight: bold;text-align: center;"><?php echo $value->intentos; ?></td>
                                       <td>
                                           <a target="_blank" href="<?php echo base_url($value->doc); ?>">Ver</a>
                                       </td>
                                       <td>
                                           <button type="button" title="Escribir mensaje..." class="btn btn-success" onclick="getMessage(<?php echo $value->user_id; ?>,<?php echo $value->course_id; ?>,<?php echo $value->category_id; ?>,<?php echo $value->tutor_id; ?>)">Abrir</button>
                                       </td>
-                                      <td><input type="checkbox" class="yes yes-<?php echo $value->id; ?>" id="user_id" data-id="<?php echo $value->id; ?>" <?php echo ( $value->yes == 1 ? "checked" : "" ) ?> /></td>
-                                      <td><input type="checkbox" class="no no-<?php echo $value->id; ?>" id="user_id" data-id="<?php echo $value->id; ?>" <?php echo ( $value->no == 1 ? "checked" : "" ) ?> /></td>
+                                      <td><input type="checkbox" class="yes yes-<?php echo $value->id; ?>" id="user_id" data-id="<?php echo $value->id; ?>" <?php #echo ( $value->yes == 1 ? "checked" : "" ) ?> /></td>
+                                      <td><input type="checkbox" class="no no-<?php echo $value->id; ?>" id="user_id" data-id="<?php echo $value->id; ?>" <?php #echo ( $value->no == 1 ? "checked" : "" ) ?> /></td>
                                       <td>
                                           <a class="btn btn-primary" target="_blank" href="<?php echo base_url('admin/pdf/'.$value->user_id); ?>">
                                               Ver
@@ -83,6 +85,28 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    $( document ).ready(function() {
+        $('#table-calificaciones').DataTable({
+
+            "stateSave": true,
+
+            "dom": "fltpi",
+
+            "columnDefs": [
+
+            { "orderable": false, "targets": [0, 5] }
+
+            ],
+
+            "oLanguage": {
+
+            "sSearch": "Buscar (alumno, curso):"
+
+            }
+
+        });
+    });
 
     function getMessage( user_id, course_id, category_id, tutor_id ){
         $(" #value-user_id ").val( user_id );
@@ -114,19 +138,26 @@
         //some think
         var id         = $(this).data("id");
         var is_checked = $(this).is(':checked');
-        
-        $.ajax({
-            url: '<?php echo site_url("document/is_approved_yes");?>',
-            type : 'POST',
-            data : {
-                'id' : id,
-                'yes' : is_checked
-            },
-            success: function( response )
-            {
-                $(".no-"+id).prop("checked",false);
-            }
-        });
+
+        var opcion = confirm("¿Esta seguro?");
+        if (opcion == true) {
+            $.ajax({
+                url: '<?php echo site_url("document/is_approved_yes");?>',
+                type : 'POST',
+                data : {
+                    'id' : id,
+                    'yes' : is_checked
+                },
+                success: function( response )
+                {
+                    //$(".no-"+id).prop("checked",false);
+                    //$(".yes-"+id).prop("checked",false);
+                    location.reload();
+                }
+            });
+        }else{
+            $(".yes-"+id).prop("checked",false);
+        }
     });
 
     // Chequear si no se calificara positivo
@@ -134,19 +165,26 @@
         //some think
         var id         = $(this).data("id");
         var is_checked = $(this).is(':checked');
-        
-        $.ajax({
+
+        var opcion = confirm("¿Esta seguro?");
+        if (opcion == true){
+            $.ajax({
             url: '<?php echo site_url("document/is_approved_yes");?>',
-            type : 'POST',
-            data : {
-                'id' : id,
-                'no' : is_checked
-            },
-            success: function( response )
-            {
-                $(".yes-"+id).prop("checked",false);
-            }
-        });
+                type : 'POST',
+                data : {
+                    'id' : id,
+                    'no' : is_checked
+                },
+                success: function( response )
+                {
+                    //$(".yes-"+id).prop("checked",false);
+                    //$(".no-"+id).prop("checked",false);
+                    location.reload();
+                }
+            });
+        }else{
+            $(".no-"+id).prop("checked",false);
+        }
     });
 
 </script>

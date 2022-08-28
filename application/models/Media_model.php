@@ -9,6 +9,16 @@ class Media_model extends CI_Model {
         $this->load->library('session');
     }
 
+    public function intentosFallidos( $user_id ) {
+        $this->db->select('b.title,a.intentos');
+        $this->db->where('a.no', 1 );
+        $this->db->where('a.intentos', 2 );
+        $this->db->where('a.user_id', $user_id );
+        #$this->db->where('a.course_id', $course_id );
+        $this->db->join('course AS b', 'a.course_id = b.id');
+        return $this->db->get('doc AS a')->result();
+    }
+
     public function get_children( $children_id ) {
         $this->db->where('id', $children_id);
         return $this->db->get('course')->row_array();

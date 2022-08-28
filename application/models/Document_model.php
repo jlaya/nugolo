@@ -4,10 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Document_model extends CI_Model {
 
   // constructor
-	function __construct()
-	{
-		parent::__construct();
-	}
+    function __construct()
+    {
+        parent::__construct();
+    }
 
     public function getData( $table, $id ) {
         
@@ -38,7 +38,7 @@ class Document_model extends CI_Model {
     }
 
     public function getDocTeacher() {
-        $this->db->select('b.id,d.title,c.first_name,c.last_name,b.doc,b.yes,b.no, c.id AS user_id, d.id AS course_id, d.category_id, a.user_id AS tutor_id');
+        $this->db->select('b.id,d.title,c.first_name,c.last_name,b.doc,b.yes,b.no, c.id AS user_id, d.id AS course_id, d.category_id, a.user_id AS tutor_id, b.intentos');
         $this->db->join('doc AS b', "a.course_id = b.course_id");
         $this->db->join('users AS c', "b.user_id = c.id");
         $this->db->join('course AS d', "b.course_id = d.id");
@@ -104,14 +104,33 @@ class Document_model extends CI_Model {
         return $this->db->delete('people');
     }
 
+    public function emailSend( $to, $message ){
+        
+        $subject = 'Nugolo Ciencia';
+        $headers = array(
+        "MIME-Version" => "1.0",
+        "Content-Type" => "text/html;charset=UTF-8",
+        "From" => "service@nugolociencia.com",
+       # "Reply-To" => "mail.nugolociencia.com"
+        );
+        
+        $send = mail( $to, $subject, $message, $headers );
+        
+        echo ( $send ? 'Enviado..' : 'Fallido...' );
+        
+    }
+
     public function is_approved_yes( $data )
     {
         $id  = $data['id'];
-        $yes = $data['yes'];
+        #$yes = $data['yes'];
 
         $doc = $this->Media_model->get_doc($id);
+        
+        #echo "QUE PASA ?";
+        #exit;
 
-        if( $yes == 'true' ){
+        if( isset($data['yes']) && $data['yes'] == 'true' ){
             #echo "paso 1";
             #exit;
             $update['yes'] = 1;
@@ -130,12 +149,41 @@ class Document_model extends CI_Model {
         }else{
             #echo "paso 2";
             #exit;
-            $update['no'] = 1;
-            $update['yes'] = null;
-        }
+            // Se realiza el conteo de los intentos
+            $this->db->select('SUM(a.intentos) AS intentos');
+            $this->db->from('doc AS a');
+            $this->db->where('a.id', $id);
+            $docs = $this->db->get();
+            $row = $docs->row();
+            $intentos = $row->intentos;
 
-        $this->db->where('id =', $data['id']);
-        $this->db->update('doc', $update );
+            // Se toma el correo del estudiante
+            $getUsers = $this->getData( 'users', $doc->user_id );
+
+            $update['no'] = 1;
+            $update['intentos'] = $intentos + 1;
+            $update['yes'] = null;
+            
+            $this->db->where('id =', $data['id']);
+            $this->db->update('doc', $update );
+            
+            #echo $intentos;
+            #exit;
+            #print_r($getUsers->email);
+            #exit;
+
+            // Se envia el correo
+            if( $update['intentos']  == 2 ){
+                #echo "2 intentos"; exit;
+                $messageStudentTwo = "Hola viajero ten cuidado porque tu nave puede dañarse, recuerda repasar bien los conceptos vistos en los videos. En los proximos días un Tutor te contactara para orientarte asi que revisa constantemente tus mensajes en plataforma y tu correo electronico.";
+                $this->emailSend( $getUsers->email, $messageStudentTwo );
+            }else if( $update['intentos'] == 4 ){
+                #echo "4 intentos"; exit;
+                $messageStudentFor = "Tu nave esta averiada te asignaremos una reunion con un tutor lo mas pronto para que el pueda guiarte en el proceso.";
+                $this->emailSend( $getUsers->email, $messageStudentFor );
+            }
+
+        }
 
     }
 

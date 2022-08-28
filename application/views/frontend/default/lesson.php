@@ -436,6 +436,15 @@
         </div>
       </div>
     <?php } ?>
+    <div class="row">
+      <div class="col-md-12">
+        <div style="text-align: right;">
+          <a href="<?php echo site_url('home/course/'.slugify($course_details['title']).'/'.$course_details['id']); ?>">
+            <button style="width: 25%;" class="button-preview">Ver contenido</button>
+          </a>
+        </div>
+      </div>
+    </div>
     <div class="row mt-3">
       <div class="col-lg-7">
         <div class="about-instructor-box">
@@ -648,6 +657,7 @@
 
 </body>
 </html>
+
 <input type="hidden" id="ready_videoId" value="<?php echo $this->session->userdata('videoId'); ?>">
 <?php 
   $arraydata = array(

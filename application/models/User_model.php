@@ -20,6 +20,21 @@ class User_model extends CI_Model {
         return $query->row();
     }
 
+    public function message_teacher() {
+        $this->db->select('COUNT(a.id) AS can');
+        $this->db->where('a.visto', NULL);
+        $this->db->where('a.user_id', $this->session->userdata('user_id'));
+        $query = $this->db->get('message_teacher AS a');
+        return $query->row();
+    }
+
+    public function updateMessageUserTeacher() {
+
+        $this->db->where('a.user_id', $this->session->userdata('user_id'));
+        $this->db->where('a.visto', NULL);
+        $this->db->update('message_teacher AS a', array( 'a.visto' => 1 ) );
+    }
+
     public function updateMessageUser( $message_thread_code ) {
 
         $this->db->where('a.message_thread_code', $message_thread_code );
@@ -29,6 +44,7 @@ class User_model extends CI_Model {
 
     public function messageTextUser() {
         $this->db->where('a.user_id', $this->session->userdata('user_id'));
+        $this->db->where('a.visto', NULL );
         $query = $this->db->get('message_teacher AS a');
         return $query->result();
     }

@@ -1,6 +1,7 @@
 <?php
   $user = $this->user_model->messageCountUser();
-  #echo $user->can;
+  $message_teacher = $this->user_model->message_teacher();
+  $countMessage = $user->can + $message_teacher->can;
 ?>
 <style type="text/css">
   .bg-light {
@@ -53,7 +54,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo base_url('home/messages'); ?>">
                               <img style="width: 65px;" src="<?php echo base_url('assets/frontend/correo.png'); ?>">
-                              <div class="message-number"><?php echo $user->can; ?></div>
+                              <div class="message-number"><?php echo $countMessage; ?></div>
                             </a>
                         </li>
                         <?php } ?>

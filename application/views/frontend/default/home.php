@@ -1,5 +1,6 @@
 <?php
     $this->load->model('Announce_model');
+    $user_id = $this->session->userdata('user_id');
     $user_details = $this->user_model->get_user($this->session->userdata('user_id'))->row_array();
     // Conteo de la cantidad de puntuaciones que tenga el usuario
     $wallet = $this->Media_model->wallet();
@@ -9,6 +10,9 @@
     $showInsignias = $this->Insignias_model->showInsignias();
     // Anuncios
     $announceActive = $this->Announce_model->announceActive();
+
+
+    $intentosFallidos = $this->Media_model->intentosFallidos( $user_id );
 
     #exit;
 
@@ -273,6 +277,75 @@
          background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
         }
     </style>
+    <style type="text/css">
+      
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .scrollbar-hidden::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Hide scrollbar for IE, Edge add Firefox */
+      .scrollbar-hidden {
+        -ms-overflow-style: none;
+        scrollbar-width: none; /* Firefox */
+      }
+    
+    </style>
+    <style type="text/css">
+      /* From uiverse.io by @kirzin */
+        .button-preview {
+         text-decoration: none;
+         position: relative;
+         border: none;
+         font-size: 14px;
+         font-family: inherit;
+         color: #fff;
+         height: 3em;
+         line-height: 2em;
+         text-align: center;
+         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+         background-size: 300%;
+         border-radius: 30px;
+         z-index: 1;
+        }
+
+        .button-preview:hover {
+         animation: ani 8s linear infinite;
+         border: none;
+        }
+
+        @keyframes ani {
+         0% {
+          background-position: 0%;
+         }
+
+         100% {
+          background-position: 400%;
+         }
+        }
+
+        .button-preview:before {
+         content: '';
+         position: absolute;
+         top: -5px;
+         left: -5px;
+         right: -5px;
+         bottom: -5px;
+         z-index: -1;
+         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+         background-size: 400%;
+         border-radius: 35px;
+         transition: 1s;
+        }
+
+        .button-preview:hover::before {
+         filter: blur(20px);
+        }
+
+        .button-preview:active {
+         background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+        }
+    </style>
 </head>
 <body style="background: linear-gradient(338deg, #00205b, #37163b);">
   <div class="row">
@@ -418,5 +491,47 @@
       ?>
     </div>
   </div>
+  <?php if( count($intentosFallidos) > 0 ){ ?>
+  <div id="myModal" class="modal fade show">
+      <div class="modal-dialog modal-login">
+          <div class="modal-content">
+              <div class="modal-body" style="position: absolute;">
+                  <img src="<?php echo base_url('assets/advertising.png'); ?>" style="width: 100%;">
+                  <div class="row">
+                    <div class="col-lg-4">&nbsp;</div>
+                    <div class="col-lg-8" style="margin: -35% 0% 0% 30%;position: absolute;font-size: 14px;width: auto;color: white">
+                      Debes estar pendiente del mensaje del tutor en la plataforma y en tu correo electrónico
+                      <div style="height: 115px;overflow-y:auto;" class="scrollbar-hidden">
+                        <?php foreach ($intentosFallidos as $key => $value) { ?>
+                        <br><br>
+                        <div style="margin: 0 0 0 35%;position: relative;">
+                          Cantidad de impactos <span>2</span>
+                          <br>
+                          vida de tu nave <span>2</span>
+                        </div>
+                        <br>
+                          <div style="margin: 0 0 0 35%;position: relative;">
+                            <p><?php echo $value->title; ?></p>
+                          </div>
+                        <?php } ?>
+                      </div>
+                      <img src="<?php echo base_url('assets/source.gif'); ?>" style="width: 40%;margin: -37% 0% 0% 0%;" >
+                      <br>
+                      <br>
+                      <p>
+                      <a data-dismiss="modal" class="button-preview" style="margin: 0% 0% 0% 0%;text-align: center;cursor: pointer;">Cerrar ventana</a>
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+</div>
+<?php } ?>
 </body>
 </html>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script type="text/javascript">
+  $('#myModal').modal('toggle');
+</script>
