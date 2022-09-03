@@ -408,7 +408,7 @@
   <?php include 'includes_top.php';?>
   <?php include 'google-analytics.php'; ?>
 </head>
-<body style="color: #fff; background: linear-gradient(338deg, #00205b, #37163b);">
+<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-color: #400497;background-position: center;background-repeat: no-repeat;background-size: contain;">
 
 <?php
   if ($this->session->userdata('user_login')) {
@@ -419,22 +419,13 @@
 ?>
 
 <section class="container-fluid">
-  <h1><?php echo $course_details['title']; ?></h1>
+  <h1 style="color: white;"><?php echo $course_details['title']; ?></h1>
 </section>
 <section class="container-fluid pt-5" style="min-height: 100vh;">
   <div>
     <?php $verify = $this->input->get("r"); ?>
     <?php if ( $verify == 1 ) { ?>
     <div class="alert alert-info">Atenci&oacute;n: ya se encuentra validado.</div>
-    <?php } ?>
-    <?php if( $this->input->get("q") == "message" ){ ?>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="alert alert-warning">
-            Debes estar pendiente de la calificación de nuestro tutor, revisa tu correo y mensajes constantemente.
-          </div>
-        </div>
-      </div>
     <?php } ?>
     <div class="row">
       <div class="col-md-12">
@@ -657,6 +648,44 @@
 
 </body>
 </html>
+
+<div id="myModalLoad" class="modal fade">
+  <div class="modal-dialog modal-login">
+    <div class="modal-content">
+      <div class="modal-body">
+        <picture>
+          <source
+            media="(max-width: 400px)"
+            srcset="<?php echo base_url('assets/notify-media.png'); ?>">
+          <img
+            src="<?php echo base_url('assets/notify.png'); ?>"
+            alt="Notify" style="width: 100%;">
+        </picture>
+        <div class="row">
+          <div style="margin: -14% 0 0 59%;width: 70%;position: absolute;">
+            <a href="<?php echo base_url('home'); ?>">
+              <button class="button-preview" style="text-align: center;cursor: pointer;width: 20%;">Cerrar</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  $( document ).ready(function() {
+
+    var notify = "<?php echo $this->input->get('q'); ?>";
+  
+    if( notify == 'message' ){
+      $('#myModalLoad').modal('show');
+    }
+
+  });
+  
+</script>
 
 <input type="hidden" id="ready_videoId" value="<?php echo $this->session->userdata('videoId'); ?>">
 <?php 

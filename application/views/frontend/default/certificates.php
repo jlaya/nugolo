@@ -223,11 +223,25 @@
           background: rgba(51,51,51,0.7);
           z-index: 10;
         }
+        body.gray-bg {
+          background: #400497;
+            background-position-x: 0%;
+            background-position-y: 0%;
+            background-repeat: repeat;
+            background-image: none;
+            background-size: auto;
+        }
+        .container {
+          display: grid;
+          width: 100vw;
+          background-color: #250440a8;
+          border-radius: 8px;
+        }
     </style>
     
    
 </head>
-<body style="background: linear-gradient(338deg, #00205b, #37163b);">
+<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-position: center;background-repeat: no-repeat;background-size: auto;">
     <!-- Estructura 2 -->
     <div class="container mt-5" style="display: none;">
       <div class="row">
@@ -271,10 +285,11 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-md-12">
-            <button class="btn btn-default">
-              <a style="color: #FFF;" href="<?php echo base_url(); ?>">Volver</a>
-            </button>
-            
+            <a style="color: #FFF;" href="<?php echo base_url(); ?>">
+              <button class="btn btn-default">
+                Volver
+              </button>
+            </a>
             <table class="table" border="1" style="width: 100%;color: #FFF;margin-top: 5%;">
               <tr style="text-align: center;">
                 <th>Curso</th>
@@ -322,7 +337,8 @@
               </tr>
               <?php } ?>
             </table>
-
+            <?php include 'application/views/frontend/default/filter-student.php'; ?>
+            <br>
         </div>
         <div class="col-12 col-md-2 text-center" style="display: none;">
             <div style="color:rgb(42, 22, 99) ; background-color: #A396D1; width:220px; height: 430px; position: absolute;text-align: center; padding: 0px 15px 0px 15px; border-radius: 8px;">

@@ -1010,4 +1010,22 @@ class Admin extends CI_Controller {
         
     }
 
+    // Reporte para sacar la data de estudiante
+    public function previewPdf(){
+
+        $user_id = $this->input->get('user_id');
+        $obj = $this->crud_model->previewPdf( $user_id );
+        $this->load->view('frontend/pdf/estudiante', compact('obj'));
+        $html = $this->output->get_output();
+        // Load pdf library
+        $this->load->library('pdf');
+        $this->dompdf->loadHtml($html);
+        $this->dompdf->setPaper('A4');
+        #$this->dompdf->setPaper('A4', 'landscape');
+        $this->dompdf->render();
+        // Output the generated PDF (1 = download and 0 = preview)
+        $this->dompdf->stream("Reporte-estudiante.pdf", array("Attachment"=> 1));
+
+    }
+
 }

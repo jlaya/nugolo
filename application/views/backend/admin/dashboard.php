@@ -99,3 +99,5 @@
         </div>
     </div>
 </div>
+
+<?php include 'application/views/frontend/default/filter-student.php'; ?>

@@ -201,16 +201,24 @@
         }
 
         body{
-    font-family: 'Open Sans', sans-serif;
-    padding-right: 0 !important;
-    color: #29303b;
-    font-size: 15px;
-}
+            font-family: 'Open Sans', sans-serif;
+            padding-right: 0 !important;
+            color: #29303b;
+            font-size: 15px;
+        }
+        body.gray-bg {
+          background: #400497;
+            background-position-x: 0%;
+            background-position-y: 0%;
+            background-repeat: repeat;
+            background-image: none;
+            background-size: auto;
+        }
     </style>
     
    
 </head>
-<body style="background: linear-gradient(338deg, #00205b, #37163b);">
+<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-position: center;background-repeat: no-repeat;background-size: contain;">
     <br><br><br><br>
     <!-- Estructura 7 -->
     <div class="row">
@@ -245,7 +253,7 @@
                 <div class="mx-3" style="width: 250px;height: 370px;position: relative;overflow: hidden;/* padding: 10px 10px 10px 10px; */display: inline-block;">
                 
                 
-                    <div style="background-color: #57C0C8;width: 250px; height: 300px; position: absolute; top: 50px;border-radius: 8px; display: inline-block;">
+                    <div style="background-image: url(<?php echo base_url('assets/textura_uno.jpg'); ?>);width: 250px; height: 300px; position: absolute; top: 50px;border-radius: 8px; display: inline-block;">
             
                     </div>
                     <div style="width: 250px; height: 180px; position: absolute; top: 140px ">

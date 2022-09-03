@@ -23,6 +23,7 @@ ALTER TABLE `announce`
 --ALTER TABLE `doc` ADD `intentos` INT(11) NULL AFTER `no`;
 
 
+TRUNCATE `doc`;
 TRUNCATE `message`;
 TRUNCATE `message_teacher`;
 TRUNCATE `message_thread`;

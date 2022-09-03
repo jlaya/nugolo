@@ -430,7 +430,7 @@
   <?php include 'includes_top.php';?>
   <?php include 'google-analytics.php'; ?>
 </head>
-<body style="color: #fff; background: linear-gradient(338deg, #00205b, #37163b);">
+<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-color: #400497;background-position: center;background-repeat: no-repeat;background-size: contain;">
 <section class="container-fluid">
   <h1><?php echo $course_details['title']; ?></h1>
   <button class="btn btn-default">

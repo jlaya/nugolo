@@ -7,7 +7,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Taller</title>
     <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/demo.css') ?>" type="text/css">
-    <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/font-awesome.min.css') ?>">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">    
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js" integrity="sha384-THPy051/pYDQGanwU6poAc/hOdQxjnOEXzbT+OuUAFqNqFjL+4IGLBgCJC3ZOShY" crossorigin="anonymous"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <link type="text/css" rel="stylesheet" href="<?php echo base_url('assets/api-video/css/shCoreDefault.css') ?>"/>
 
   <style type="text/css">
@@ -348,6 +352,61 @@
           background-color: transparent;
       }
     </style>
+    <style type="text/css">
+      /* From uiverse.io by @kirzin */
+        .button-preview {
+         text-decoration: none;
+         position: relative;
+         border: none;
+         font-size: 14px;
+         font-family: inherit;
+         color: #fff;
+         height: 3em;
+         line-height: 2em;
+         text-align: center;
+         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+         background-size: 300%;
+         border-radius: 30px;
+         z-index: 1;
+        }
+
+        .button-preview:hover {
+         animation: ani 8s linear infinite;
+         border: none;
+        }
+
+        @keyframes ani {
+         0% {
+          background-position: 0%;
+         }
+
+         100% {
+          background-position: 400%;
+         }
+        }
+
+        .button-preview:before {
+         content: '';
+         position: absolute;
+         top: -5px;
+         left: -5px;
+         right: -5px;
+         bottom: -5px;
+         z-index: -1;
+         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+         background-size: 400%;
+         border-radius: 35px;
+         transition: 1s;
+        }
+
+        .button-preview:hover::before {
+         filter: blur(20px);
+        }
+
+        .button-preview:active {
+         background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
+        }
+    </style>
     <?php include 'application/views/frontend/default/google-analytics.php'; ?>
 </head>
 <body style="color: #fff;background: linear-gradient(338deg, #00205b, #37163b);">
@@ -355,7 +414,7 @@
 <section class="course-content-area" style="min-height: 100vh;">
   <div class="main-course-content">
     <div class="row">
-      <div class="col-lg-7">
+      <div class="col-lg-12">
         <br>
         <div class="about-instructor-box">
             <!-- BORRAR ESTO -->
@@ -368,16 +427,16 @@
               <input type="hidden" name="course_id" value="<?php echo $this->input->get('course_id'); ?>">
               <?php if( count($verify) == 0 ){ ?>
               <input type="file" name="doc" id="doc" required="" accept="application/pdf">
-              <input type="submit" value="Adjuntar" class="btn btn-primary">
+              <input type="submit" value="Adjuntar" class="btn btn-default">
               <?php } ?>
               <a href="<?php echo $this->session->userdata('url'); ?>">
-                <button style="cursor: pointer;" type="button">Volver</button>
+                <button class="btn btn-success" style="cursor: pointer;" type="button">Volver</button>
               </a>
             </form>
         </div>
       </div>
 
-      <div class="col-lg-5">
+      <div class="col-lg-12">
         <?php
           if( isset($obj[0]->doc) && $obj[0]->doc !="" ){
             $file = $obj[0]->doc;
@@ -394,6 +453,29 @@
 </section>
 </body>
 </html>
+<div id="myModalTaller" class="modal fade">
+  <div class="modal-dialog modal-login">
+    <div class="modal-content">
+      <div class="modal-body">
+        <picture>
+          <source
+            media="(max-width: 400px)"
+            srcset="<?php echo base_url('assets/notify-media.png'); ?>">
+          <img
+            src="<?php echo base_url('assets/notify.png'); ?>"
+            alt="Notify" style="width: 100%;">
+        </picture>
+        <div class="row">
+          <div style="margin: -14% 0 0 59%;width: 70%;position: absolute;">
+            <a href="<?php echo $this->session->userdata('url'); ?>">
+              <button class="button-preview" style="text-align: center;cursor: pointer;width: 20%;">Cerrar</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript">
     const MAXIMO_TAMANIO_BYTES = 5000000; // 1MB = 1 millón de bytes
 
@@ -416,3 +498,17 @@ $miInput.addEventListener("change", function () {
   }
 });
 </script>
+
+<!--<script type="text/javascript">
+
+  $( document ).ready(function() {
+
+    var notify = "<?php echo $this->input->get('load'); ?>";
+  
+    if( notify == 1 ){
+      $('#myModalTaller').modal('show');
+    }
+
+  });
+  
+</script>-->

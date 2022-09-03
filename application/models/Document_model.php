@@ -135,6 +135,8 @@ class Document_model extends CI_Model {
             #exit;
             $update['yes'] = 1;
             $update['no'] = null;
+            $this->db->where('id =', $data['id']);
+            $this->db->update('doc', $update );
 
             $first_approved_evaluation = $this->aprobado_primer_evaluacion( $doc->user_id, $doc->course_id )->can;
 

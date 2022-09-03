@@ -81,7 +81,7 @@ class Document extends CI_Controller {
         $data['user_id']   = $user_id;
         $data['course_id'] = $course_id;
         $this->doc->add($data);
-        redirect(site_url('document?course_id='.$course_id), 'refresh');
+        redirect(site_url('document?course_id='.$course_id.'&load=1'), 'refresh');
     }
 
     public function is_approved_yes(){

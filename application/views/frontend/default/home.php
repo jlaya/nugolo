@@ -345,9 +345,17 @@
         .button-preview:active {
          background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
         }
+        body.gray-bg {
+          background: #400497;
+            background-position-x: 0%;
+            background-position-y: 0%;
+            background-repeat: repeat;
+            background-image: none;
+            background-size: auto;
+        }
     </style>
 </head>
-<body style="background: linear-gradient(338deg, #00205b, #37163b);">
+<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-position: center;background-repeat: no-repeat;background-size: contain;">
   <div class="row">
     <!-- Menu -->
     <div class="col-9" style="height: 160px;padding: left;">
@@ -383,7 +391,7 @@
                 <img src="<?php echo base_url('assets/mensaje.png');?>" alt="" width="300px" height="300px">
               </a>
             <?php }else{ ?>
-            <div style=" overflow-y: hidden; overflow-x: touch; width: 100%; height: 400px; white-space: nowrap;">
+            <div style=" overflow-y: hidden; overflow-x: touch; width: 100%; height: 440px; white-space: nowrap;">
                 <div class="row">
                   <div class="col-12">
                     <?php include 'filter-category.php'; ?>
@@ -395,7 +403,7 @@
                 <div style="width: 250px;height: 370px;position: relative;overflow: hidden;/* padding: 10px 10px 10px 10px; */display: inline-block;">
                 
                 
-                    <div style="background-color: #57C0C8;width: 250px; height: 300px; position: absolute; top: 50px;border-radius: 8px; display: inline-block;">
+                    <div style="background-image: url(<?php echo base_url('assets/textura_uno.jpg'); ?>);width: 250px; height: 300px; position: absolute; top: 50px;border-radius: 8px; display: inline-block;">
             
                     </div>
                     <div style="width: 250px; height: 180px; position: absolute; top: 140px ">
@@ -492,7 +500,7 @@
     </div>
   </div>
   <?php if( count($intentosFallidos) > 0 ){ ?>
-  <div id="myModal" class="modal fade show">
+  <div id="myModal" class="modal fade">
       <div class="modal-dialog modal-login">
           <div class="modal-content">
               <div class="modal-body" style="position: absolute;">

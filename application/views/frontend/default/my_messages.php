@@ -38,6 +38,9 @@
       border: 1px solid #ccc;
       border-top: none;
     }
+    section.page-header-area {
+      background: #371582;
+    }
 </style>
 <section class="page-header-area">
     <div class="container">
@@ -49,6 +52,11 @@
     </div>
 </section>
 <section class="message-area">
+    <a style="color: #FFF;" href="<?php echo base_url(); ?>">
+      <button class="btn btn-default">
+        Volver
+      </button>
+    </a>
     <!-- Tab links -->
     <div class="tab">
       <button class="tablinks" onclick="openContent(event, 'messageContent', 0)">Mensajeria</button>
@@ -61,7 +69,7 @@
         <div class="row no-gutters align-items-stretch">
             <div class="col-lg-5">
                 <div class="message-sender-list-box">
-                    <button class="btn compose-btn" type="button" id="NewMessage" onclick="NewMessage(event)">Nuevo hilo</button>
+                    <button class="btn compose-btn" type="button" id="NewMessage" onclick="NewMessage(event)"; style="color: #FFF">Nuevo hilo</button>
                     <hr>
                     <ul class="message-sender-list">
 

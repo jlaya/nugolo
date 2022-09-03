@@ -12,6 +12,13 @@ class Crud_model extends CI_Model {
     }
 
     // Verificamos que si no ha pagado el curso aun, este se le muestre como opcion de COMPRAR
+    public function getUsers() {
+        $this->db->where('a.role_id', 2 );
+        $this->db->where('a.status', 1 );
+        return $this->db->get('users AS a')->result();
+    }
+
+    // Verificamos que si no ha pagado el curso aun, este se le muestre como opcion de COMPRAR
     public function get_pay( $course_id ) {
         $this->db->select('COUNT(a.id) AS can');
         $this->db->where('a.user_id', $this->session->userdata('user_id'));
@@ -1493,6 +1500,36 @@ public function get_last_message_by_message_thread_code($message_thread_code) {
         $this->db->select('a.json');
         $this->db->where('a.id', 1 );
         return $this->db->get('banks AS a')->row();
+    }
+
+    // Reporte para sacar la data de estudiante
+    public function previewPdf( $user_id = 0 ) {
+        $this->db->select('a.*,c.first_name,c.last_name');
+        $this->db->join('users AS c', "a.user_id = c.id");
+        if( $user_id > 0 ) $this->db->where('a.user_id', $user_id );
+        $this->db->where('a.type', 6 );
+        return $this->db->get('enroll AS a')->result();
+    }
+    // Contenidos que esta viendo en el curso
+    public function previewCourse( $course_id  ) {
+        $this->db->select('a.title,a.outcomes');
+        $this->db->where('a.id', $course_id );
+        return $this->db->get('course AS a')->result();
+    }
+    // Curso aprovado ?
+    public function approvedCourse( $user_id, $course_id  ) {
+        $this->db->select('COUNT(*) AS can');
+        $this->db->where('a.user_id', $user_id );
+        $this->db->where('a.course_id', $course_id );
+        $this->db->where('a.yes', 1 );
+        return $this->db->get('doc AS a')->row();
+    }
+    // Intentos fallidos
+    public function cancelCourse( $user_id, $course_id  ) {
+        $this->db->select('a.intentos');
+        $this->db->where('a.user_id', $user_id );
+        $this->db->where('a.course_id', $course_id );
+        return $this->db->get('doc AS a')->row();
     }
 
 }
