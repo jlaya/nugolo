@@ -3,6 +3,13 @@
     $messageTextUser = $this->user_model->messageTextUser();
 ?>
 <style type="text/css">
+     body {
+        background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));
+        background-position: top;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: #3a0071;
+      }
      /* Style the tab */
     .tab {
       overflow: hidden;

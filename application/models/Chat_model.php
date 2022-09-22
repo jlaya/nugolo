@@ -87,6 +87,7 @@ class Chat_model extends CI_Model {
         $this->db->join('users AS b', 'a.user_id = b.id');
         //$this->db->join('channel_group_users AS c', 'a.channel_group_id = c.channel_group_id');
         $this->db->where('a.channel_group_id', $channel_group_id);
+        $this->db->order_by('a.id', "DESC");
         $query = $this->db->get();
         return $query->result();
     }

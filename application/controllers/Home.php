@@ -16,9 +16,9 @@ class Home extends CI_Controller {
         /*cache control*/
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
-        if (!$this->session->userdata('cart_items')) {
+        /*if (!$this->session->userdata('cart_items')) {
             $this->session->set_userdata('cart_items', array());
-        }
+        }*/
     }
 
 
@@ -164,15 +164,23 @@ class Home extends CI_Controller {
         $this->completar_3_cursos( $user_id, 0 );
         $this->completar_4_cursos( $user_id, 0 );
         $this->completar_mas_4_cursos( $user_id, 0 );
-        $this->home();
+        $this->homePage();
     }
 
 
     //Lista de cursos
-    public function courses() {
+    /*public function courses() {
         $page_data['page_name'] = "home-public";
         $page_data['page_title'] = "Cursos";
         $this->load->view('frontend/default/index', $page_data);
+    }*/
+    public function courses(){
+        $page_data['page_name']  = "";
+        $page_data['page_title'] = get_phrase('home');
+        /*if(!$this->session->userdata('user_id')){
+            redirect(site_url('/'), 'refresh');
+        }*/
+        $this->load->view('frontend/default/home-public', $page_data );
     }
 
     public function home() {
@@ -297,7 +305,7 @@ class Home extends CI_Controller {
     public function course($slug = "", $course_id = "") {
         $page_data['course_id'] = $course_id;
 
-        if( $this->session->userdata('user_login') == '' ){
+        if( $this->session->userdata('user_login') ){
             $page_data['page_name'] = "course_page-public";
         }else{
             $page_data['page_name'] = "course_page";
@@ -691,11 +699,10 @@ class Home extends CI_Controller {
     }
 
     public function lesson($slug = "", $course_id = "", $lesson_id = "") {
-      /*if ($this->session->userdata('user_login') != 1){
-            if ($this->session->userdata('admin_login') != 1){
-              redirect('home', 'refresh');
-          }
-      }*/
+
+      if (!$this->session->userdata('user_login') && $this->input->get('q') != 'free' ){
+        redirect('/', 'refresh');
+      }
 
       $user_id = $this->session->userdata('user_id');
       $this->completar_2_cursos( $user_id, 0 );
@@ -1769,7 +1776,7 @@ public function get_modules() {
     }
 
     // Lista de certificados en la vista Home
-    public function certificates(){
+    /*public function certificates(){
         $page_data['page_name']  = "certificates";
         $page_data['page_title'] = "Certificados";
         $user_id                 = $this->session->userdata('user_id');
@@ -1781,6 +1788,16 @@ public function get_modules() {
         }else{
             redirect(site_url('login'), 'refresh');
         }
+    }*/
+    public function certificates(){
+        $page_data['page_name']  = "";
+        $page_data['page_title'] = "Certificados";
+        $user_id                 = $this->session->userdata('user_id');
+        $page_data['docs']       = $this->Media_model->list_docs( $user_id );
+        if(!$this->session->userdata('user_id')){
+            redirect(site_url('/'), 'refresh');
+        }
+        $this->load->view('frontend/default/certificates', $page_data );
     }
 
 
@@ -1888,6 +1905,17 @@ public function get_modules() {
     // sobre las certificaciones
     public function updateMessageUserTeacher(){
         $this->user_model->updateMessageUserTeacher();
+    }
+
+
+    // Prueba Home
+    public function homePage(){
+        $page_data['page_name']  = "";
+        $page_data['page_title'] = get_phrase('home');
+        if(!$this->session->userdata('user_id')){
+            redirect(site_url('/'), 'refresh');
+        }
+        $this->load->view('frontend/default/homePropuesta', $page_data );
     }
 
 

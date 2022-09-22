@@ -3,8 +3,13 @@
     //header("Location: ".base_url(uri_string()));
     $this->load->library('session');
     header('X-Frame-Options: SAMEORIGIN');
-    $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
     $user_id = $this->session->userdata('user_id');
+    // Matricular estudiante de forma gratuita
+    if( $this->input->get('q') == "free" ){
+      $this->crud_model->enroll_to_free_course( $course_id, $user_id );
+    }
+
+    $course_details = $this->crud_model->get_course_by_id($course_id)->row_array();
     $r1 = $this->Media_model->count_lesson( $user_id, $course_id );
     $r1 = $r1->can;
     $r2 = $this->Media_model->count_lesson_logros( $user_id, $course_id );
@@ -21,11 +26,13 @@
     //$first_more_videos = $this->Media_model->first_get_media($course_details['token']);
     //$more_videos = $this->Media_model->get_media($course_details['token']);
     // Carga automatica de video segun el usuario
-    //$this->Media_model->add_video( $course_id, $course_details['token'] );
+    $this->Media_model->add_video( $course_id, $course_details['token'] );
     // Lectura de datos de videos
     $token  = $course_details['token'];
-    #$videos = $this->Media_model->get_multi_media_users( $course_details['token'] );
-    $module = $this->Media_model->group_by_courses( $course_details['token'] );
+    $row_media = $this->Media_model->row_media( $token );
+    $videos = $this->Media_model->get_media_users( $course_details['token'] );
+    $doc = $this->Media_model->searchDocument( $course_details['id'] )->cant;
+    $module = $this->Media_model->group_by_users( $course_details['token'] );
     # Consulta para hacer el conteo de la cantidad de lecciones que pueda tener a nivel
     # global los modulos
     $sum_modules = $this->Media_model->sum_modules( $course_details['token'] );
@@ -36,7 +43,7 @@
     $cant_module = $cant_module->cant_module;
 
     // Conteo de la cantidad de puntuaciones que tenga el usuario
-    $wallet = $this->Media_model->wallet();
+    //$wallet = $this->Media_model->wallet();
     
     # SELECT SUM(a.sum_modules) AS sum_modules FROM history_user AS a INNER jOIN multi_media AS b ON( a.multi_media_id = b.id ) WHERE b.month = 'Enero' GROUP BY b.month 
     #echo "<pre>";
@@ -48,520 +55,254 @@
 ?>
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Cursos</title>
-    <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/demo.css') ?>" type="text/css">
-    <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/font-awesome.min.css') ?>">
-  <link type="text/css" rel="stylesheet" href="<?php echo base_url('assets/api-video/css/shCoreDefault.css') ?>"/>
-  <style>
-  img.btn-whatsapp {
-    display: block !important;
-    position: fixed;
-    z-index: 9999999;
-    bottom: 20px;
-    right: 20px;
-    cursor: pointer;
-    border-radius:100px !important;
-  }
-  img.btn-whatsapp:hover{
-    border-radius:100px !important;
-    -webkit-box-shadow: 0px 0px 15px 0px rgba(7,94,84,1); 
-    -moz-box-shadow: 0px 0px 15px 0px rgba(7,94,84,1);
-    box-shadow: 0px 0px 15px 0px rgba(7,94,84,1);
-    transition-duration: 1s;
-  }
+    <title>Curso</title>
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css');?>">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bebas">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/fonts/font-awesome.min.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/Article-Clean.css');?>">
 
-  a.btn-whatsapp {
-      display: block !important;
-      position: fixed;
-      z-index: 9999999;
-      bottom: 20px;
-      right: 100px;
-      cursor: pointer;
-      border-radius: 100px !important;
-      font-size: 31px;
-  }
-</style>
-  <style type="text/css">
-        .menu-area {
-            margin-bottom: 3rem!important;
-        }
-    /*@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');*/
 
-    .text-loading-course-video{font-family: 'Poppins';}
-    .course-text-content{font-family: 'Poppins'; letter-spacing: 1px;background: transparent !important;color: #48668e;box-shadow: 3px 3px 5px -1px #48668e;}
-    @media (max-width: 991.98px) { .main-loading-course{width: 100% !important;}}
-
-    .main-course-content{
-      width: 100%;
-      padding-right: 15px;
-      padding-left: 15px;
-      margin-right: auto;
-      margin-left: auto;
-    }
-    /* Style the buttons that are used to open and close the accordion panel */
-    .accordion {
-      background-color: #eee;
-      color: #444;
-      cursor: pointer;
-      padding: 18px;
-      width: 100%;
-      text-align: left;
-      border: none;
-      outline: none;
-      transition: 0.4s;
-    }
-
-    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-    .active, .accordion:hover {
-      background-color: #ccc;
-    }
-
-    .panel-semanas-curso button{
-      margin: 0 10px;
-    }
-
-    #container {
-      margin: 0 auto;
-      width: 460px;
-      padding: 2em;
-    }
-
-    .ui-progress-bar {
-     margin-top: 3em;
-     margin-bottom: 3em;
-    }
-
-    .ui-progress span.ui-label {
-     font-size: 1.2em;
-     position: absolute;
-     right: 0;
-     line-height: 33px;
-     padding-right: 12px;
-     color: rgba(0,0,0,0.6);
-     text-shadow: rgba(255,255,255, 0.45) 0 1px 0px;
-     white-space: nowrap;
-    }
-
-    @-webkit-keyframes animate-stripes {
-     from {
-     background-position: 0 0;
-     }
-
-     to {
-     background-position: 44px 0;
-     }
-
-    }
-    .ui-progress-bar {
-     position: relative;
-     height: 35px;
-     padding-right: 2px;
-     background-color: #abb2bc;
-     border-radius: 35px;
-     -moz-border-radius: 35px;
-     -webkit-border-radius: 35px;
-     background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #b6bcc6), color-stop(1, #9da5b0));
-     background: -moz-linear-gradient(#9da5b0 0%, #b6bcc6 100%);
-     -webkit-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px #FFF;
-     -moz-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px #FFF;
-     box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.5), 0px 1px 0px 0px #FFF;
-    }
-
-    .button-send{
-      padding: 7px 32px !important; 
-      border-radius: 4px !important; 
-      font-size: 16px !important;
-    }
-
-    .ui-progress {
-     position: relative;
-     display: block;
-     overflow: hidden;
-     height: 33px;
-     -moz-border-radius: 35px;
-     -webkit-border-radius: 35px;
-     border-radius: 35px;
-     -webkit-background-size: 44px 44px;
-     background-color: #74d04c;
-     background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0.00, rgba(255,255,255,0.17)), color-stop(0.25, rgba(255,255,255,0.17)), color-stop(0.26, rgba(255,255,255,0)), color-stop(0.50, rgba(255,255,255,0)), color-stop(0.51, rgba(255,255,255,0.17)), color-stop(0.75, rgba(255,255,255,0.17)), color-stop(0.76, rgba(255,255,255,0)), color-stop(1.00, rgba(255,255,255,0)) ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));
-     background: -moz-repeating-linear-gradient(top left -30deg, rgba(255,255,255,0.17), rgba(255,255,255,0.17) 15px, rgba(255,255,255,0) 15px, rgba(255,255,255,0) 30px ), -moz-linear-gradient(#9bdd62 0%, #74d04c 100%);
-     -webkit-box-shadow: inset 0px 1px 0px 0px #dbf383, inset 0px -1px 1px #58c43a;
-     -moz-box-shadow: inset 0px 1px 0px 0px #dbf383, inset 0px -1px 1px #58c43a;
-     box-shadow: inset 0px 1px 0px 0px #dbf383, inset 0px -1px 1px #58c43a;
-     border: 1px solid #4c8932;
-     -webkit-animation: animate-stripes 2s linear infinite;
-    }
-    .btn:disabled {
-        opacity: .65;
-        background-color: #17a2b8 !important;
-    }
-  </style>
-  <style type="text/css">
-            @font-face {
-            
-            font-family: "boombox";
-            src: url("<?php echo base_url('assets/frontend/fonts/boombox.ttf'); ?>");
-            
-            font-family: "Bebas-Regular";
-            src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
-            
-            font-family: "GameOfSquids";
-            src: url("<?php echo base_url('assets/frontend/fonts/GameOfSquids.ttf'); ?>");
-            }
-        .button-1{
-            color: #FFF;
-            font-weight: bold;
-            border-color: #5cdac9;
-            background-color: #5cdac9;
-        }
-        .color-571894{
-            width: 140px;
-            height: 30px;
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: #54178f;
-            border-radius: 15px;
-            border: 1px solid;
-            border-color: #b858fe;
-        }
-        .color-FFF{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
-        }
-        .color-000{
-            font-family: "GameOfSquids";
-            color: #000;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
-        }
-        .h1-font{
-            color: #FFF;
-            font-family: "boombox" !important;
-        }.h3-font{
-            color: #FFF;
-        }
-
-        /* Tipografias 
-        .boombox2{
-            font-family: "boombox2";
-            src: url("<?php echo base_url('assets/frontend/fonts/boombox2.ttf'); ?>");
-        }
-        .bebas{
-            font-family: "Bebas-Regular";
-            src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
-        }
-        .gameofsquids{
-            font-family: "Game Of Squids";
-            src: url("<?php echo base_url('assets/frontend/fonts/Game-Of-Squids.ttf'); ?>");
-        }
-        */
-        
-        .container {
-            display: inline-block;
-            width: 100% !important;
-        }
- 
- 
- 
-                     .cielo-1 {
-                      width: 100vw;
-                      height: 400vh;
-                      background: transparent;
-                      position: absolute;
-                      -webkit-animation: animaCielo 15s linear infinite backwards running;
-                      -moz-animation: animaCielo 15s linear infinite backwards running;
-                      -ms-animation: animaCielo 15s linear infinite backwards running;
-                      animation: animaCielo 15s linear infinite backwards running;
-                    }
-                    .cielo-1 .estrella {
-                      background: #497c95;
-                      position: absolute;
-                      width: 2px;
-                      height: 2px;
-                      border-radius: 50%;
-                    }
-                    
-                    .cielo-2 {
-                      
-                      width: 100%;
-                      height: 400%;
-                      position: absolute;
-                      -webkit-animation: animaCielo 13s linear infinite backwards running;
-                      -moz-animation: animaCielo 13s linear infinite backwards running;
-                      -ms-animation: animaCielo 13s linear infinite backwards running;
-                      animation: animaCielo 13s linear infinite backwards running;
-                    }
-                    .cielo-2 .estrellaDos {
-                      background: #704995;
-                      position: absolute;
-                      width: 2px;
-                      height: 2px;
-                      border-radius: 50%;
-                    }
-                    
-                    @-webkit-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-                    @-ms-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-                    @-o-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-                    @-moz-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-
-    </style>
-    <style>
-        /* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
-
-        #contenedor::-webkit-scrollbar {
-            -webkit-appearance: none;
-        }
-
-        #contenedor::-webkit-scrollbar:vertical {
-            width:10px;
-        }
-
-        #contenedor::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
-            display: none;
-        } 
-
-        #contenedor::-webkit-scrollbar:horizontal {
-            height: 10px;t
-        }
-
-        #contenedor::-webkit-scrollbar-thumb {
-            background-color: #d56bff;
-            border-radius: 20px;
-            
-        }
-
-        #contenedor::-webkit-scrollbar-track {
-            border-radius: 10px;  
-        }
-
-        body {
-            font-family: 'Open Sans', sans-serif !important;
-            font-size: 15px;
-        }
-    </style>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/Simple-Slider.css');?>">
     <style type="text/css">
-      .content{
-        width: 100%;
-        height: auto;
-        margin: -16% 0% 0% 0%;
-      }
-      .nav-pills{
-        width: 100%;
-      }
-      .nav-item{
-        width: auto;
-      }
-      .nav-pills .nav-link{
+    body {
+    background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #3a0071;
+    }
+     @font-face {
+          
+          font-family: "boombox";
+          src: url("<?php echo base_url('assets/frontend/fonts/boombox.ttf'); ?>");
+          
+          font-family: "Bebas-Regular";
+          src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
+          
+          font-family: "GameOfSquids";
+          src: url("<?php echo base_url('assets/frontend/fonts/GameOfSquids.ttf'); ?>");
+          }
+          
+      .message-number{
+        margin: -74px 0px 0px 36px;
+        color: white;
         font-weight: bold;
-        padding-top: 13px;
-        text-align: center;
-        background: #343436;
-        color: #fff;
-        border-radius: 30px;
-        height: 100px;
+        position: absolute;
       }
-      .nav-pills .nav-link.active{
-        background: #ad7dfd !important;
-        color: #000;
+      .level-number{
+        margin: -25px 0px 0px 30px;
+        color: white;
+        font-weight: bold;
+        position: absolute;
       }
-      .tab-content{
-        position: relative;
-        width: 100%;
-        height: auto;
-        margin-top: -50px;
-        background: #fff;
-        color: #000;
-        border-radius: 30px;
-        z-index: 1000;
-        box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.4);
-        padding: 10px;
-        margin-bottom: 65px;
+      .article-clean {
+            color: #56585b;
+            background-color: #a396d1 !important;
+            font-family: 'Lora', serif;
+            font-size: 14px;
+        }
+      
+      
+      .col-md-8 {
+        display: -webkit-box;
+        padding: 55px 5px;
+        overflow-x: scroll;
       }
-      .tab-content button{
-        border-radius: 15px;
-        width: 100%;
-        margin: 0 auto;
-        float: right;
+      
+      .card {
+        background-color: #572c2c3d; box-shadow: inset 0 -6px 30px 0 #eea8f3; color: bisque; backdrop-filter: blur(7px); border: 2px solid rgba(242, 224, 255, 0.76) !important; margin: 0px 1%;
       }
-      .active, .accordion:hover {
-          background-color: transparent;
+      
+      #estilostablamenu {
+          font-size: 13px;
       }
-    </style>
-
-  <?php include 'includes_top.php';?>
-  <?php include 'google-analytics.php'; ?>
-</head>
-<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-color: #400497;background-position: center;background-repeat: no-repeat;background-size: contain;">
-<section class="container-fluid">
-  <h1><?php echo $course_details['title']; ?></h1>
-  <button class="btn btn-default">
-    <a style="color: #FFF;" href="<?php echo site_url('home/course/'.slugify($course_details['title']).'/'.$course_details['id']); ?>">Volver</a>
-  </button>
-</section>
-<section class="container-fluid pt-5" style="min-height: 100vh;">
-  <div>
-    <?php $verify = $this->input->get("r"); ?>
-    <?php if ( $verify == 1 ) { ?>
-    <div class="alert alert-info">Atenci&oacute;n: ya se encuentra validado.</div>
-    <?php } ?>
-    <div class="row">
-      <div class="col-lg-7">
+      
+      .respmenu {
+          flex-direction:row !important;
+          align-items: center;
+          margin-left: auto !important;
+          margin-right: auto;
+      }
+      .navbar-collapse {
+        display: flex;
+      }
+      #mainNav {
+          padding-top: 0px !important;
+          padding-bottom: 0px !important;
+      }
+      
+      .bg-secondary {
+          background-color: #963a99b8 !important;
+          backdrop-filter: blur(7px) !important;
+          border: 1px solid #ffffff3d !important;
+        }
+        .coloricono {
+          background-color: #fbf8ff !important;
+          color: #6610f2 !important;
+        }
+        /*-------------------------------*/
+       /*disenio de botones generales */
+        .btn-success {
+          color: #fff;
+          background-color: #6f1987 !important;
+          border-color: #871980 !important;
+        }
         
-        <div class="about-instructor-box">
-            <!-- BORRAR ESTO -->
-            <span style="color: red;" class="mensaje"></span>
+        .btn-primary {
+          background-color: #f7ddff !important;
+          border-color: #dab2fb !important;
+          color: #300659 !important;
+        }
+        
+        /*-------------------------------*/
+       /* flecha */
+       
+       @keyframes moviendrew {
+              0% {
+                transform: translatex(0px);
+              }
+              100% {
+                transform: translatex(20px);
+              }
+        }
+        
+        #flecha {
+                    animation-name: moviendrew;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    font-size: 100px;
+                    color: white;
+                    position: absolute;
+                    top: 423px;
+                    z-index: 1;
 
-            <div hidden="" class="about-instructor-title">
-                + Videos
-            </div>
-            <form action="<?php echo base_url('Video/is_checked/'.$sum_modules); ?>" id='frm-send' method="POST">
-              <input type="hidden" name="course_id" value="<?php echo $course_id; ?>">
-              <input type="hidden" name="url" value="<?php echo base_url(uri_string()); ?>">
-              <div class="col" style="height: 600px">
-                <div class="col-lg-3">
-                  <div class="about-instructor-image">
-                    <ul class="more-videos"></ul>
-                  </div>
-                </div>
-                <div class="row  justify-content-center" >
-                    <div class="container-fluid py-5 px-0" >
-                      <div class="col-md-12 mb-2 text-center text-md-left px-0" style="background-color: transparent;">
-                        <!--<div class="d-inline-block p-2 mb-4 rounded course-text-content text-center text-lg-left">
-                          Puntuaciones: <?php echo $wallet->cant; ?>
-                        </div>-->
+        }
 
+        
+        /*-------------------------------*/
+       /* aqui van los puntos de ruptura */
+       
+       @media (max-width: 991px){
+            .fixaltura {
+             padding-top: calc(2rem + 57px)!important;
+           }
+      }
+      @media (max-width: 767px){
+            .card {
+               width: 16rem !important;
+            }
+      }
+      
+      @media (min-width: 768px){
+            .col-md-10 {
+              flex: 0 0 auto;
+              width: 100% !important;
+            }
+            .col-md-4 {
+              display: flex;
+              align-self: center;
+            }
+      } 
+      
+       @media (max-width: 500px){
+            .respmenu {
+                flex-direction: column-reverse !important;
+            }
+            .navbar-collapse {
+              height: 100vh;
+            }
+            #mainNav .navbar-nav {
+              margin-top: -1rem;
+            }
+        }
+      
+     @media (max-width: 320px){
+            .card {
+                margin: 0px 5%;
+            }
+            .img-logo {
+              height: 40px;
+            }
+            
+            #flecha {
+                    animation-name: moviendrew;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    font-size: 50px;
+                    color: white;
+                    position: absolute;
+                    top: 423px;
+                    z-index: 1;
 
-                        <input type="hidden" id="sum_modules" value="<?php echo $sum_modules; ?>">
-                        <p class="text-center text-lg-left panel-semanas-curso">
-                          <label class="d-block d-lg-inline-block mb-2"></label>
-                          <!-- Taps de lista de cursos con sus lecciones asociadas -->
-                          <?php include 'taps-course.php'; ?>
-                        </p>
+            }
+            
+      }
+      .sub-menu-course{
+        width: 33%;
+      }
+      @media (max-width: 600px){
+          .responsivo-submenu {
+              flex-direction: column;
+          }
+          .sub-menu-course{
+            width: 100%;
+          }
+      }
+      
+    </style>
+</head>
 
-                      </div>
-                      <!--<div class="col-md-12 mb-4 d-flex flex-column align-items-center justify-content-center" style="height: auto;">
-                        <div class="main-loading-course " style="width: 50%">
-                          <img src="https://i.postimg.cc/k589Sr4b/3742225.png" class="img-fluid img-loading-course mt-4" style="display: none;"></img>
-                          <h4 style="display: none;" class="text-loading-course-video mb-5 text-center"> Comienza un nuevo desafio, ahora! </h4>
-                        </div>
-                      </div>
-                      <div class="col-md-12" style="background-color: transparent;">
-                        
-                      </div>-->
-                    </div>
-                </div>
+<body id="page-top" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="72">
+    <!--<div id="flecha">
+         &#8594;
+    </div>-->
+    <?php include 'componentes/menu.php'; ?>
+    <header class="text-center text-white masthead fixaltura">
+        <div class="container" style="margin-bottom: 10px;">
+            <div class="row responsivo-submenu">
+              <div class="col-md-6 sub-menu-course ">
+                <a href="<?php echo base_url('home/courses'); ?>">
+                    <button style="width: 100%;" class = "btn btn-primary" type="button">Volver</button>
+                </a>
               </div>
-              
-            </form>
+              <div class="col-md-6 sub-menu-course">
+                <h5><?php echo $course_details['title']; ?></h5>
+              </div>
+              <div class="col-md-6 sub-menu-course">
+                <a href="<?php echo site_url('home/course/'.slugify($course_details['title']).'/'.$course_details['id']); ?>">
+                  <button style="width: 100%;" class="btn btn-primary">Ver contenido</button>
+                </a>
+              </div>
+            </div>
         </div>
-      </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <?php include 'componentes/videos.php'; ?>
+            </div>
+            <div class="col">
+              <?php include 'componentes/chat.php'; ?>
+            </div>
+          </div>
+        </div>
+    </header>
+    <script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js')?>"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/freelancer.js')?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.js"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/Simple-Slider.js')?>"></script>
+</body>
 
-      <div class="col-lg-5">
-          <br>
-        <img src="<?php echo base_url('assets/chat-block.png') ?>" style="width: 100%">
-      </div>
-    </div>
-  </div>
-</section>
-<?php
-  
-  #echo $total_module."<br>";
-  #echo $sum_modules_total."<br>";
-
-  /*if( $this->Media_model->sum_history_user() ){
-    $sum_history_user = $this->Media_model->sum_history_user();
-  }else{
-    $sum_history_user = $sum_history_user->cant;
-  }
-
-
-  #echo $total_module;
-  #echo "<br>";
-  #echo $sum_history_user->cant;
-
-  // Si se completa todos los modulos de todos los cursos se anade un logro
-
-  #echo "$total_module == $sum_history_user->cant";
-
-  if( $total_module == $sum_history_user ){
-
-    #echo "Fino";
-    #return false;
-    
-    // Se inserta las puntuaciones
-    $wallet = array(
-        'value' => 1,
-        'user_id' => $this->session->userdata('user_id'),
-        'module' => 'all',
-    );
-    $this->db->insert('wallet', $wallet);
-
-    // Se ingresa el historial de que cumplio todos los cursos
-    $data_history['name']           = "Ha completado los $total_module cursos";
-    $data_history['sum_modules']    = $total_module;
-    $data_history['multi_media_id'] = 0;
-    $data_history['user_id']        = $this->session->userdata('user_id');
-    $data_history['module_id']      = 0;
-    $data_history['is_checked']     = 1;
-    $this->db->insert('history_user', $data_history);
-    #echo $this->db->last_query();
-
-    // Cierre de proceso
-    $this->db->where('multi_media_id', 0);
-    $this->db->where('user_id', $this->session->userdata('user_id'));
-    $fields = array(
-        'close' => 1
-    );
-    $this->db->update('history_user', $fields );
-
-    #echo $this->db->last_query();
-
-  }else{
-    echo "";
-  }*/
-
-  
-
-?>
+</html>
 
 <?php
   //include 'footer.php';
@@ -597,20 +338,20 @@
 </script>
 <script type="text/javascript">
   
-  function get_module( module_id){
+  /*function get_module( module_id){
     $("#module_id").val(module_id);
     // Se limpia el contenedor de Video
     $("div.video-embed").html("");
-  }
+  }*/
 
-  get_module(1);
+  //get_module(1);
 
-  function show_content(id,sum_modules,value1,value2){
+  /*function show_content(id,sum_modules,value1,value2){
     var token = '<?php echo $token; ?>';
 
     $.ajax({
       dataType: "json",
-      url: '<?php echo site_url('home/show_content_courses');?>',
+      url: '<?php echo site_url('home/show_content');?>',
       type : 'POST',
       data : {
         'id' : id,
@@ -633,23 +374,60 @@
       }
 
       $("div.video-embed").html(content_iframe);
-      /*if( value1 == value2 ){
-        $('.shadow-sm').prop('disabled',true);
-      }else{
-        $('.shadow-sm').prop('disabled',false);
-      }*/
+      
       $("#multi_media_id").val(r['id']);
 
     }
     });
-  }
+  }*/
 </script>
-<!-- Whatsapp image -->
-<a target="_blank" href="https://wa.me/573014701404?text=Hola!%20Estoy%20interesado%20en%20tu%20servicio">
-<img title="Whatsapp" class="btn-whatsapp" src="https://clientes.dongee.com/whatsapp.png" width="64" height="64" alt="Whatsapp">
-</a>
+
 </body>
 </html>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">&nbsp;</h5>
+      </div>
+      <div class="modal-body">
+        <picture>
+          <source
+            media="(max-width: 400px)"
+            srcset="<?php echo base_url('assets/notify-media.png'); ?>">
+          <img
+            src="<?php echo base_url('assets/notify.png'); ?>"
+            alt="Notify" style="width: 100%;display:block;margin:auto;">
+        </picture>
+      </div>
+      <div class="modal-footer">
+        <a href="<?php echo base_url('home'); ?>">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  $( document ).ready(function() {
+
+    var notify = "<?php echo $this->input->get('q'); ?>";
+    var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'))
+  
+    if( notify == 'message' ){
+      document.onreadystatechange = function () {
+        myModal.show();
+      };
+    }
+
+  });
+  
+</script>
+
 <input type="hidden" id="ready_videoId" value="<?php echo $this->session->userdata('videoId'); ?>">
 <?php 
   $arraydata = array(

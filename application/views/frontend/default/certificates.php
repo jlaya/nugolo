@@ -1,296 +1,217 @@
-<?php
-    $user_details = $this->user_model->get_user($this->session->userdata('user_id'))->row_array();
-    // Conteo de la cantidad de puntuaciones que tenga el usuario
-    $wallet = $this->Media_model->wallet();
-
-    // Validacion para el tema de las insignias
-    #$count_history_user = $this->Media_model->count_history_user();
-
-    // Se realiza el conteo de cursos en el caso de que el usuario no lo posea
-    $course_user = $this->Media_model->count_relation_course_user()->cant;
-    #exit;
-
-    function limitar_cadena($cadena, $limite, $sufijo){
-      // Si la longitud es mayor que el límite...
-      if(strlen($cadena) > $limite){
-      // Entonces corta la cadena y ponle el sufijo
-      return substr($cadena, 0, $limite) . $sufijo;
-      }
-      
-      // Si no, entonces devuelve la cadena normal
-      return $cadena;
-    }
-
-?>
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Nugolo</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/frontend/css/custom-home.css'); ?>">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title><?php echo $page_title; ?></title>
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css');?>">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/fonts/font-awesome.min.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/Article-Clean.css');?>">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/Simple-Slider.css');?>">
     <style type="text/css">
-            @font-face {
-            
-            font-family: "boombox";
-            src: url("<?php echo base_url('assets/frontend/fonts/boombox.ttf'); ?>");
-            
-            font-family: "Bebas-Regular";
-            src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
-            
-            font-family: "GameOfSquids";
-            src: url("<?php echo base_url('assets/frontend/fonts/GameOfSquids.ttf'); ?>");
-            }
-        .button-1{
-            color: #FFF;
-            font-weight: bold;
-            border-color: #5cdac9;
-            background-color: #5cdac9;
+    body {
+    background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #3a0071;
+    }
+     @font-face {
+          
+          font-family: "boombox";
+          src: url("<?php echo base_url('assets/frontend/fonts/boombox.ttf'); ?>");
+          
+          font-family: "Bebas-Regular";
+          src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
+          
+          font-family: "GameOfSquids";
+          src: url("<?php echo base_url('assets/frontend/fonts/GameOfSquids.ttf'); ?>");
+          }
+          
+      .message-number{
+        margin: -74px 0px 0px 36px;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+      }
+      .level-number{
+        margin: -25px 0px 0px 30px;
+        color: white;
+        font-weight: bold;
+        position: absolute;
+      }
+      .article-clean {
+            color: #56585b;
+            background-color: #a396d1 !important;
+            font-family: 'Lora', serif;
+            font-size: 14px;
         }
-        .color-571894{
-            width: 140px;
-            height: 30px;
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: #54178f;
-            border-radius: 15px;
-            border: 1px solid;
-            border-color: #b858fe;
+      
+      
+      .col-md-8 {
+        display: -webkit-box;
+        padding: 55px 5px;
+        overflow-x: scroll;
+      }
+      
+      .card {
+        background-color: #572c2c3d; box-shadow: inset 0 -6px 30px 0 #eea8f3; color: bisque; backdrop-filter: blur(7px); border: 2px solid rgba(242, 224, 255, 0.76) !important; margin: 0px 1%;
+      }
+      
+      #estilostablamenu {
+          font-size: 13px;
+      }
+      
+      .respmenu {
+          flex-direction:row !important;
+          align-items: center;
+          margin-left: auto !important;
+          margin-right: auto;
+      }
+      .navbar-collapse {
+        display: flex;
+      }
+      #mainNav {
+          padding-top: 0px !important;
+          padding-bottom: 0px !important;
+      }
+      
+      .bg-secondary {
+          background-color: #963a99b8 !important;
+          backdrop-filter: blur(7px) !important;
+          border: 1px solid #ffffff3d !important;
         }
-        .color-FFF{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
+        .coloricono {
+          background-color: #fbf8ff !important;
+          color: #6610f2 !important;
         }
-        .color-FFF:hover{
-            font-family: "GameOfSquids";
-            color: #FFF;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
+        /*-------------------------------*/
+       /*disenio de botones generales */
+        .btn-success {
+          color: #fff;
+          background-color: #6f1987 !important;
+          border-color: #871980 !important;
         }
-        .color-000{
-            font-family: "GameOfSquids";
-            color: #000;
-            font-weight: bold;
-            border: none; 
-            background-color: transparent;
-        }
-        .h1-font{
-            color: #FFF;
-            font-family: "boombox" !important;
-        }.h3-font{
-            color: #FFF;
-        }
-
-        /* Tipografias 
-        .boombox2{
-            font-family: "boombox2";
-            src: url("<?php echo base_url('assets/frontend/fonts/boombox2.ttf'); ?>");
-        }
-        .bebas{
-            font-family: "Bebas-Regular";
-            src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
-        }
-        .gameofsquids{
-            font-family: "Game Of Squids";
-            src: url("<?php echo base_url('assets/frontend/fonts/Game-Of-Squids.ttf'); ?>");
-        }
-        */
         
-        .container {
-            display:inline-block;
-            width: 100vw;
+        .btn-primary {
+          background-color: #f7ddff !important;
+          border-color: #dab2fb !important;
+          color: #300659 !important;
         }
- 
- 
- 
-                     .cielo-1 {
-                      width: 100vw;
-                      height: 400vh;
-                      background: transparent;
-                      position: absolute;
-                      -webkit-animation: animaCielo 15s linear infinite backwards running;
-                      -moz-animation: animaCielo 15s linear infinite backwards running;
-                      -ms-animation: animaCielo 15s linear infinite backwards running;
-                      animation: animaCielo 15s linear infinite backwards running;
-                    }
-                    .cielo-1 .estrella {
-                      background: #497c95;
-                      position: absolute;
-                      width: 2px;
-                      height: 2px;
-                      border-radius: 50%;
-                    }
-                    
-                    .cielo-2 {
-                      
-                      width: 100%;
-                      height: 400%;
-                      position: absolute;
-                      -webkit-animation: animaCielo 13s linear infinite backwards running;
-                      -moz-animation: animaCielo 13s linear infinite backwards running;
-                      -ms-animation: animaCielo 13s linear infinite backwards running;
-                      animation: animaCielo 13s linear infinite backwards running;
-                    }
-                    .cielo-2 .estrellaDos {
-                      background: #704995;
-                      position: absolute;
-                      width: 2px;
-                      height: 2px;
-                      border-radius: 50%;
-                    }
-                    
-                    @-webkit-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-                    @-ms-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-                    @-o-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
-                    @-moz-keyframes animaCielo {
-                      0% {
-                        top: -100%;
-                      }
-                      100% {
-                        top: 0%;
-                      }
-                    }
+        
+        /*-------------------------------*/
+       /* flecha */
+       
+       @keyframes moviendrew {
+              0% {
+                transform: translatex(0px);
+              }
+              100% {
+                transform: translatex(20px);
+              }
+        }
+        
+        #flecha {
+                    animation-name: moviendrew;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    font-size: 100px;
+                    color: white;
+                    position: absolute;
+                    top: 423px;
+                    z-index: 1;
 
+        }
+
+        
+        /*-------------------------------*/
+       /* aqui van los puntos de ruptura */
+       
+       @media (max-width: 991px){
+            .fixaltura {
+             padding-top: calc(5rem + 57px)!important;
+           }
+      }
+      
+      @media (max-width: 767px){
+            .card {
+               width: 16rem !important;
+            }
+      }
+      
+      @media (min-width: 768px){
+            .col-md-10 {
+              flex: 0 0 auto;
+              width: 100% !important;
+            }
+      } 
+      
+       @media (max-width: 500px){
+            .respmenu {
+                flex-direction: column-reverse !important;
+            }
+            .navbar-collapse {
+              height: 100vh;
+            }
+            #mainNav .navbar-nav {
+              margin-top: -1rem;
+            }
+        }
+      
+     @media (max-width: 320px){
+            .card {
+                margin: 0px 5%;
+            }
+            .img-logo {
+              height: 40px;
+            }
+            
+            #flecha {
+                    animation-name: moviendrew;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    font-size: 50px;
+                    color: white;
+                    position: absolute;
+                    top: 423px;
+                    z-index: 1;
+
+            }
+            
+      }
     </style>
     <style>
-        /* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
-
-        #contenedor::-webkit-scrollbar {
-            -webkit-appearance: none;
-        }
-
-        #contenedor::-webkit-scrollbar:vertical {
-            width:10px;
-        }
-
-        #contenedor::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
-            display: none;
-        } 
-
-        #contenedor::-webkit-scrollbar:horizontal {
-            height: 10px;t
-        }
-
-        #contenedor::-webkit-scrollbar-thumb {
-            background-color: #d56bff;
-            border-radius: 20px;
-            
-        }
-
-        #contenedor::-webkit-scrollbar-track {
-            border-radius: 10px;  
-        }
-
-        body{
-            font-family: 'Open Sans', sans-serif;
-            padding-right: 0 !important;
-            color: #29303b;
-            font-size: 15px;
-        }
-        .overlay {
-          color: #FFF;
-          position: fixed;
-          text-align: center;
-          width: 100%;
-          height: 100%;
-          left: 0;
-          top: 0;
-          background: rgba(51,51,51,0.7);
-          z-index: 10;
-        }
-        body.gray-bg {
-          background: #400497;
-            background-position-x: 0%;
-            background-position-y: 0%;
-            background-repeat: repeat;
-            background-image: none;
-            background-size: auto;
-        }
-        .container {
+        .container-table {
           display: grid;
-          width: 100vw;
+          width: 98%;
           background-color: #250440a8;
           border-radius: 8px;
+          margin: 10px;
         }
     </style>
-    
-   
 </head>
-<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-position: center;background-repeat: no-repeat;background-size: auto;">
-    <!-- Estructura 2 -->
-    <div class="container mt-5" style="display: none;">
-      <div class="row">
-        <div class="w-100 text-left">
-          <div class="container">
-              <div class="row">
-                <div class="col">
-                    <img style="width: 50px;" src="<?php echo base_url('assets/frontend/shop.png'); ?>">
-                </div>
-                <div class="col" style="top: 15px;">
-                    <a class="color-FFF" href="<?php echo site_url('home/courses'); ?>">
-                        Cursos
-                    </a>
-                </div>
-                <div class="col" style="top: 15px;">
-                    <a class="color-FFF" href="<?php echo site_url('home/certificates'); ?>">
-                        Certificados
-                    </a>
-                </div>
-                <div class="col">
-                    <div style="float: left;">
-                        <img style="width: 50px;" src="<?php echo base_url('assets/frontend/money.png'); ?>">
-                    </div>
-                    <div class="color-000" style="float: left;background-color: #FFF;width: 30%;border-radius: 4%;text-align: center;margin: 5% 0% 0% -3%;">
-                        <?php echo ( $wallet->cant == 0 ? 0 : $wallet->cant ); ?>
-                    </div>
-                </div>
-                <div class="col" style="top: 15px;">
-                    <a class="color-FFF" href="<?php echo site_url('login/logout'); ?>">
-                        <?php echo get_phrase('log_out'); ?>
-                    </a>
-                </div>
-                <div class="col"></div>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
-    <br><br><br>
-    <!-- Estructura 7 -->
-    <div class="container">
+
+<body id="page-top" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="72">
+    <?php include 'componentes/menu.php'; ?>
+    <header class="text-white masthead fixaltura">
+        <div class="container-table">
       <div class="row">
         <div class="col-12 col-md-12">
             <a style="color: #FFF;" href="<?php echo base_url(); ?>">
-              <button class="btn btn-default">
+              <button class="btn btn-primary">
                 Volver
               </button>
             </a>
-            <table class="table" border="1" style="width: 100%;color: #FFF;margin-top: 5%;">
+            <table class="table" border="" style="width: 100%;color: #FFF;margin-top: 5%;">
               <tr style="text-align: center;">
                 <th>Curso</th>
                 <th>Certificado</th>
@@ -383,35 +304,11 @@
         </div>
       </div>
     </div>
-    </div>
-    
-    <!--<div style="position: revert;;"> 
-        <div class="cielo-2"></div>
-        <div class="cielo-1"></div>
-    </div>-->
-    
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
-  
-  <script>
-          for ( i=0 ;  i<500 ;i++)
-      {
-      var posX = Math.random()*$(window).width();
-      var posY = Math.random()*$('.cielo-1').height();
-      var alfa = Math.random();
-      var estrella = '<div class="estrella"     style="left:'+posX+'px;top:'+posY+'px; opacity:'+alfa+'"></div>';
-        
-        $('.cielo-1').append(estrella);
-      }
-
-      for ( j=0 ;  j<500 ;j++)
-      {
-      var posLeft = Math.random()*$(window).width();
-      var posTop = Math.random()*$('.cielo-2').height();
-      var omega = Math.random();
-      var estrellaDos = '<div class="estrellaDos" style="left:'+posLeft+'px;top:'+posTop+'px;opacity:'+omega+'"></div>';
-                  
-        $('.cielo-2').append(estrellaDos);
-      }
-  </script>
+    </header>
+    <script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js')?>"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/freelancer.js')?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.js"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/Simple-Slider.js')?>"></script>
 </body>
+
 </html>

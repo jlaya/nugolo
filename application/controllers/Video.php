@@ -80,7 +80,7 @@ class Video extends CI_Controller {
 
         $url                     = $data['url'];
         $array['multi_media_id'] = $data['multi_media_id'];
-        $array['is_checked']     = $data['is_checked'];
+        $array['is_checked']     = 1;
         $array['request_a']      = "N/A";
         $array['request_b']      = "N/A";
 

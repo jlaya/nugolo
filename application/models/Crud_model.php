@@ -431,7 +431,7 @@ $this->db->insert('course', $data);
 
 $course_id = $this->db->insert_id();
 if ($_FILES['course_thumbnail']['name'] != "") {
-    move_uploaded_file($_FILES['course_thumbnail']['tmp_name'], 'uploads/thumbnails/course_thumbnails/'.$course_id.'.jpg');
+    move_uploaded_file($_FILES['course_thumbnail']['tmp_name'], 'uploads/thumbnails/course_thumbnails/'.$course_id.'.png');
 }
 if ($data['status'] == 'approved') {
     $this->session->set_flashdata('flash_message', get_phrase('course_added_successfully'));
@@ -499,7 +499,7 @@ $this->db->where('id', $course_id);
 $this->db->update('course', $data);
 
 if ($_FILES['course_thumbnail']['name'] != "") {
-    move_uploaded_file($_FILES['course_thumbnail']['tmp_name'], 'uploads/thumbnails/course_thumbnails/'.$course_id.'.jpg');
+    move_uploaded_file($_FILES['course_thumbnail']['tmp_name'], 'uploads/thumbnails/course_thumbnails/'.$course_id.'.png');
 }
 if ($data['status'] == 'approved') {
     $this->session->set_flashdata('flash_message', get_phrase('course_updated_successfully'));
@@ -530,15 +530,15 @@ public function get_courses($category_id = "", $sub_category_id = "", $instructo
 
 public function get_course_thumbnail_url($course_id) {
 
- if (file_exists('uploads/thumbnails/course_thumbnails/'.$course_id.'.jpg'))
-     return base_url().'uploads/thumbnails/course_thumbnails/'.$course_id.'.jpg';
+ if (file_exists('uploads/thumbnails/course_thumbnails/'.$course_id.'.png'))
+     return base_url().'uploads/thumbnails/course_thumbnails/'.$course_id.'.png';
  else
     return base_url().'uploads/thumbnails/thumbnail.png';
 }
 public function get_lesson_thumbnail_url($lesson_id) {
 
- if (file_exists('uploads/thumbnails/lesson_thumbnails/'.$lesson_id.'.jpg'))
-     return base_url().'uploads/thumbnails/lesson_thumbnails/'.$lesson_id.'.jpg';
+ if (file_exists('uploads/thumbnails/lesson_thumbnails/'.$lesson_id.'.png'))
+     return base_url().'uploads/thumbnails/lesson_thumbnails/'.$lesson_id.'.png';
  else
     return base_url().'uploads/thumbnails/thumbnail.png';
 }
@@ -835,7 +835,7 @@ $data['summary'] = $this->input->post('summary');
 
 $this->db->insert('lesson', $data);
 $inserted_id = $this->db->insert_id();
-move_uploaded_file($_FILES['thumbnail']['tmp_name'], 'uploads/thumbnails/lesson_thumbnails/'.$inserted_id.'.jpg');
+move_uploaded_file($_FILES['thumbnail']['tmp_name'], 'uploads/thumbnails/lesson_thumbnails/'.$inserted_id.'.png');
 }
 
 public function edit_lesson($lesson_id) {
@@ -918,7 +918,7 @@ $this->db->where('id', $lesson_id);
 $this->db->update('lesson', $data);
 
 if ($_FILES['thumbnail']['name'] != "") {
-    move_uploaded_file($_FILES['thumbnail']['tmp_name'], 'uploads/thumbnails/lesson_thumbnails'.$lesson_id.'.jpg');
+    move_uploaded_file($_FILES['thumbnail']['tmp_name'], 'uploads/thumbnails/lesson_thumbnails'.$lesson_id.'.png');
 }
 }
 public function delete_lesson($lesson_id) {
@@ -962,9 +962,9 @@ public function update_frontend_settings() {
 }
 
 public function update_frontend_banner() {
-    move_uploaded_file($_FILES['banner_image']['tmp_name'], 'uploads/frontend/home-banner.jpg');
-    move_uploaded_file($_FILES['banner_image2']['tmp_name'], 'uploads/frontend/home-banner2.jpg');
-    move_uploaded_file($_FILES['banner_image3']['tmp_name'], 'uploads/frontend/home-banner3.jpg');
+    move_uploaded_file($_FILES['banner_image']['tmp_name'], 'uploads/frontend/home-banner.png');
+    move_uploaded_file($_FILES['banner_image2']['tmp_name'], 'uploads/frontend/home-banner2.png');
+    move_uploaded_file($_FILES['banner_image3']['tmp_name'], 'uploads/frontend/home-banner3.png');
 }
 
 public function handleWishList($course_id) {
@@ -1033,11 +1033,10 @@ public function all_courses( $category = 0 ) {
     }
 
     if( $user_id ){
-        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id AND type=1) AS is_pay FROM course AS a WHERE a.status ='active' AND a.is_free_course IS NULL $whereCategory ORDER by category_id ASC";
+        $sql = "SELECT *,(SELECT COUNT(*) FROM enroll WHERE course_id = a.id AND user_id= $user_id AND type=6) AS is_pay FROM course AS a WHERE a.status ='active' AND a.is_free_course IS NULL $whereCategory ORDER by category_id ASC";
     }else{
         $sql = "SELECT * FROM course AS a WHERE a.status = 'active' AND a.is_free_course IN(1) $whereCategory ORDER by a.category_id ASC ";
     }
-
 
     $result = $this->db->query($sql);
     return $result->result_array();
@@ -1058,17 +1057,24 @@ public function get_all_course() {
     return $result->result_array();
 }
 
-public function get_enroll_course( $category = 0 ) {
+public function get_enroll_course() {
 
-    if( $category == 0 ){
+    if( $this->input->get('category') == 0 ){
         $whereCategory = "";
     }else{
-        $whereCategory = " AND category_id = $category ";
+        $whereCategory = " AND a.category_id = ".$this->input->get('category');
     }
-    $user_id = $this->session->userdata('user_id');
-    $sql = "(SELECT a.* FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id and b.user_id=$user_id and b.type = 5 AND close IS NULL ) WHERE a.status ='active' AND a.is_free_course = 1 $whereCategory ORDER by a.category_id ASC)
+
+    if( $this->session->userdata('user_id') ){
+        $user_id = " AND b.user_id=".$this->session->userdata('user_id');
+    }else{
+        $user_id = "";
+    }
+
+    $sql = "(SELECT a.* FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id $user_id AND b.type = 5 AND b.close IS NULL ) WHERE a.status ='active' AND a.is_free_course = 1 $whereCategory ORDER by a.category_id ASC)
     UNION
-    (SELECT a.* FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id and b.user_id=$user_id and b.type = 6 ) WHERE a.status ='active' AND a.is_free_course IS NULL $whereCategory ORDER by a.category_id ASC)";
+    (SELECT a.* FROM course AS a INNER JOIN enroll AS b ON( b.course_id=a.id $user_id AND b.type = 6 ) WHERE a.status ='active' AND a.is_free_course IS NULL $whereCategory ORDER by a.category_id ASC)";
+
     $result = $this->db->query($sql);
     return $result->result_array();
 }
@@ -1504,17 +1510,34 @@ public function get_last_message_by_message_thread_code($message_thread_code) {
 
     // Reporte para sacar la data de estudiante
     public function previewPdf( $user_id = 0 ) {
-        $this->db->select('a.*,c.first_name,c.last_name');
-        $this->db->join('users AS c', "a.user_id = c.id");
-        if( $user_id > 0 ) $this->db->where('a.user_id', $user_id );
-        $this->db->where('a.type', 6 );
-        return $this->db->get('enroll AS a')->result();
+        $sql = "SELECT ";
+        $sql .= "b.nivel,";
+        $sql .= "b.first_name,";
+        $sql .= "b.last_name ,";
+        $sql .= "a.course_id ,";
+        $sql .= "a.user_id ,";
+        $sql .= " (SELECT GROUP_CONCAT(course_id) FROM enroll WHERE user_id = a.user_id AND type = 6) AS ids ";
+        $sql .= " FROM enroll AS a INNER JOIN users AS b ON( a.user_id = b.id ) ";
+        $sql .= " WHERE a.type = 6 ";
+        if( $user_id > 0 ){
+            $sql .= " AND a.user_id = $user_id";
+        }
+        $sql .= " GROUP BY user_id";
+
+        $result = $this->db->query($sql);
+        return $result->result();
     }
     // Contenidos que esta viendo en el curso
     public function previewCourse( $course_id  ) {
-        $this->db->select('a.title,a.outcomes');
+        $this->db->select('a.id,a.title,a.outcomes');
         $this->db->where('a.id', $course_id );
         return $this->db->get('course AS a')->result();
+    }
+    // mostrar curso
+    public function rowCourse( $course_id  ) {
+        $this->db->select('a.title,a.outcomes');
+        $this->db->where('a.id', $course_id );
+        return $this->db->get('course AS a')->row();
     }
     // Curso aprovado ?
     public function approvedCourse( $user_id, $course_id  ) {

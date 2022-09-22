@@ -271,6 +271,9 @@
                       <input required="" type="hidden" name="address" placeholder="Dirección" value="0" />
                       <input required="" type="password" name="password" placeholder="Ingrese su contrase&ntilde;a" />
                       <input type="submit" class="submit action-button send-register_1" value="Enviar"/>
+                      <a href="<?php echo base_url(); ?>">
+                          <button type="button" class="action-button">Volver</button>
+                      </a>
                    </fieldset>
                 </form>
             

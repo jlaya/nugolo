@@ -1,3 +1,16 @@
+<style type="text/css">
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+	    color: #FFF !important;
+	    line-height: 28px;
+	}
+	
+	.botondebuscar{
+	    width: 100%;
+	    background-color: #8946d9 !important;
+        border-color: #ffddf6 !important;
+        color: white !important;
+	}
+</style>
 <?php
 	$getCategory = $this->user_model->getCategory();
 	$category = $this->input->get('category');
@@ -13,7 +26,7 @@
 			</select>
 		</div>
 		<div class="col-4">
-			<button type="submit" class="btn btn-primary">Buscar</button>
+			<button type="submit" class="btn btn-primary botondebuscar">Buscar</button>
 		</div>
 	</div>
 </form>

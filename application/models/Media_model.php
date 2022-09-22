@@ -18,6 +18,16 @@ class Media_model extends CI_Model {
         $this->db->join('course AS b', 'a.course_id = b.id');
         return $this->db->get('doc AS a')->result();
     }
+    // 4 intentos fallidos
+    public function intentosFallidos4( $user_id ) {
+        $this->db->select('b.title,a.intentos');
+        $this->db->where('a.no', 1 );
+        $this->db->where('a.intentos', 4 );
+        $this->db->where('a.user_id', $user_id );
+        #$this->db->where('a.course_id', $course_id );
+        $this->db->join('course AS b', 'a.course_id = b.id');
+        return $this->db->get('doc AS a')->result();
+    }
 
     public function get_children( $children_id ) {
         $this->db->where('id', $children_id);
@@ -55,6 +65,13 @@ class Media_model extends CI_Model {
         $this->db->where('token', $token);
         $query = $this->db->get('multi_media');
         return $query->result();
+    }
+
+    public function row_media( $token )
+    {
+        $this->db->where('token', $token);
+        $query = $this->db->get('multi_media');
+        return $query->row();
     }
 
     public function delete( $id )
@@ -218,6 +235,14 @@ class Media_model extends CI_Model {
         #$this->db->order_by('b.type','ASC');
         $query = $this->db->get();
         return $query->result();
+    }
+
+    public function get_media_users( $token )
+    {
+        $this->db->from('multi_media_users AS a');
+        $this->db->where('a.token', $token);
+        $query = $this->db->get();
+        return $query->row();
     }
 
     /**

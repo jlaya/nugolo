@@ -71,9 +71,10 @@ class Document extends CI_Controller {
             $archivo = $_FILES['doc']['name'];
             $ex      = explode('.', $archivo);
             $ex      = $ex[1]; // Extencion
-            $archivo = "$user_id.pdf";
+            $archivo = "$user_id.$ex";
             $ruta    = getcwd();  // Obtiene el directorio actual en donde se esta trabajando
             //echo $ruta;
+            unlink("assets/doc/".$archivo);
             move_uploaded_file($_FILES['doc']['tmp_name'], $ruta . "/assets/doc/" . $archivo);
             $data['doc']         = "assets/doc/".$archivo;
             endif;

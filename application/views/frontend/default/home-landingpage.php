@@ -17,7 +17,7 @@
             font-family: "boombox";
             src: url("<?php echo base_url('assets/frontend/fonts/boombox.ttf'); ?>");
             
-            font-family: "Bebas-Regular";
+            font-family: "BebasRegular";
             src: url("<?php echo base_url('assets/frontend/fonts/Bebas-Regular.ttf'); ?>");
             
             font-family: "GameOfSquids";
@@ -40,6 +40,15 @@
             border: 1px solid;
             border-color: #b858fe;
         }
+        .color-footer{
+            font-family: "GameOfSquids" !important;
+            color: #FFF !important;
+            font-weight: bold !important;
+            border: none !important; 
+            background-color: transparent !important;
+            cursor: pointer !important;
+            font-size: 16px;
+        }
         .color-FFF{
             font-family: "GameOfSquids" !important;
             color: #FFF !important;
@@ -47,6 +56,7 @@
             border: none !important; 
             background-color: transparent !important;
             cursor: pointer !important;
+            font-size: 26px;
         }
         .color-FFF:hover{
             font-family: "GameOfSquids" !important;
@@ -55,14 +65,44 @@
             border: none !important; 
             background-color: transparent !important;
             cursor: pointer !important;
+            font-size: 26px;
         }
-        .h1-font{
-            color: #FFF;
+        .h1-fontinicio{
+            color: white;
             font-family: "boombox" !important;
-        }.h3-font{
-            color: #FFF;
+            font-size: 26px;
+            line-height: 31px;
+        }.h3-fontinicio{
+            color: white;
+            font-family: Bebas;
+            font-size: 36px;
+            line-height: 31px;
+            text-align: justify;
         }
-
+        
+        .text-centeruno {
+            text-align:right;
+        }
+        .text-centerdos{
+            text-align:left;
+        }
+        .alinearderecha {
+            text-align:right;
+        }
+        .h3-fontcentar{
+            text-align:center;
+            color: white;
+            font-family: Bebas;
+            font-size: 36px;
+            line-height: 31px;
+            
+        }
+        .col-md-6 {
+          
+          padding-right: 82px;
+          align-self: center;
+        }
+        
         /* Tipografias 
         .boombox2{
             font-family: "boombox2";
@@ -78,6 +118,7 @@
         }
         */
         
+        
         .container {
             /*display:inline-block;*/
             width: 100vw;
@@ -86,8 +127,9 @@
  
  
                      .cielo-1 {
-                      width: 100vw;
-                      height: 400vh;
+                      width: 100%;
+                      height: 100vh;
+                      overflow: hidden;
                       background: transparent;
                       position: absolute;
                       -webkit-animation: animaCielo 15s linear infinite backwards running;
@@ -107,7 +149,8 @@
                     .cielo-2 {
                       
                       width: 100%;
-                      height: 400%;
+                      height: 100vh;
+                      overflow: hidden;
                       position: absolute;
                       -webkit-animation: animaCielo 13s linear infinite backwards running;
                       -moz-animation: animaCielo 13s linear infinite backwards running;
@@ -155,7 +198,25 @@
                         top: 0%;
                       }
                     }
-
+        /*---------------------*/
+        /* puntos de ruptura */
+        
+        @media (max-width: 767px){
+            .h3-fontinicio{
+                text-align: center!important;
+            }
+             .text-centeruno {
+            text-align:center;
+        }
+        .text-centerdos{
+            text-align:center;
+        }
+        .col-md-6 {
+          
+          padding-right: 0px;
+          align-self: center;
+        }
+        }
     </style>
     
    
@@ -163,9 +224,9 @@
 <body style="background: linear-gradient(338deg, #00205b, #37163b);">
         
         <div style="position: revert;;"> 
-        <div class="cielo-2"></div>
-        <div class="cielo-1"></div>
-    </div>
+            <div class="cielo-2"></div>
+            <div class="cielo-1"></div>
+        </div>
     
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
   
@@ -234,7 +295,7 @@
     <div class="container mt-5">
       <div class="row">
         <div class="w-100 text-center">
-          <h1 class="h1-font ">DESAROLLA TU <br> APRENDIZAJE RAPIDO Y FACIL</h1>
+          <h1 class="h1-fontinicio ">DESAROLLA TU <br> APRENDIZAJE RAPIDO Y FACIL</h1>
         </div>
       </div>
     </div>
@@ -250,10 +311,10 @@
     <!-- Estructura 5 -->
     <div class="container mt-5">
       <div class="row">
-        <div class="col-12 col-md-6 text-center">
-            <img style="width: 50%;" src="https://i.ibb.co/SdCVbqV/3172.png">
+        <div class="col-12 col-md-6 text-centeruno">
+            <img style="width: 80%;" src="https://i.ibb.co/SdCVbqV/3172.png">
         </div>
-        <div class="col-12 col-md-6"><h3 class="h3-font ">TE GUIAREMOS POR LA MEJOR RUTA PARA UN APRENDIZAJE SEGURO</h3></div>
+        <div class="col-12 col-md-6"><h3 class="h3-fontinicio ">TE GUIAREMOS POR LA MEJOR RUTA PARA UN APRENDIZAJE SEGURO</h3></div>
       </div>
     </div>
     <!-- Estructura 6 -->
@@ -268,8 +329,8 @@
     <!-- Estructura 7 -->
     <div class="container">
       <div class="row">
-        <div class="col-12 col-md-6"><h3 class="h3-font">TENDRAS UN TUTOR QUE TE <br> GUIARA EN TODO TU PROCESO <br> DE APRENDIZAJE</h3></div>
-        <div class="col-12 col-md-6 text-center">
+        <div class="col-12 col-md-6"><h3 class="h3-fontinicio alinearderecha">TENDRAS UN TUTOR QUE TE <br> GUIARA EN TODO TU PROCESO <br> DE APRENDIZAJE</h3></div>
+        <div class="col-12 col-md-6 text-centerdos">
             <img style="width: 70%;" src="https://i.ibb.co/WnHxsRy/profevirtual.png">
         </div>
       </div>
@@ -278,8 +339,8 @@
     <!-- Estructura 8 -->
     <div class="container mt-5">
       <div class="row">
-        <div class="col-12 col-md-12 text-center"><h3 class="h3-font">PERSONALIZA TU PROPIO AVATAR</h3></div>
-        <div class="col-12 col-md-12 text-center" style="background-image: url('https://i.ibb.co/TrvY7Sw/avatar.png');background-repeat: no-repeat;background-position:center;background-size: 50%">
+        <div class="col-12 col-md-12 text-center"><h3 class="h3-fontcentar">PERSONALIZA TU PROPIO AVATAR</h3></div>
+        <div class="col-12 col-md-12 text-center" style="background-image: url('https://i.ibb.co/TrvY7Sw/avatar.png');background-repeat: no-repeat;background-position:center;background-size: contain;">
             <br><br><br>
             <button class="mt-5 button-1">COOMING SOON</button> 
             <br><br><br>
@@ -292,7 +353,7 @@
     <div class="container">
       <div class="row">
         <div class="w-100 text-center">
-          <a class="color-FFF" href="home/terms">
+          <a class="color-footer" href="home/terms">
             Terminos y condiciones | Nugolo &copy; <?php echo date('Y')?>
           </a>
         </div>

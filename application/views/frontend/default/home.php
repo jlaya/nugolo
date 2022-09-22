@@ -35,14 +35,38 @@
     }
 
 ?>
+<?php
+  $user = $this->user_model->messageCountUser();
+  $message_teacher = $this->user_model->message_teacher();
+  $countMessage = $user->can + $message_teacher->can;
+  $get_enroll_course = $this->crud_model->get_enroll_course( $category );
+?>
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Home</title>
-  <link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/frontend/css/custom-home.css'); ?>">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Brand</title>
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css');?>">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/fonts/font-awesome.min.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/Article-Clean.css');?>">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/Simple-Slider.css');?>">
     <style type="text/css">
-          @font-face {
+    body {
+    background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #3a0071;
+    }
+     @font-face {
           
           font-family: "boombox";
           src: url("<?php echo base_url('assets/frontend/fonts/boombox.ttf'); ?>");
@@ -53,493 +77,406 @@
           font-family: "GameOfSquids";
           src: url("<?php echo base_url('assets/frontend/fonts/GameOfSquids.ttf'); ?>");
           }
-      .button-1{
-          color: #FFF;
-          font-weight: bold;
-          border-color: #5cdac9;
-          background-color: #5cdac9;
+          
+      .message-number{
+        margin: -74px 0px 0px 36px;
+        color: white;
+        font-weight: bold;
+        position: absolute;
       }
-      .color-571894{
-          width: 140px;
-          height: 30px;
-          color: #FFF;
-          font-weight: bold;
-          border: none; 
-          background-color: #54178f;
-          border-radius: 15px;
-          border: 1px solid;
-          border-color: #b858fe;
+      .level-number{
+        margin: -25px 0px 0px 30px;
+        color: white;
+        font-weight: bold;
+        position: absolute;
       }
-      .color-FFF{
-          font-family: "GameOfSquids" !important;
-          color: #FFF !important;
-          font-weight: bold !important;
-          border: none !important; 
-          background-color: transparent !important;
-          cursor: pointer !important;
-      }
-      .color-FFF:hover{
-          font-family: "GameOfSquids" !important;
-          color: #FFF !important;
-          font-weight: bold !important;
-          border: none !important; 
-          background-color: transparent !important;
-          cursor: pointer !important;
-      }
-      .color-000{
-          font-family: "GameOfSquids";
-          color: #000;
-          font-weight: bold;
-          border: none; 
-          background-color: transparent;
-      }
-      .h1-font{
-          color: #FFF;
-          font-family: "boombox" !important;
-      }.h3-font{
-          color: #FFF;
-      }
-
-      .container {
-          display:inline-block;
-          width: 100vw;
-      }
-     .cielo-1 {
-      width: 100vw;
-      height: 400vh;
-      background: transparent;
-      position: absolute;
-      -webkit-animation: animaCielo 15s linear infinite backwards running;
-      -moz-animation: animaCielo 15s linear infinite backwards running;
-      -ms-animation: animaCielo 15s linear infinite backwards running;
-      animation: animaCielo 15s linear infinite backwards running;
-    }
-    .cielo-1 .estrella {
-      background: #497c95;
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-    }
-    
-    .cielo-2 {
+      .article-clean {
+            color: #56585b;
+            background-color: #a396d1 !important;
+            font-family: 'Lora', serif;
+            font-size: 14px;
+        }
       
-      width: 100%;
-      height: 400%;
-      position: absolute;
-      -webkit-animation: animaCielo 13s linear infinite backwards running;
-      -moz-animation: animaCielo 13s linear infinite backwards running;
-      -ms-animation: animaCielo 13s linear infinite backwards running;
-      animation: animaCielo 13s linear infinite backwards running;
-    }
-    .cielo-2 .estrellaDos {
-      background: #704995;
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-    }
-    
-    @-webkit-keyframes animaCielo {
-      0% {
-        top: -100%;
+      
+      .col-md-8 {
+        display: -webkit-box;
+        padding: 55px 5px;
+        overflow-x: scroll;
       }
-      100% {
-        top: 0%;
+      
+      .card {
+        background-color: #572c2c3d; box-shadow: inset 0 -6px 30px 0 #eea8f3; color: bisque; backdrop-filter: blur(7px); border: 2px solid rgba(242, 224, 255, 0.76) !important; margin: 0px 1%;
       }
-    }
-    @-ms-keyframes animaCielo {
-      0% {
-        top: -100%;
+      
+      #estilostablamenu {
+          font-size: 13px;
       }
-      100% {
-        top: 0%;
+      
+      .respmenu {
+          flex-direction:row !important;
+          align-items: center;
+          margin-left: auto !important;
+          margin-right: auto;
       }
-    }
-    @-o-keyframes animaCielo {
-      0% {
-        top: -100%;
+      .navbar-collapse {
+        display: flex;
       }
-      100% {
-        top: 0%;
+      #mainNav {
+          padding-top: 0px !important;
+          padding-bottom: 0px !important;
       }
-    }
-    @-moz-keyframes animaCielo {
-      0% {
-        top: -100%;
-      }
-      100% {
-        top: 0%;
-      }
-    }
+      
+      .bg-secondary {
+          background-color: #963a99b8 !important;
+          backdrop-filter: blur(7px) !important;
+          border: 1px solid #ffffff3d !important;
+        }
+        .coloricono {
+          background-color: #fbf8ff !important;
+          color: #6610f2 !important;
+        }
+        /*-------------------------------*/
+       /*disenio de botones generales */
+        .btn-success {
+          color: #fff;
+          background-color: #6f1987 !important;
+          border-color: #871980 !important;
+        }
+        
+        .btn-primary {
+          background-color: #f7ddff !important;
+          border-color: #dab2fb !important;
+          color: #300659 !important;
+        }
+        
+        /*-------------------------------*/
+       /* flecha */
+       
+       @keyframes moviendrew {
+              0% {
+                transform: translatex(0px);
+              }
+              100% {
+                transform: translatex(20px);
+              }
+        }
+        
+        #flecha {
+                    animation-name: moviendrew;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    font-size: 100px;
+                    color: white;
+                    position: absolute;
+                    top: 423px;
+                    z-index: 1;
 
-    </style>
-    <style>
-        /* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
-
-        #contenedor::-webkit-scrollbar {
-            -webkit-appearance: none;
         }
 
-        #contenedor::-webkit-scrollbar:vertical {
-            width:10px;
+        
+        /*-------------------------------*/
+       /* aqui van los puntos de ruptura */
+       
+       @media (max-width: 991px){
+            .fixaltura {
+             padding-top: calc(5rem + 57px)!important;
+           }
+      }
+      
+      @media (max-width: 767px){
+            .card {
+               width: 16rem !important;
+            }
+      }
+      
+      @media (min-width: 768px){
+            .col-md-10 {
+              flex: 0 0 auto;
+              width: 100% !important;
+            }
+      } 
+      
+       @media (max-width: 500px){
+            .respmenu {
+                flex-direction: column-reverse !important;
+            }
+            .navbar-collapse {
+              height: 100vh;
+            }
+            #mainNav .navbar-nav {
+              margin-top: -1rem;
+            }
         }
-
-        #contenedor::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
-            display: none;
-        } 
-
-        #contenedor::-webkit-scrollbar:horizontal {
-            height: 10px;t
-        }
-
-        #contenedor::-webkit-scrollbar-thumb {
-            background-color: #d56bff;
-            border-radius: 20px;
+      
+     @media (max-width: 320px){
+            .card {
+                margin: 0px 5%;
+            }
+            .img-logo {
+              height: 40px;
+            }
             
-        }
+            #flecha {
+                    animation-name: moviendrew;
+                    animation-duration: 0.5s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    font-size: 50px;
+                    color: white;
+                    position: absolute;
+                    top: 423px;
+                    z-index: 1;
 
-        #contenedor::-webkit-scrollbar-track {
-            border-radius: 10px;  
-        }
-
-        body{
-            font-family: 'Open Sans', sans-serif;
-            padding-right: 0 !important;
-            color: #29303b;
-            font-size: 15px;
-        }
-        .overlay {
-          color: #FFF;
-          position: fixed;
-          text-align: center;
-          width: 100%;
-          height: 100%;
-          left: 0;
-          top: 0;
-          background: rgba(51,51,51,0.7);
-          z-index: 10;
-        }
-    </style>
-    <style type="text/css">
-      /* From uiverse.io by @kirzin */
-        .button-preview {
-         text-decoration: none;
-         position: absolute;
-         border: none;
-         font-size: 14px;
-         font-family: inherit;
-         color: #fff;
-         width: 9em;
-         height: 3em;
-         line-height: 2em;
-         text-align: center;
-         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
-         background-size: 300%;
-         border-radius: 30px;
-         z-index: 1;
-        }
-
-        .button-preview:hover {
-         animation: ani 8s linear infinite;
-         border: none;
-        }
-
-        @keyframes ani {
-         0% {
-          background-position: 0%;
-         }
-
-         100% {
-          background-position: 400%;
-         }
-        }
-
-        .button-preview:before {
-         content: '';
-         position: absolute;
-         top: -5px;
-         left: -5px;
-         right: -5px;
-         bottom: -5px;
-         z-index: -1;
-         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
-         background-size: 400%;
-         border-radius: 35px;
-         transition: 1s;
-        }
-
-        .button-preview:hover::before {
-         filter: blur(20px);
-        }
-
-        .button-preview:active {
-         background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
-        }
-    </style>
-    <style type="text/css">
-      
-      /* Hide scrollbar for Chrome, Safari and Opera */
-      .scrollbar-hidden::-webkit-scrollbar {
-        display: none;
+            }
+            
       }
-
-      /* Hide scrollbar for IE, Edge add Firefox */
-      .scrollbar-hidden {
-        -ms-overflow-style: none;
-        scrollbar-width: none; /* Firefox */
-      }
-    
-    </style>
-    <style type="text/css">
-      /* From uiverse.io by @kirzin */
-        .button-preview {
-         text-decoration: none;
-         position: relative;
-         border: none;
-         font-size: 14px;
-         font-family: inherit;
-         color: #fff;
-         height: 3em;
-         line-height: 2em;
-         text-align: center;
-         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
-         background-size: 300%;
-         border-radius: 30px;
-         z-index: 1;
-        }
-
-        .button-preview:hover {
-         animation: ani 8s linear infinite;
-         border: none;
-        }
-
-        @keyframes ani {
-         0% {
-          background-position: 0%;
-         }
-
-         100% {
-          background-position: 400%;
-         }
-        }
-
-        .button-preview:before {
-         content: '';
-         position: absolute;
-         top: -5px;
-         left: -5px;
-         right: -5px;
-         bottom: -5px;
-         z-index: -1;
-         background: linear-gradient(90deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
-         background-size: 400%;
-         border-radius: 35px;
-         transition: 1s;
-        }
-
-        .button-preview:hover::before {
-         filter: blur(20px);
-        }
-
-        .button-preview:active {
-         background: linear-gradient(32deg,#03a9f4,#f441a5,#ffeb3b,#03a9f4);
-        }
-        body.gray-bg {
-          background: #400497;
-            background-position-x: 0%;
-            background-position-y: 0%;
-            background-repeat: repeat;
-            background-image: none;
-            background-size: auto;
-        }
     </style>
 </head>
-<body style="background-image: url(https://i.ibb.co/fHnLCkj/3163-Convertido.png\));background-position: center;background-repeat: no-repeat;background-size: contain;">
-  <div class="row">
-    <!-- Menu -->
-    <div class="col-9" style="height: 160px;padding: left;">
-      <div class="container-fluid mt-5">
-        <div class="row">
-          <div class="w-100 text-left">
-            <?php include 'menu-home.php'; ?>
-          </div>
-        </div>
-    </div>
-    </div>
-    <div class="col-3" style="background-color: #A396D1;z-index:1;padding: 5% 2% 2% 2%;border-radius: 10% 0% 0% 10%;">
-      <p>
-        <b>Nombre: <?php echo $user_details['first_name']; ?></b>
-      </p>
-      <p>
-        <b>Nivel: <?php echo $level; ?></b>
-      </p>
-    </div>
-  </div>
-  <div class="row">
-    <!-- Cursos -->
-    <div class="col-9">
-      <div class="container-fluid">
-      <div class="row row p-3">
-        <?php if( $course_user == 0 ){ ?>
-        <div class="col-12 col-md-5">
-        <?php }else{ ?>
-        <div class="col-12 col-md-10">
-        <?php } ?>
-            <?php if( $course_user == 0 ){ ?>
-              <a title="Ir a todos los cursos" class="color-FFF text-center" href="<?php echo site_url('home/courses'); ?>">
-                <img src="<?php echo base_url('assets/mensaje.png');?>" alt="" width="300px" height="300px">
-              </a>
-            <?php }else{ ?>
-            <div style=" overflow-y: hidden; overflow-x: touch; width: 100%; height: 440px; white-space: nowrap;">
-                <div class="row">
-                  <div class="col-12">
-                    <?php include 'filter-category.php'; ?>
-                  </div>
-                </div>
-                <?php
-                $get_enroll_course = $this->crud_model->get_enroll_course( $category );
-                foreach ($get_enroll_course as $field){ ?>
-                <div style="width: 250px;height: 370px;position: relative;overflow: hidden;/* padding: 10px 10px 10px 10px; */display: inline-block;">
-                
-                
-                    <div style="background-image: url(<?php echo base_url('assets/textura_uno.jpg'); ?>);width: 250px; height: 300px; position: absolute; top: 50px;border-radius: 8px; display: inline-block;">
-            
-                    </div>
-                    <div style="width: 250px; height: 180px; position: absolute; top: 140px ">
-                        <div style="position:relative; text-align: center; padding-top: 20px; ">
-                            <H1 style="color: #0D0046; line-height : 1px; font-weight: bold;"><b>&nbsp;</b></H1>
-                            <h3 class="h3-margin-1"><?php echo $field['title']; ?></h3>
-                            <div class="div-description">
-                              <?php echo limitar_cadena($field['short_description'], 50, '...'); ?>
-                              </div>
-                           </div>
-                    </div>
-                    <?php if( $field['is_free_course'] ==1 ){ ?>
-                    <div style="background-color: #0D0046; width: 40%; height: 50px; position: absolute; top: 310px;  border-radius: 8px;  margin-left: 19px;">
-                    <?php }else{ ?>
-                      <div style="background-color: #0D0046; width: 200px; height: 50px; position: relative; top: 310px; margin: 0 auto; border-radius: 8px;  ">
-                    <?php } ?>
-                       <a href="<?php echo site_url('home/lesson/'.slugify($field['title']).'/'.$field['id']); ?>" style="text-decoration: none; color: white ;">  
-                       <div style="position:relative; text-align: center; padding-top: 15px; ">
-                       <b>EMPEZAR</b> 
-                       </div>
-                        </a>
-                    </div>
-                    <?php
-                      if( $field['is_free_course'] !=1 ){
-                        $hidden = "hidden";
-                      }else{
-                        $hidden = "";
-                      }
-                    ?>
-                    <div <?php echo $hidden; ?> style="background-color: #0D0046; width: 40%; height: 50px; position: absolute; top: 310px; margin-left: 130px; border-radius: 8px;">
-                       <a target="_blank" href="https://wa.me/573132545111?text=<?php echo $field['title']."%20".$field['price'].": %20Dejale este mensaje al asesor para que se comunique contigo"; ?>" style="text-decoration: none; color: white ;">
-                       <div style="position:relative; text-align: center; padding-top: 15px; ">
-                       <b>PAGAR</b> 
-                       </div>
-                     </a>
-                    </div>
-                    <?php
-                      if( $field['is_free_course'] ==1 ){
-                        $top = 8;
-                      }else{
-                        $top = -40;
-                      }
-                    ?>
-                    <div style="width: 150px; height: 150px; position: relative; top: <?php echo $top; ?>px;   margin: 0 auto; ">
-                        <img src="<?php echo $this->crud_model->get_course_thumbnail_url($field['id']); ?>" alt="" width="150px"  height="150px">
-                    </div>
-                </div>
-                <?php } ?>
 
-            </div>
-            <?php } ?>
-        </div>
-        <?php if( $course_user == 0 ){ ?>
-        <div class="col-12 col-md-5">
-          <div style="margin-top: 30%;text-align: center;">
-            <a title="Ir a todos los cursos" class="color-FFF text-center" href="<?php echo site_url('home/courses'); ?>">
-              <button class="button-preview">
-                VER CURSOS
-              </button>
+<body id="page-top" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="72">
+    <div id="flecha">
+         &#8594;
+    </div>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top bg-secondary text-uppercase" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="http://localhost/colombia/nugolo/">
+                <img src="https://i.ibb.co/R0zYZHR/logo.png" alt="" height="50px" class="img-logo">
             </a>
-          </div>
+            <button data-bs-toggle="collapse" data-bs-target="#navbarResponsive" class="navbar-toggler text-white  navbar-toggler-right text-uppercase rounded coloricono" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto respmenu">
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" title="Proximamente...">
+                           <img style="width: 65px;" src="<?php echo base_url('assets/frontend/new/tiendanugol.png'); ?>">
+                       </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" title="Proximamente...">
+                           <img style="width: 65px;" src="<?php echo base_url('assets/frontend/new/monedas_nugol.png'); ?>">
+                           <div class="level-number"><?php echo $wallet->cant; ?></div>
+                       </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" href="<?php echo site_url('home/courses'); ?>">
+                            <img style="width: 65px;" src="<?php echo base_url('assets/frontend/new/cursosnugol.png'); ?>">
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" href="<?php echo site_url('home/certificates'); ?>">
+                            <img style="width: 65px;" src="<?php echo base_url('assets/frontend/new/certificadosnugol.png'); ?>">
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded" href="<?php echo base_url('home/messages'); ?>">
+                            <img style="width: 65px;" src="<?php echo base_url('assets/frontend/new/mensajesnugol.png'); ?>">
+                            <div class="message-number"><?php echo $countMessage; ?></div>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1" id="estilostablamenu">
+                        <table style="background-color: azure;  -webkit-border-radius: 10px 10px 10px 56px; box-shadow: -7px 9px 23px -10px rgba(27,9,71,0.68);
+                          border-radius: 10px 10px 10px 56px; text-align: right;width: 219px;">
+                              <tbody>
+                                  <tr>
+                                      <td colspan="2" style="padding-top: 8px !important;"><?php echo $user_details['first_name']; ?></td>
+                                      <td rowspan="2" style="width: 80px;"><img src="https://nugolociencia.com/assets/frontend/perfil.png" alt="" width="60px" style="vertical-align: middle !important"></td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nivel</td>
+                                      <td><?php echo $level; ?></td>
+                                  </tr>
+                                  <tr>
+                                    <td colspan="2" style="padding-bottom:10px;">
+                                      <a href="<?php echo base_url('home/profile/users'); ?>">
+                                        Ver Perfil
+                                      </a>
+                                    </td>
+                                    <td>
+                                      <a class="nav-link" href="<?php echo base_url('login/logout/user'); ?>">
+                                        <img style="width: 65px;" src="<?php echo base_url('assets/frontend/salir.png'); ?>">
+                                      </a>
+                                    </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <?php } ?>
-      </div>
-    </div>
-    </div>
-    <div class="col-3" style="margin: right">
-      <div class="col-12 col-md-12 pt-2 mt-4" style="color:rgb(42, 22, 99); background-color: #A396D1; width:98%; height: 430px;text-align: center; padding: 0px 15px 0px 15px; border-radius: 8px;margin: rig;">
-        <?php foreach ($announceActive as $key => $value) { ?>
-          <p>
-            <?php echo $value->title; ?><br><br>
-          </p>
-          <p>
-            <?php echo $value->html; ?>
-          </p>
-          <hr>
-        <?php } ?>
+    </nav>
+    <header class="text-center text-white masthead fixaltura">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        <?php include 'filter-category.php'; ?>
+                    </p>
+                </div>
+            </div>
         </div>
-    </div>
-  </div>
-  <div class="row mt-2">
-    <div class="col-12">
-      <?php
-        foreach ($get_enroll_course as $key => $value) {
-          foreach (json_decode($value['outcomes']) as $outcome){
-            
-                echo '<div style="float: left;margin: 1% 1% 1% 1%;">';
-                  echo '<button type="button" class="btn btn-success">'.$outcome.'</button>';
-                  echo '</div>';
-                
-          }
-        } 
-      ?>
-    </div>
-  </div>
-  <?php if( count($intentosFallidos) > 0 ){ ?>
-  <div id="myModal" class="modal fade">
-      <div class="modal-dialog modal-login">
-          <div class="modal-content">
-              <div class="modal-body" style="position: absolute;">
-                  <img src="<?php echo base_url('assets/advertising.png'); ?>" style="width: 100%;">
-                  <div class="row">
-                    <div class="col-lg-4">&nbsp;</div>
-                    <div class="col-lg-8" style="margin: -35% 0% 0% 30%;position: absolute;font-size: 14px;width: auto;color: white">
-                      Debes estar pendiente del mensaje del tutor en la plataforma y en tu correo electrónico
-                      <div style="height: 115px;overflow-y:auto;" class="scrollbar-hidden">
-                        <?php foreach ($intentosFallidos as $key => $value) { ?>
-                        <br><br>
-                        <div style="margin: 0 0 0 35%;position: relative;">
-                          Cantidad de impactos <span>2</span>
-                          <br>
-                          vida de tu nave <span>2</span>
+        <div class="container">
+            <div class="row">
+                <?php if( $course_user == 0 ){ ?>
+                  <a title="Ir a todos los cursos" class="color-FFF text-center" href="<?php echo site_url('home/courses'); ?>">
+                    <img src="<?php echo base_url('assets/mensaje.png');?>" alt="" width="300px" height="300px">
+                  </a>
+                <?php }else{ ?>
+                    <?php include 'cards.php'; ?>
+                <?php } ?>
+                <?php include 'anuncios.php'; ?>
+            </div>
+        </div>
+    </header>
+    <div class="text-center text-white copyright py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12"><span></span></div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-12 text-left">
+                          <h1 style="color: white;font-size: 22px;margin:1%;background-color: rebeccapurple;padding: 10px;">Glosario de temas</h1>
                         </div>
-                        <br>
-                          <div style="margin: 0 0 0 35%;position: relative;">
-                            <p><?php echo $value->title; ?></p>
-                          </div>
-                        <?php } ?>
                       </div>
-                      <img src="<?php echo base_url('assets/source.gif'); ?>" style="width: 40%;margin: -37% 0% 0% 0%;" >
-                      <br>
-                      <br>
-                      <p>
-                      <a data-dismiss="modal" class="button-preview" style="margin: 0% 0% 0% 0%;text-align: center;cursor: pointer;">Cerrar ventana</a>
-                      </p>
-                  </div>
-              </div>
-          </div>
-      </div>
+                      <div class="row mt-2">
+                        <div class="col-12">
+                          <?php
+                            foreach ($get_enroll_course as $key => $value) {
+                              foreach (json_decode($value['outcomes']) as $outcome){
+                                
+                                    echo '<div style="float: left;margin: 1% 1% 1% 1%;">';
+                                      echo '<button type="button" class="btn btn-success">'.$outcome.'</button>';
+                                      echo '</div>';
+                                    
+                              }
+                            } 
+                          ?>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<?php } ?>
+    <div class="d-lg-none scroll-to-top position-fixed rounded"><a class="text-center d-block rounded text-white" href="#page-top"><i class="fa fa-chevron-up"></i></a></div>
+    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-1">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
+                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/cabin.png">
+                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-2">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
+                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/cake.png">
+                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-3">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
+                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/circus.png">
+                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-4">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
+                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/game.png">
+                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-5">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
+                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/safe.png">
+                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal text-center" role="dialog" tabindex="-1" id="portfolio-modal-6">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                <div class="modal-body">
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto">
+                                <h2 class="text-uppercase text-secondary mb-0">Project Name</h2>
+                                <hr class="star-dark mb-5"><img class="img-fluid mb-5" src="assets/img/portfolio/submarine.png">
+                                <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias magnam, recusandae quos quis inventore quisquam velit asperiores, vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer pb-5"><a class="btn btn-primary btn-lg mx-auto rounded-pill portfolio-modal-dismiss" role="button" data-bs-dismiss="modal"><i class="fa fa-close"></i>&nbsp;Close Project</a></div>
+            </div>
+        </div>
+    </div>
+    <script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js')?>"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/freelancer.js')?>"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/6.4.8/swiper-bundle.min.js"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/Simple-Slider.js')?>"></script>
 </body>
-</html>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script type="text/javascript">
-  $('#myModal').modal('toggle');
-</script>
+</html>

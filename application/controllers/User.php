@@ -77,10 +77,12 @@ class User extends CI_Controller {
     public function index() {
 
         if( $this->session->userdata('user_id') ){
-            $page_data['page_name'] = "home";
-            $page_data['matriculation'] = $this->Matriculation_model->show();
-            $page_data['verify_matriculation'] = $this->Matriculation_model->verify_matriculation();
-            $page_data['announce']  = $this->Announce_model->show_public();
+            $page_data['page_name']  = "";
+            $page_data['page_title'] = get_phrase('home');
+            if(!$this->session->userdata('user_id')){
+                redirect(site_url('/'), 'refresh');
+            }
+            return $this->load->view('frontend/default/homePropuesta', $page_data );
         }else{
             $page_data['page_name'] = "home-landingpage";
         }
@@ -110,25 +112,7 @@ class User extends CI_Controller {
             $this->session->set_userdata('role_id', $row->role_id);
             $this->session->set_userdata('role', get_user_role('user_role', $row->id));
             $this->session->set_userdata('name', $row->first_name.' '.$row->last_name);
-            /*if ( $row->role_id == 1 ) {
-               $this->session->set_userdata('admin_login', '1');
-               redirect(site_url('admin/dashboard'), 'refresh');
-            }else */if( $row->role_id == 2 ){
-               $this->session->set_userdata('user_login', '1');
-               redirect($data['uri_string']);
-            }/*else if ( $row->role_id == 3 ) {
-               $this->session->set_userdata('admin_login', '1');
-               redirect(site_url('admin/dashboard'), 'refresh');
-            }else if ( $row->role_id == 4 ) {
-               $this->session->set_userdata('admin_login', '1');
-               redirect(site_url('admin/dashboard'), 'refresh');
-            }else if ( $row->role_id == 5 ) {
-               $this->session->set_userdata('admin_login', '1');
-               redirect(site_url('admin/dashboard'), 'refresh');
-            }else if ( $row->role_id == 6 ) {
-               $this->session->set_userdata('admin_login', '1');
-               redirect(site_url('admin/dashboard'), 'refresh');
-            }*/
+            redirect(site_url('home'), 'refresh');
         }else {
             $this->session->set_flashdata('error_message',get_phrase('invalid_login_credentials'));
             if ($from == "user")

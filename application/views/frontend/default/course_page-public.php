@@ -22,8 +22,25 @@
 
 <style>
     body {
-  font-size: 16px !important;
-}
+      font-size: 16px !important;
+      color: #2e293b;
+    }
+    .instructor-name a {
+      color: #3a2b60 !important;
+    }
+    section.course-header-area {
+      background-color: #2f0459!important;
+    }
+    .view-more {
+      color: #5B488E!important;
+    }
+    
+    .view-less {
+      color: #5B488E!important;
+    }
+    .what-you-get-box ul li::before {
+        color: blueviolet;
+    }
 </style>
 <div id="modal">
   <div class="modal-content">
@@ -89,10 +106,7 @@
                                   <a href="<?php echo site_url('home/lesson/'.slugify($course_details['title']).'/'.$course_details['id']); ?>">PROBAR</a>
                                 </button>
                                 <?php } ?>
-                                <span class="created-by d-block">
-                                    <?php echo get_phrase('created_by'); ?>
-                                    <a href="<?php echo site_url('home/instructor_page/'.$course_details['user_id']); ?>"><?php echo $instructor_details['first_name'].' '.$instructor_details['last_name']; ?></a>
-                                </span>
+                                <br>
                                 <?php if ($course_details['last_modified'] > 0): ?>
                                     <span class="last-updated-date d-block d-lg-inline"><?php 
                                     echo get_phrase('last_updated').' '.ucwords( strftime("%A, %d de %B del %Y", $course_details['last_modified'])); ?></span>
@@ -415,7 +429,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 order-0 order-lg-1" style="display: none;">
+                    <div class="col-lg-4 order-0 order-lg-1">
                         <div class="course-sidebar natural">
                             <?php if ($course_details['video_url'] != ""): ?>
                                 <div class="preview-video-box">

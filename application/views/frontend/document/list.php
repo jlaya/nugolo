@@ -5,6 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv='cache-control' content='no-cache'>
+    <meta http-equiv='expires' content='0'>
+    <meta http-equiv='pragma' content='no-cache'>
     <title>Taller</title>
     <link rel="stylesheet" href="<?php echo base_url('assets/api-video/css/demo.css') ?>" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">    
@@ -426,7 +429,7 @@
             <form action="<?php echo base_url('document/save'); ?>" enctype="multipart/form-data" method="POST">
               <input type="hidden" name="course_id" value="<?php echo $this->input->get('course_id'); ?>">
               <?php if( count($verify) == 0 ){ ?>
-              <input type="file" name="doc" id="doc" required="" accept="application/pdf">
+              <input type="file" name="doc" id="doc" required="" accept="application/pdf/image/*">
               <input type="submit" value="Adjuntar" class="btn btn-default">
               <?php } ?>
               <a href="<?php echo $this->session->userdata('url'); ?>">
@@ -445,7 +448,7 @@
           }
         ?>
         <?php if( $file !="" ){ ?>
-          <iframe src="<?php echo base_url($file); ?>" width="100%" height="680px"></iframe>
+          <iframe src="<?php echo base_url($file).'#nocache'.time(); ?>" width="100%" height="680px"></iframe>
         <?php } ?>
       </div>
     </div>
